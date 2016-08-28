@@ -16,7 +16,7 @@
         public string Extension => BackingFile.Extension;
         public string RealPath => BackingFile.FullName;
         public long Size => BackingFile.Length;
-        public DateTime LastModified => BackingFile.LastWriteTime;
+        public DateTime? LastModified => BackingFile.LastWriteTime;
         public bool IsDirectory => false;
         public bool Exists => BackingFile.Exists;
 
@@ -25,14 +25,16 @@
             BackingFile = fileInfo;
         }
 
-        public Stream OpenRead()
+        public async Task<Stream> OpenReadAsync()
         {
-            return BackingFile.OpenRead();
+            var task = new Task<Stream>( BackingFile.OpenRead );
+            task.Start();
+            return await task;
         }
 
         public async Task<string> GetHashAsync()
         {
-            using ( var stream = OpenRead() )
+            using ( var stream = await OpenReadAsync() )
             {
                 return await stream.ToMd5HashAsync();
             }
@@ -40,32 +42,40 @@
 
         public async Task<byte[]> ReadToEndAsync()
         {
-            using ( var fileStream = OpenRead() )
+            using ( var fileStream = await OpenReadAsync() )
             {
                 return await fileStream.ReadStreamToEndAsync();
             }
         }
 
-        public Stream OpenWrite( FileMode mode = FileMode.Overwrite )
+        public async Task<Stream> OpenWriteAsync( FileMode mode = FileMode.Overwrite )
         {
             Directory.CreateDirectory( Path.GetDirectoryName( RealPath ) );
 
+            Task<Stream> task;
             switch ( mode )
             {
                 case FileMode.Overwrite:
-                    return BackingFile.OpenWrite();
+                    task = new Task<Stream>( BackingFile.OpenWrite );
+                    break;
                 case FileMode.Append:
-                    return BackingFile.Open( System.IO.FileMode.Append, FileAccess.Write );
+                    task = new Task<Stream>( () => BackingFile.Open( System.IO.FileMode.Append, FileAccess.Write ) );
+                    break;
                 case FileMode.Truncate:
-                    return BackingFile.Open( System.IO.FileMode.Truncate, FileAccess.Write );
+                    task = new Task<Stream>( () => BackingFile.Open( System.IO.FileMode.Truncate, FileAccess.Write ) );
+                    break;
                 default:
                     throw new NotImplementedException();
             }
+            task.Start();
+            return await task;
         }
 
-        public void Delete( bool recursive = true )
+        public async Task DeleteAsync( bool recursive = true )
         {
-            BackingFile.Delete();
+            var task = new Task( BackingFile.Delete );
+            task.Start();
+            await task;
         }
     }
 }

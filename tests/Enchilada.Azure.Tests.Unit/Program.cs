@@ -1,4 +1,4 @@
-﻿namespace Enchilada.Azure.Tests.Unit
+﻿namespace Enchilada.Azure.Tests.Integration
 {
     public class Program
     {

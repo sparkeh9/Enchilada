@@ -26,7 +26,7 @@
 
             File.Exists( sut.RealPath ).Should().BeFalse();
 
-            using ( sut.OpenWrite() ) {}
+            using ( sut.OpenWriteAsync().Result ) {}
 
             File.Exists( sut.RealPath ).Should().BeTrue();
             File.Delete( sut.RealPath );
@@ -38,7 +38,7 @@
             string tempFileInfo = $"{ResourceHelpers.GetTempFilePath()}/{Guid.NewGuid()}.txt";
             var sut = new FilesystemFile( new FileInfo( tempFileInfo ) );
 
-            using ( var stream = sut.OpenWrite() )
+            using ( var stream = sut.OpenWriteAsync().Result )
             using ( var writer = new StreamWriter( stream ) )
             {
                 writer.Write( WRITE_CONTENT );

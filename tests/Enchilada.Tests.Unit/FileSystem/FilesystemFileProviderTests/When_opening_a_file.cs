@@ -1,12 +1,9 @@
 ﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemFileProviderTests
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
-    using Configuration;
-    using Enchilada.Infrastructure;
     using Filesystem;
     using FluentAssertions;
     using Helpers;

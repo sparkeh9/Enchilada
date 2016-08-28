@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using Infrastructure;
     using Infrastructure.Interface;
 
     public class FilesystemFileProvider : IFileProvider
@@ -16,9 +15,9 @@
         public bool IsDirectory => !IsFile;
         public bool IsFile => File != null;
 
-        public FilesystemFileProvider( FilesystemAdapterConfiguration configuration, string directory )
+        public FilesystemFileProvider( FilesystemAdapterConfiguration configuration, string filePath )
         {
-            string combinedPath = Path.Combine( configuration.Directory, directory.Trim( DirectorySeparators ) );
+            string combinedPath = Path.Combine( configuration.Directory, filePath.Trim( DirectorySeparators ) );
 
             if ( System.IO.File.Exists( combinedPath ) )
             {

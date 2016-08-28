@@ -20,7 +20,7 @@
 
             sut.Exists.Should().BeTrue();
 
-            sut.Delete();
+            sut.DeleteAsync();
         }
 
         [ Fact ]
@@ -34,7 +34,7 @@
             sut.Exists.Should().BeTrue();
             sut.CreateDirectory();
 
-            sut.Delete();
+            sut.DeleteAsync();
         }
     }
 }

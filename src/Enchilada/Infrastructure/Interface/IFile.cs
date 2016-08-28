@@ -10,7 +10,7 @@
         /// Provides a Stream in read-only mode
         /// </summary>
         /// <returns>Stream</returns>
-        Stream OpenRead();
+        Task<Stream> OpenReadAsync();
 
         /// <summary>
         /// Asynchronously reads the file, returning a byte array
@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="mode">The mode in which to amend the file</param>
         /// <returns>Stream</returns>
-        Stream OpenWrite( FileMode mode = FileMode.Overwrite );
+        Task<Stream> OpenWriteAsync( FileMode mode = FileMode.Overwrite );
 
         /// <summary>
         /// Provides a hash to check for file integrity

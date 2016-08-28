@@ -18,7 +18,7 @@
             sut.CreateDirectory();
 
             sut.Exists.Should().BeTrue();
-            sut.Delete();
+            sut.DeleteAsync().Wait();
 
             sut.Exists.Should().BeFalse();
         }
@@ -29,7 +29,7 @@
             var resourceDirectory = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
 
             var sut = resourceDirectory.GetDirectory( $"does_not_exist_{Guid.NewGuid()}" );
-            sut.Delete();
+            sut.DeleteAsync();
         }
     }
 }

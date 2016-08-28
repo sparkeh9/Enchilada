@@ -17,11 +17,11 @@
 
             File.Exists( sut.RealPath ).Should().BeFalse();
 
-            using ( sut.OpenWrite() ) {}
+            using ( sut.OpenWriteAsync().Result ) {}
 
             File.Exists( sut.RealPath ).Should().BeTrue();
 
-            sut.Delete();
+            sut.DeleteAsync().Wait();
 
             File.Exists( sut.RealPath ).Should().BeFalse();
         }
@@ -35,7 +35,7 @@
 
             File.Exists( sut.RealPath ).Should().BeFalse();
 
-            sut.Delete();
+            sut.DeleteAsync();
         }
     }
 }

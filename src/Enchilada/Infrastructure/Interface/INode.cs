@@ -1,6 +1,7 @@
 ﻿namespace Enchilada.Infrastructure.Interface
 {
     using System;
+    using System.Threading.Tasks;
 
     public interface INode
     {
@@ -17,7 +18,7 @@
         /// <summary>
         /// Provides a DateTime as to when the given file was last modified
         /// </summary>
-        DateTime LastModified { get; }
+        DateTime? LastModified { get; }
 
         /// <summary>
         /// Determines whether the node is a directory or not
@@ -30,6 +31,6 @@
         /// Deletes the given file
         /// </summary>
         /// <param name="recursive"></param>
-        void Delete( bool recursive = true);
+        Task DeleteAsync( bool recursive = true );
     }
 }

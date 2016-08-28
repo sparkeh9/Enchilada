@@ -24,7 +24,7 @@
             tempFile.Exists.Should().BeFalse();
             tempFile.RealPath.Should().Be( Path.Combine( directory.RealPath, tempFileName ) );
 
-            directory.Delete();
+            directory.DeleteAsync();
         }
 
         [ Fact ]
@@ -37,7 +37,7 @@
 
             var tempFile = directory.GetFile( tempFileName );
 
-            using ( var stream = tempFile.OpenWrite() )
+            using ( var stream = tempFile.OpenWriteAsync().Result )
             using ( var writer = new StreamWriter( stream ) )
             {
                 writer.Write( WRITE_CONTENT );
@@ -46,7 +46,7 @@
             File.Exists( tempFile.RealPath ).Should().BeTrue();
             File.Delete( tempFile.RealPath );
 
-            directory.Delete();
+            directory.DeleteAsync();
         }
     }
 }

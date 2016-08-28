@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using Infrastructure.Interface;
 
     public class FilesystemDirectory : IDirectory
@@ -12,7 +13,7 @@
         protected DirectoryInfo BackingDirectory;
 
         public string Name => BackingDirectory.Name;
-        public DateTime LastModified => BackingDirectory.LastWriteTime;
+        public DateTime? LastModified => BackingDirectory.LastWriteTime;
 
         public bool IsDirectory => true;
 
@@ -31,11 +32,13 @@
             BackingDirectory = directoryInfo;
         }
 
-        public void Delete( bool recursive )
+        public async Task DeleteAsync( bool recursive = true )
         {
             try
             {
-                BackingDirectory.Delete( recursive );
+                var task = new Task( BackingDirectory.Delete );
+                task.Start();
+                await task;
             }
             catch ( Exception )
             {
