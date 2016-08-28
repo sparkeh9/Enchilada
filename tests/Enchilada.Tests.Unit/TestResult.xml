@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<test-run id="0" testcasecount="0" result="Failed" total="0" passed="0" failed="0" inconclusive="0" skipped="0" asserts="0" portable-engine-version="3.3.0.0" start-time="2016-07-25 21:28:37Z" end-time="2016-07-25 21:28:37Z" duration="0.072229">
+  <test-suite type="Assembly" id="1000" name="Enchilada.Tests.Unit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" fullname="Enchilada.Tests.Unit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" runstate="NotRunnable" testcasecount="0" result="Failed" label="Invalid" site="SetUp" start-time="2016-07-25 21:28:37Z" end-time="2016-07-25 21:28:37Z" duration="0.005799" total="0" passed="0" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <settings>
+      <setting name="WorkDirectory" value="D:\code\git\enchilada\src\Enchilada.Tests.Unit" />
+    </settings>
+    <properties>
+      <property name="_SKIPREASON" value="Has no TestFixtures" />
+    </properties>
+    <failure>
+      <message><![CDATA[Has no TestFixtures]]></message>
+    </failure>
+  </test-suite>
+</test-run>
