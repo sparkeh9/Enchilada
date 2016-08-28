@@ -6,11 +6,9 @@ An abstraction layer written in C#, to enable simple use of file operations over
 It aims to have the cover the whole enchilada, the ability to interact with any type of filesystem through extensibility of its provider implementations.
 
 Implemented:
+- Local Filesystem
 
 Planned:
-
-- Local Filesystem
-- In Memory
 - Azure Blob Storage
 - FTP/S (FTP over SSL)
 - SFTP (FTP over SSH)
