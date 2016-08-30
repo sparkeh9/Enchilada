@@ -24,7 +24,7 @@
         }
 
         [ Fact ]
-        public void Should_present_file()
+        public async Task Should_present_file()
         {
             string filesystemPath = ResourceHelpers.GetResourceDirectoryInfo().FullName;
             var filesystemProvider = new FilesystemFileProvider( new FilesystemAdapterConfiguration
@@ -35,7 +35,7 @@
             filesystemProvider.IsFile.Should().BeTrue();
             filesystemProvider.File.Should().NotBeNull();
 
-            var bytes = Task.Run( () => filesystemProvider.File.ReadToEndAsync() ).Result;
+            var bytes = await filesystemProvider.File.ReadToEndAsync();
             string contents = Encoding.UTF8.GetString( bytes );
 
             contents.Should().StartWith( "Lorem ipsum" );

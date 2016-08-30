@@ -10,11 +10,11 @@
     public class When_reading_to_end_of_stream
     {
         [ Fact ]
-        public void Should_return_contents_of_file()
+        public async Task Should_return_contents_of_file()
         {
             var sut = new FilesystemFile( ResourceHelpers.GetResourceFileInfo( "SampleContent.txt" ) );
 
-            var bytes = Task.Run( () => sut.ReadToEndAsync() ).Result;
+            var bytes = await sut.ReadToEndAsync();
             string contents = Encoding.UTF8.GetString( bytes );
 
             contents.Should().StartWith( "Lorem ipsum" );

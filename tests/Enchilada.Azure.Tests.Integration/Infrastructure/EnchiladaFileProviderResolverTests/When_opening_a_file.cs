@@ -2,9 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using BlobStorage;
+    using Azure.BlobStorage;
     using Configuration;
-    using Enchilada.Infrastructure;
     using Filesystem;
     using Xunit;
     using FluentAssertions;

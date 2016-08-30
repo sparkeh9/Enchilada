@@ -64,7 +64,7 @@
         [ Fact ]
         public void Should_list_all_nodes()
         {
-            var sut = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
+            var sut = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo( "level1" ) );
 
             var nodes = sut.ToList();
 

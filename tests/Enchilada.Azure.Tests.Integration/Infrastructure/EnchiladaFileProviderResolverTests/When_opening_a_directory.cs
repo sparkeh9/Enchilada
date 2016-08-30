@@ -2,10 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using BlobStorage;
+    using Azure.BlobStorage;
     using Configuration;
-    using Enchilada.Infrastructure;
     using Enchilada.Infrastructure.Exceptions;
+    using Filesystem;
     using FluentAssertions;
     using Xunit;
 
@@ -59,7 +59,7 @@
                                                          } );
             var provider = sut.OpenProvider( "enchilada://blob_filesystem/" );
             provider.Should().BeOfType<BlobStorageFileProvider>();
-            provider.RootDirectory.RealPath.Should().Be("http://127.0.0.1:10000/devstoreaccount1/test/");
+            provider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/" );
         }
 
         [ Fact ]
@@ -89,11 +89,11 @@
 
             var firstProvider = sut.OpenProvider( "enchilada://blob_filesystem/" );
             firstProvider.Should().BeOfType<BlobStorageFileProvider>();
-            firstProvider.RootDirectory.RealPath.Should().Be("http://127.0.0.1:10000/devstoreaccount1/test/");
+            firstProvider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/" );
 
             var secondProvider = sut.OpenProvider( "enchilada://another_filesystem/abc123/" );
             secondProvider.Should().BeOfType<BlobStorageFileProvider>();
-            secondProvider.RootDirectory.RealPath.Should().Be("http://127.0.0.1:10000/devstoreaccount1/test123/abc123/");
+            secondProvider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test123/abc123/" );
         }
     }
 }

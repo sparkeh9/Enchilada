@@ -1,6 +1,7 @@
 ﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemDirectoryTests
 {
     using System;
+    using System.Threading.Tasks;
     using Filesystem;
     using FluentAssertions;
     using Helpers;
@@ -9,7 +10,7 @@
     public class When_creating_a_directory
     {
         [ Fact ]
-        public void Should_create_a_directory()
+        public async Task Should_create_a_directory()
         {
             var resourceDirectory = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
 
@@ -20,11 +21,11 @@
 
             sut.Exists.Should().BeTrue();
 
-            sut.DeleteAsync();
+            await sut.DeleteAsync();
         }
 
         [ Fact ]
-        public void Should_not_blow_up_if_folder_already_exists()
+        public async Task Should_not_blow_up_if_folder_already_exists()
         {
             var resourceDirectory = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
 
@@ -34,7 +35,7 @@
             sut.Exists.Should().BeTrue();
             sut.CreateDirectory();
 
-            sut.DeleteAsync();
+            await sut.DeleteAsync();
         }
     }
 }

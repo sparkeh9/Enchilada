@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
     using Filesystem;
     using FluentAssertions;
     using Helpers;
@@ -10,7 +11,7 @@
     public class When_deleting_a_directory
     {
         [ Fact ]
-        public void Should_delete_a_directory()
+        public async Task Should_delete_a_directory()
         {
             var resourceDirectory = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
 
@@ -18,18 +19,18 @@
             sut.CreateDirectory();
 
             sut.Exists.Should().BeTrue();
-            sut.DeleteAsync().Wait();
+            await sut.DeleteAsync();
 
             sut.Exists.Should().BeFalse();
         }
 
         [ Fact ]
-        public void Should_not_throw_exception_when_directory_not_present()
+        public async Task Should_not_throw_exception_when_directory_not_present()
         {
             var resourceDirectory = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
 
             var sut = resourceDirectory.GetDirectory( $"does_not_exist_{Guid.NewGuid()}" );
-            sut.DeleteAsync();
+            await sut.DeleteAsync();
         }
     }
 }

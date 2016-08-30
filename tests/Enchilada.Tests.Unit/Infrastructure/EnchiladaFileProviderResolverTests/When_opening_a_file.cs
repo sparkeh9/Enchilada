@@ -36,26 +36,6 @@
 
             Assert.Throws<UriFormatException>( () => sut.OpenProvider( "abc" ) );
         }
-//
-//        [ Fact ]
-//        public void Should_give_filesystem_provider()
-//        {
-//            string filesystemPath = ResourceHelpers.GetResourceDirectoryInfo( "level1" ).FullName;
-//            var sut = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
-//                                                         {
-//                                                             Adapters = new List<IEnchiladaAdapterConfiguration>
-//                                                             {
-//                                                                 new FilesystemAdapterConfiguration
-//                                                                 {
-//                                                                     AdapterName = "level1",
-//                                                                     Directory = filesystemPath
-//                                                                 }
-//                                                             }
-//                                                         } );
-//            var provider = sut.OpenProvider( "enchilada://level1/SampleContent.txt" );
-//            provider.Should().BeOfType<FilesystemFileProvider>();
-//            provider.RootDirectory.RealPath.Should().Be( filesystemPath );
-//        }
 
         [ Fact ]
         public void Should_give_correct_filesystem_provider()

@@ -1,9 +1,9 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemFileTests
+﻿namespace Enchilada.Azure.Tests.Integration.BlobStorage.BlobStorageFileTests
 {
     using System;
     using System.IO;
     using System.Threading.Tasks;
-    using Filesystem;
+    using Azure.BlobStorage;
     using FluentAssertions;
     using Helpers;
     using Xunit;
@@ -15,29 +15,26 @@
         [ Fact ]
         public void Should_not_have_file_in_place_before_creation()
         {
-            var sut = new FilesystemFile( new FileInfo( $"{ResourceHelpers.GetTempFilePath()}/{Guid.NewGuid()}.txt" ) );
-            File.Exists( sut.RealPath ).Should().BeFalse();
+            var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), $"{Guid.NewGuid()}.txt" );
+            sut.Exists.Should().BeFalse();
         }
 
         [ Fact ]
         public async Task Should_create_file_when_stream_opened()
         {
-            string tempFileInfo = $"{ResourceHelpers.GetTempFilePath()}/{Guid.NewGuid()}.txt";
-            var sut = new FilesystemFile( new FileInfo( tempFileInfo ) );
-
-            File.Exists( sut.RealPath ).Should().BeFalse();
+            var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), $"{Guid.NewGuid()}.txt" );
+            sut.Exists.Should().BeFalse();
 
             using ( await sut.OpenWriteAsync() ) {}
 
-            File.Exists( sut.RealPath ).Should().BeTrue();
-            File.Delete( sut.RealPath );
+            sut.Exists.Should().BeTrue();
+            await sut.DeleteAsync();
         }
 
         [ Fact ]
         public async Task Should_write_content_to_file()
         {
-            string tempFileInfo = $"{ResourceHelpers.GetTempFilePath()}/{Guid.NewGuid()}.txt";
-            var sut = new FilesystemFile( new FileInfo( tempFileInfo ) );
+            var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), $"{Guid.NewGuid()}.txt" );
 
             using ( var stream = await sut.OpenWriteAsync() )
             using ( var writer = new StreamWriter( stream ) )
@@ -45,10 +42,11 @@
                 writer.Write( WRITE_CONTENT );
             }
 
-            string fileContents = File.ReadAllText( sut.RealPath );
+            string fileContents = await sut.RealPath.MakeHttpRequestAsync();
+
             fileContents.Should().Be( WRITE_CONTENT );
 
-            File.Delete( sut.RealPath );
+            await sut.DeleteAsync();
         }
     }
 }

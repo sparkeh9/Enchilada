@@ -1,10 +1,10 @@
-﻿namespace Enchilada.Infrastructure
+﻿namespace Enchilada.Filesystem
 {
     using System;
     using System.Linq;
     using Configuration;
-    using Exceptions;
-    using Interface;
+    using Infrastructure.Exceptions;
+    using Infrastructure.Interface;
 
     public class EnchiladaFileProviderResolver : IEnchiladaFilesystemResolver
     {
