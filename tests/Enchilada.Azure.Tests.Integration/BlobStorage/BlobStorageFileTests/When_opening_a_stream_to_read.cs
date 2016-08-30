@@ -4,7 +4,6 @@
     using System.IO;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
-    using Filesystem;
     using FluentAssertions;
     using Helpers;
     using Xunit;
