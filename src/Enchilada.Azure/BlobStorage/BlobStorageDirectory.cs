@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using Infrastructure.Extensions;
     using Infrastructure.Interface;
     using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -20,7 +21,7 @@
 
         public bool IsDirectory => true;
 
-        public string RealPath => BlobContainer.GetDirectoryReference( Path ).Prefix;
+        public string RealPath => BlobContainer.GetDirectoryReference( Path ).Uri.ToString().StripDoubleSlash();
 
         public IEnumerable<IFile> Files => GetBlobFiles();
 
@@ -77,7 +78,7 @@
 
         public IFile GetFile( string fileName )
         {
-            return new BlobStorageFile( BlobContainer, System.IO.Path.Combine( Path, fileName ) );
+            return new BlobStorageFile( BlobContainer, fileName );
         }
 
         public void CreateDirectory() {}

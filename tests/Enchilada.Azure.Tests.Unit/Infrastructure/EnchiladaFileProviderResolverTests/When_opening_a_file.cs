@@ -50,13 +50,16 @@
                                                                  }
                                                              }
                                                          } );
-            var provider = sut.OpenProvider( "enchilada://blob_filesystem/SampleContent.txt" );
+
+            var provider = sut.OpenProvider( "enchilada://blob_filesystem/ABC123.txt" );
             provider.Should().BeOfType<BlobStorageFileProvider>();
-            provider.RootDirectory.RealPath.Should().Be( "test" );
+            provider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test" );
+            provider.IsFile.Should().BeTrue();
+            provider.File.Name.Should().Be( "ABC123.txt" );
         }
 
         [ Fact ]
-        public void Should_give_correct_filesystem_provider()
+        public void Should_give_correct_blob_filesystem_provider()
         {
             var sut = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
                                                          {
@@ -80,13 +83,17 @@
                                                              }
                                                          } );
 
-            var firstProvider = sut.OpenProvider( "enchilada://blob_filesystem/" );
+            var firstProvider = sut.OpenProvider( "enchilada://blob_filesystem/SampleContent.txt" );
             firstProvider.Should().BeOfType<BlobStorageFileProvider>();
-            firstProvider.RootDirectory.RealPath.Should().Be( "/" );
+            firstProvider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test" );
+            firstProvider.RootDirectory.Name.Should().Be( string.Empty );
+            firstProvider.File.Name.Should().Be( "SampleContent.txt" );
 
-            var secondProvider = sut.OpenProvider( "enchilada://another_filesystem/" );
+            var secondProvider = sut.OpenProvider( "enchilada://another_filesystem/SampleContent.txt" );
             secondProvider.Should().BeOfType<BlobStorageFileProvider>();
-            secondProvider.RootDirectory.RealPath.Should().Be( "/" );
+            secondProvider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test123" );
+            secondProvider.RootDirectory.Name.Should().Be( string.Empty );
+            secondProvider.File.Name.Should().Be( "SampleContent.txt" );
         }
     }
 }

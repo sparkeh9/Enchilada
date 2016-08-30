@@ -1,6 +1,7 @@
 ﻿namespace Enchilada.Azure.BlobStorage
 {
     using System.IO;
+    using Infrastructure.Extensions;
     using Infrastructure.Interface;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
@@ -18,6 +19,11 @@
 
         public BlobStorageFileProvider( BlobStorageAdapterConfiguration configuration, string filePath )
         {
+            bool isDirectory = filePath.EndsWith( "/" );
+            string blobPath = filePath.StripLeadingSlash();
+            bool isRootContainer = blobPath.IsNullOrWhiteSpace();
+
+
             var account = CloudStorageAccount.Parse( configuration.ConnectionString );
             var blobClient = account.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference( configuration.ContainerReference );
@@ -32,16 +38,20 @@
                                                } ).Wait();
             }
 
-            var blockBlobReference = container.GetBlockBlobReference( filePath );
-            if ( blockBlobReference.ExistsAsync().GetAwaiter().GetResult() )
+            if ( isRootContainer )
             {
-                RootDirectory = new BlobStorageDirectory( container, Path.GetFullPath( Path.Combine( filePath, "../" ) ) );
-                File = RootDirectory.GetFile( Path.GetFileName( filePath ) );
+                RootDirectory = new BlobStorageDirectory( container, "/" );
+                return;
             }
-            else
+
+            if ( isDirectory )
             {
-                RootDirectory = new BlobStorageDirectory( container, filePath );
+                RootDirectory = new BlobStorageDirectory( container, blobPath );
+                return;
             }
+
+            RootDirectory = new BlobStorageDirectory( container, blobPath.RemoveFilename() );
+            File = RootDirectory.GetFile( blobPath );
         }
     }
 }
