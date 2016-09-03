@@ -1,5 +1,6 @@
 ﻿namespace Enchilada.Azure.Tests.Integration.BlobStorage.StreamTests
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
@@ -12,34 +13,58 @@
 
     public class When_transferring_between_filesystems
     {
-        [ Fact ]
-        public async Task Should_write_to_blob_storage()
-        {
-            var providerPath = ResourceHelpers.GetResourceDirectoryInfo();
-            var sut = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
-                                                         {
-                                                             Adapters = new List<IEnchiladaAdapterConfiguration>
-                                                             {
-                                                                 new BlobStorageAdapterConfiguration
-                                                                 {
-                                                                     AdapterName = "blob_filesystem",
-                                                                     CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
-                                                                     ContainerReference = "test",
-                                                                     IsPublicAccess = true
-                                                                 },
-                                                                 new FilesystemAdapterConfiguration
-                                                                 {
-                                                                     AdapterName = "local_filesystem",
-                                                                     Directory = providerPath.FullName
-                                                                 }
-                                                             }
-                                                         } );
+        private readonly EnchiladaFileProviderResolver providerResolver;
 
-            var sourceFile = sut.OpenFileReference( "enchilada://local_filesystem/SampleContent.txt" );
-            var targetFile = sut.OpenFileReference( "enchilada://blob_filesystem/SampleContent.txt" );
+        public When_transferring_between_filesystems()
+        {
+            providerResolver = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
+                                                                  {
+                                                                      Adapters = new List<IEnchiladaAdapterConfiguration>
+                                                                      {
+                                                                          new BlobStorageAdapterConfiguration
+                                                                          {
+                                                                              AdapterName = "blob_filesystem",
+                                                                              CreateContainer = true,
+                                                                              ConnectionString = "UseDevelopmentStorage=true;",
+                                                                              ContainerReference = "test",
+                                                                              IsPublicAccess = true
+                                                                          },
+                                                                          new FilesystemAdapterConfiguration
+                                                                          {
+                                                                              AdapterName = "local_filesystem",
+                                                                              Directory = ResourceHelpers.GetResourceDirectoryInfo().FullName
+                                                                          }
+                                                                      }
+                                                                  } );
+        }
+
+        [ Fact ]
+        public async Task Should_write_text_file_to_blob_storage()
+        {
+            var sourceFile = providerResolver.OpenFileReference( "enchilada://local_filesystem/SampleContent.txt" );
+            var targetFile = providerResolver.OpenFileReference( $"enchilada://blob_filesystem/SampleContent{Guid.NewGuid()}.txt" );
 
             await targetFile.CopyFromAsync( sourceFile );
+
+            targetFile.Exists.Should().BeTrue();
+
+            string sourceHash = await sourceFile.GetHashAsync();
+            string targetHash = await targetFile.GetHashAsync();
+
+            sourceHash.Should().Be( targetHash );
+
+            await targetFile.DeleteAsync();
+        }
+
+        [ Fact ]
+        public async Task Should_write_binary_file_to_blob_storage()
+        {
+            var sourceFile = providerResolver.OpenFileReference( "enchilada://local_filesystem/penguin.jpg" );
+            var targetFile = providerResolver.OpenFileReference( $"enchilada://blob_filesystem/penguin{Guid.NewGuid()}.jpg" );
+
+            await targetFile.CopyFromAsync( sourceFile );
+
+            targetFile.Exists.Should().BeTrue();
 
             string sourceHash = await sourceFile.GetHashAsync();
             string targetHash = await targetFile.GetHashAsync();
