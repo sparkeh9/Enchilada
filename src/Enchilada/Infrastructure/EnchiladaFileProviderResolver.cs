@@ -28,14 +28,14 @@
             return (IFileProvider) Activator.CreateInstance( matchingProvider.FileProvider, matchingProvider, providerUri.PathAndQuery );
         }
 
-        public IDirectory OpenDirectory( string uri )
+        public IDirectory OpenDirectoryReference( string uri )
         {
             var provider = OpenProvider( uri );
 
             return provider.RootDirectory;
         }
 
-        public IFile OpenFile( string uri )
+        public IFile OpenFileReference( string uri )
         {
             var provider = OpenProvider( uri );
 

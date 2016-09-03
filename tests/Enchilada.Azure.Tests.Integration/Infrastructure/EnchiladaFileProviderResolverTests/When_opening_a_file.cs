@@ -29,7 +29,7 @@
                                                              }
                                                          } );
 
-            Assert.Throws<UriFormatException>( () => sut.OpenFile( "abc" ) );
+            Assert.Throws<UriFormatException>( () => sut.OpenFileReference( "abc" ) );
         }
 
 
@@ -51,7 +51,7 @@
                                                              }
                                                          } );
 
-            var provider = sut.OpenFile( "enchilada://blob_filesystem/ABC123.txt" );
+            var provider = sut.OpenFileReference( "enchilada://blob_filesystem/ABC123.txt" );
             provider.Should().BeOfType<BlobStorageFile>();
             provider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/ABC123.txt" );
             provider.Name.Should().Be( "ABC123.txt" );
@@ -82,12 +82,12 @@
                                                              }
                                                          } );
 
-            var firstProvider = sut.OpenFile( "enchilada://blob_filesystem/SampleContent.txt" );
+            var firstProvider = sut.OpenFileReference( "enchilada://blob_filesystem/SampleContent.txt" );
             firstProvider.Should().BeOfType<BlobStorageFile>();
             firstProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/SampleContent.txt" );
             firstProvider.Name.Should().Be( "SampleContent.txt" );
 
-            var secondProvider = sut.OpenFile( "enchilada://another_filesystem/SampleContent.txt" );
+            var secondProvider = sut.OpenFileReference( "enchilada://another_filesystem/SampleContent.txt" );
             secondProvider.Should().BeOfType<BlobStorageFile>();
             secondProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test123/SampleContent.txt" );
             secondProvider.Name.Should().Be( "SampleContent.txt" );

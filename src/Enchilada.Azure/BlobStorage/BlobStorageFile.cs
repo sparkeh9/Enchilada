@@ -49,6 +49,15 @@
             }
         }
 
+        public async Task CopyFromAsync( IFile sourceFile )
+        {
+            using ( var sourceStream = await sourceFile.OpenReadAsync() )
+            using ( var targetStream = await OpenWriteAsync() )
+            {
+                await sourceStream.CopyToAsync( targetStream );
+            }
+        }
+
         public async Task<byte[]> ReadToEndAsync()
         {
             using ( var fileStream = await OpenReadAsync() )

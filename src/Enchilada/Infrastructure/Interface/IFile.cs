@@ -30,5 +30,12 @@
         /// </summary>
         /// <returns></returns>
         Task<string> GetHashAsync();
+
+        /// <summary>
+        /// Copies a file from source to target
+        /// </summary>
+        /// <param name="sourceFile"></param>
+        /// <returns></returns>
+        Task CopyFromAsync( IFile sourceFile );
     }
 }
