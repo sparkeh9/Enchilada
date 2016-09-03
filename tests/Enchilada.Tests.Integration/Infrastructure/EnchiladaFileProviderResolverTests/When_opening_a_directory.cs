@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Configuration;
+    using Enchilada.Infrastructure;
     using Enchilada.Infrastructure.Exceptions;
     using Filesystem;
     using Helpers;
@@ -85,6 +86,27 @@
             var secondProvider = sut.OpenDirectory( "enchilada://another_filesystem/" );
             secondProvider.Should().BeOfType<FilesystemDirectory>();
             secondProvider.RealPath.Should().Be( secondProviderPath );
+        }
+
+
+        [ Fact ]
+        public void Should_allow_path_with_extension_in_name()
+        {
+            string filesystemPath = ResourceHelpers.GetResourceDirectoryInfo( "test_filesystem" ).FullName;
+            var sut = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
+                                                         {
+                                                             Adapters = new List<IEnchiladaAdapterConfiguration>
+                                                             {
+                                                                 new FilesystemAdapterConfiguration
+                                                                 {
+                                                                     AdapterName = "test_filesystem",
+                                                                     Directory = filesystemPath
+                                                                 }
+                                                             }
+                                                         } );
+            var provider = sut.OpenDirectory( "enchilada://test_filesystem/test.folder/" );
+            provider.Should().BeOfType<FilesystemDirectory>();
+            provider.RealPath.Should().EndWith( "test.folder" );
         }
     }
 }

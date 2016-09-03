@@ -17,7 +17,15 @@
 
         public FilesystemFileProvider( FilesystemAdapterConfiguration configuration, string filePath )
         {
+            bool isDirectory = filePath.EndsWith( "/" );
+
             string combinedPath = Path.Combine( configuration.Directory, filePath.Trim( DirectorySeparators ) );
+
+            if ( isDirectory )
+            {
+                SetRootDirectory( combinedPath );
+                return;
+            }
 
             if ( System.IO.File.Exists( combinedPath ) || Path.HasExtension( combinedPath ) )
             {

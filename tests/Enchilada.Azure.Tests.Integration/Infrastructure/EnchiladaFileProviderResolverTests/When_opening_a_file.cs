@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Azure.BlobStorage;
     using Configuration;
+    using Enchilada.Infrastructure;
     using Filesystem;
     using Xunit;
     using FluentAssertions;
@@ -88,7 +89,7 @@
 
             var secondProvider = sut.OpenFile( "enchilada://another_filesystem/SampleContent.txt" );
             secondProvider.Should().BeOfType<BlobStorageFile>();
-            secondProvider.RealPath.Should().Be("http://127.0.0.1:10000/devstoreaccount1/test123/SampleContent.txt");
+            secondProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test123/SampleContent.txt" );
             secondProvider.Name.Should().Be( "SampleContent.txt" );
         }
     }

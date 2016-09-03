@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Configuration;
+    using Enchilada.Infrastructure;
     using Enchilada.Infrastructure.Exceptions;
     using Filesystem;
     using Helpers;

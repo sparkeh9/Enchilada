@@ -7,8 +7,7 @@ It aims to have the cover the whole enchilada, the ability to interact with any 
 
 Implemented:
 - Local Filesystem
-
-Planned:
 - Azure Blob Storage
+Planned:
 - FTP/S (FTP over SSL)
 - SFTP (FTP over SSH)

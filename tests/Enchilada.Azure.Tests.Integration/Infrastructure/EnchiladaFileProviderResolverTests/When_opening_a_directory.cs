@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Azure.BlobStorage;
     using Configuration;
+    using Enchilada.Infrastructure;
     using Enchilada.Infrastructure.Exceptions;
     using Filesystem;
     using FluentAssertions;
