@@ -10,7 +10,7 @@
 
     public class When_opening_a_stream_to_read
     {
-        private string FileContent = "Lorem ipsum";
+        private string FileContent = "When_opening_a_stream_to_read";
 
         [ Fact ]
         public async Task Should_give_stream()
@@ -35,7 +35,6 @@
             string fileName = $"{Guid.NewGuid()}.txt";
             await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), fileName, FileContent );
             var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), fileName );
-
 
             using ( var stream = await sut.OpenReadAsync() )
             using ( var reader = new StreamReader( stream ) )

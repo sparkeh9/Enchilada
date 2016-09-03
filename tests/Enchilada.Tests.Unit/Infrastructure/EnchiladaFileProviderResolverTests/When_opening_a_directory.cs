@@ -16,7 +16,7 @@
         public void Should_throw_exception_when_no_configuration_provided()
         {
             var sut = new EnchiladaFileProviderResolver();
-            Assert.Throws<ConfigurationMissingException>( () => sut.OpenProvider( "abc" ) );
+            Assert.Throws<ConfigurationMissingException>( () => sut.OpenDirectory( "abc" ) );
         }
 
         [ Fact ]
@@ -34,7 +34,7 @@
                                                              }
                                                          } );
 
-            Assert.Throws<UriFormatException>( () => sut.OpenProvider( "abc" ) );
+            Assert.Throws<UriFormatException>( () => sut.OpenDirectory( "abc" ) );
         }
 
         [ Fact ]
@@ -52,9 +52,9 @@
                                                                  }
                                                              }
                                                          } );
-            var provider = sut.OpenProvider( "enchilada://test_filesystem/" );
-            provider.Should().BeOfType<FilesystemFileProvider>();
-            provider.RootDirectory.RealPath.Should().Be( filesystemPath );
+            var provider = sut.OpenDirectory( "enchilada://test_filesystem/" );
+            provider.Should().BeOfType<FilesystemDirectory>();
+            provider.RealPath.Should().Be( filesystemPath );
         }
 
         [ Fact ]
@@ -79,13 +79,13 @@
                                                              }
                                                          } );
 
-            var firstProvider = sut.OpenProvider( "enchilada://test_filesystem/" );
-            firstProvider.Should().BeOfType<FilesystemFileProvider>();
-            firstProvider.RootDirectory.RealPath.Should().Be( firstProviderPath );
+            var firstProvider = sut.OpenDirectory( "enchilada://test_filesystem/" );
+            firstProvider.Should().BeOfType<FilesystemDirectory>();
+            firstProvider.RealPath.Should().Be( firstProviderPath );
 
-            var secondProvider = sut.OpenProvider( "enchilada://another_filesystem/" );
-            secondProvider.Should().BeOfType<FilesystemFileProvider>();
-            secondProvider.RootDirectory.RealPath.Should().Be( secondProviderPath );
+            var secondProvider = sut.OpenDirectory( "enchilada://another_filesystem/" );
+            secondProvider.Should().BeOfType<FilesystemDirectory>();
+            secondProvider.RealPath.Should().Be( secondProviderPath );
         }
     }
 }

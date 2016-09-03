@@ -16,7 +16,7 @@
         public void Should_throw_exception_when_no_configuration_provided()
         {
             var sut = new EnchiladaFileProviderResolver();
-            Assert.Throws<ConfigurationMissingException>( () => sut.OpenProvider( "abc" ) );
+            Assert.Throws<ConfigurationMissingException>( () => sut.OpenFile( "abc" ) );
         }
 
         [ Fact ]
@@ -34,7 +34,7 @@
                                                              }
                                                          } );
 
-            Assert.Throws<UriFormatException>( () => sut.OpenProvider( "abc" ) );
+            Assert.Throws<UriFormatException>( () => sut.OpenFile( "abc" ) );
         }
 
         [ Fact ]
@@ -59,13 +59,13 @@
                                                              }
                                                          } );
 
-            var firstProvider = sut.OpenProvider( "enchilada://test_filesystem/" );
-            firstProvider.Should().BeOfType<FilesystemFileProvider>();
-            firstProvider.RootDirectory.RealPath.Should().Be( firstProviderPath );
+            var firstProvider = sut.OpenFile( "enchilada://test_filesystem/abc.txt" );
+            firstProvider.Should().BeOfType<FilesystemFile>();
+            firstProvider.RealPath.Should().Be( $"{firstProviderPath}\\abc.txt" );
 
-            var secondProvider = sut.OpenProvider( "enchilada://another_filesystem/" );
-            secondProvider.Should().BeOfType<FilesystemFileProvider>();
-            secondProvider.RootDirectory.RealPath.Should().Be( secondProviderPath );
+            var secondProvider = sut.OpenFile( "enchilada://another_filesystem/123.txt" );
+            secondProvider.Should().BeOfType<FilesystemFile>();
+            secondProvider.RealPath.Should().Be( $"{secondProviderPath}\\123.txt" );
         }
     }
 }

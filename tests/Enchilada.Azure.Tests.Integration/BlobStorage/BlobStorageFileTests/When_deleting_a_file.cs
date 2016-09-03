@@ -17,10 +17,6 @@
             await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), fileName, "test" );
             var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), fileName );
 
-            sut.Exists.Should().BeFalse();
-
-            using ( await sut.OpenWriteAsync() ) {}
-
             sut.Exists.Should().BeTrue();
 
             await sut.DeleteAsync();

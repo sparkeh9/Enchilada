@@ -48,5 +48,23 @@
 
             await sut.DeleteAsync();
         }
+
+        [ Fact ]
+        public async Task Should_write_content_to_file_in_deep_structure()
+        {
+            var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), $"folder1/folder2/folder3/{Guid.NewGuid()}.txt" );
+
+            using ( var stream = await sut.OpenWriteAsync() )
+            using ( var writer = new StreamWriter( stream ) )
+            {
+                writer.Write( WRITE_CONTENT );
+            }
+
+            string fileContents = await sut.RealPath.MakeHttpRequestAsync();
+
+            fileContents.Should().Be( WRITE_CONTENT );
+
+            await sut.DeleteAsync();
+        }
     }
 }

@@ -10,7 +10,7 @@
 
     public class When_reading_to_end_of_stream
     {
-        private const string FileContent = "Lorem Ipsum";
+        private const string FileContent = "When_reading_to_end_of_stream";
 
         [ Fact ]
         public async Task Should_return_contents_of_file()
@@ -23,6 +23,7 @@
             string contents = Encoding.UTF8.GetString( bytes );
 
             contents.Should().Be( FileContent );
+            await sut.DeleteAsync();
         }
     }
 }

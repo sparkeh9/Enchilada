@@ -15,7 +15,7 @@
             this.enchiladaConfiguration = enchiladaConfiguration;
         }
 
-        public IFileProvider OpenProvider( string uri )
+        protected IFileProvider OpenProvider( string uri )
         {
             if ( enchiladaConfiguration == null || !enchiladaConfiguration.Adapters.Any() )
                 throw new ConfigurationMissingException();
@@ -26,6 +26,20 @@
                                                          .FirstOrDefault( x => x.AdapterName == providerUri.Host );
 
             return (IFileProvider) Activator.CreateInstance( matchingProvider.FileProvider, matchingProvider, providerUri.PathAndQuery );
+        }
+
+        public IDirectory OpenDirectory( string uri )
+        {
+            var provider = OpenProvider( uri );
+
+            return provider.RootDirectory;
+        }
+
+        public IFile OpenFile( string uri )
+        {
+            var provider = OpenProvider( uri );
+
+            return provider.File;
         }
     }
 }

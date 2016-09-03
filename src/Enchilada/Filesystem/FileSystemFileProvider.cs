@@ -19,19 +19,13 @@
         {
             string combinedPath = Path.Combine( configuration.Directory, filePath.Trim( DirectorySeparators ) );
 
-            if ( System.IO.File.Exists( combinedPath ) )
+            if ( System.IO.File.Exists( combinedPath ) || Path.HasExtension( combinedPath ) )
             {
                 SetRootDirectory( Directory.GetParent( combinedPath ).FullName );
                 File = RootDirectory.GetFile( Path.GetFileName( combinedPath ) );
             }
             else
             {
-                if ( Path.HasExtension( combinedPath ) )
-                {
-                    SetRootDirectory( Directory.GetParent( combinedPath ).FullName );
-                    return;
-                }
-
                 SetRootDirectory( combinedPath );
             }
         }

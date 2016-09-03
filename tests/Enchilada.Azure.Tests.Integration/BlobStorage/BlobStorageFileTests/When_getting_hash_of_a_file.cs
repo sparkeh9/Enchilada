@@ -9,7 +9,7 @@
 
     public class When_getting_hash_of_a_file
     {
-        private const string FileContent = "Lorem Ipsum";
+        private const string FileContent = "When_getting_hash_of_a_file";
 
         [ Fact ]
         public async Task Should_give_md5_hash_of_file()
@@ -22,7 +22,7 @@
             var hash = await sut.GetHashAsync();
 
             hash.Should().NotBeEmpty();
-            hash.Should().Be("6dbd01b4309de2c22b027eb35a3ce18b");
+            hash.Should().Be( "081cb72eaaacae3df4502708ff956d23" );
 
             await sut.DeleteAsync();
         }

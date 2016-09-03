@@ -2,6 +2,7 @@
 {
     public interface IEnchiladaFilesystemResolver
     {
-        IFileProvider OpenProvider( string uri );
+        IDirectory OpenDirectory( string uri );
+        IFile OpenFile( string uri );
     }
 }

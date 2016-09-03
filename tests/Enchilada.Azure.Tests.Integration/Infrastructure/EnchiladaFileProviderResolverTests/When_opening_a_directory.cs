@@ -16,7 +16,7 @@
         public void Should_throw_exception_when_no_configuration_provided()
         {
             var sut = new EnchiladaFileProviderResolver();
-            Assert.Throws<ConfigurationMissingException>( () => sut.OpenProvider( "abc" ) );
+            Assert.Throws<ConfigurationMissingException>( () => sut.OpenDirectory( "abc" ) );
         }
 
         [ Fact ]
@@ -37,7 +37,7 @@
                                                              }
                                                          } );
 
-            Assert.Throws<UriFormatException>( () => sut.OpenProvider( "abc" ) );
+            Assert.Throws<UriFormatException>( () => sut.OpenDirectory( "abc" ) );
         }
 
         [ Fact ]
@@ -57,9 +57,9 @@
                                                                  }
                                                              }
                                                          } );
-            var provider = sut.OpenProvider( "enchilada://blob_filesystem/" );
-            provider.Should().BeOfType<BlobStorageFileProvider>();
-            provider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/" );
+            var directory = sut.OpenDirectory( "enchilada://blob_filesystem/" );
+            directory.Should().BeOfType<BlobStorageDirectory>();
+            directory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/" );
         }
 
         [ Fact ]
@@ -83,17 +83,26 @@
                                                                      CreateContainer = true,
                                                                      ConnectionString = "UseDevelopmentStorage=true;",
                                                                      ContainerReference = "test123"
-                                                                 }
+                                                                 },
+                                                                 new FilesystemAdapterConfiguration
+                                                                 {
+                                                                     AdapterName = "local_filesystem",
+                                                                     Directory = "c:\\"
+                                                                 },
                                                              }
                                                          } );
 
-            var firstProvider = sut.OpenProvider( "enchilada://blob_filesystem/" );
-            firstProvider.Should().BeOfType<BlobStorageFileProvider>();
-            firstProvider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/" );
+            var firstProvider = sut.OpenDirectory( "enchilada://blob_filesystem/" );
+            firstProvider.Should().BeOfType<BlobStorageDirectory>();
+            firstProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/" );
 
-            var secondProvider = sut.OpenProvider( "enchilada://another_filesystem/abc123/" );
-            secondProvider.Should().BeOfType<BlobStorageFileProvider>();
-            secondProvider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test123/abc123/" );
+            var secondProvider = sut.OpenDirectory( "enchilada://another_filesystem/abc123/" );
+            secondProvider.Should().BeOfType<BlobStorageDirectory>();
+            secondProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test123/abc123/" );
+
+            var thirdProvider = sut.OpenDirectory( "enchilada://local_filesystem/abc123/" );
+            thirdProvider.Should().BeOfType<FilesystemDirectory>();
+            thirdProvider.RealPath.Should().Be( "c:\\abc123" );
         }
     }
 }
