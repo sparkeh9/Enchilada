@@ -1,10 +1,10 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemFileTests
+﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemFileTests
 {
     using System.Threading.Tasks;
     using Filesystem;
-    using FluentAssertions;
     using Helpers;
     using Xunit;
+    using FluentAssertions;
 
     public class When_getting_hash_of_a_file
     {

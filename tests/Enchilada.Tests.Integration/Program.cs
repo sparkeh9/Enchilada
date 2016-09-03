@@ -1,4 +1,4 @@
-﻿namespace Enchilada.Tests.Unit
+﻿namespace Enchilada.Tests.Integration
 {
     public class Program
     {

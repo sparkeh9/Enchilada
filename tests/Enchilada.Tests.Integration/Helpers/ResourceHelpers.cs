@@ -1,4 +1,4 @@
-﻿namespace Enchilada.Tests.Unit.Helpers
+﻿namespace Enchilada.Tests.Integration.Helpers
 {
     using System.IO;
 

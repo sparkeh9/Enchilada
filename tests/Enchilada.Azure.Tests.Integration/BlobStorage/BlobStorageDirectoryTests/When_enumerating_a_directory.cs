@@ -54,7 +54,6 @@
             await sut.DeleteAsync();
         }
 
-//
         [ Fact ]
         public async Task Should_list_all_nodes()
         {
@@ -68,8 +67,7 @@
             nodes.Count( x => x.IsDirectory ).Should().Be( 1 );
             nodes.Count( x => !x.IsDirectory ).Should().Be( 1 );
 
-            await file.DeleteAsync();
-            await file2.DeleteAsync();
+            await sut.DeleteAsync();
         }
     }
 }

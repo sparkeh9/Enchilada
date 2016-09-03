@@ -1,10 +1,10 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemFileProviderTests
+﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemFileProviderTests
 {
     using System.IO;
     using Filesystem;
-    using FluentAssertions;
     using Helpers;
     using Xunit;
+    using FluentAssertions;
 
     public class When_opening_a_directory
     {

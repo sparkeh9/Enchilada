@@ -1,11 +1,11 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemDirectoryTests
+﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemDirectoryTests
 {
     using System;
     using System.Threading.Tasks;
     using Filesystem;
-    using FluentAssertions;
     using Helpers;
     using Xunit;
+    using FluentAssertions;
 
     public class When_creating_a_directory
     {

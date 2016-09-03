@@ -1,14 +1,13 @@
-﻿namespace Enchilada.Tests.Unit.Infrastructure.EnchiladaFileProviderResolverTests
+﻿namespace Enchilada.Tests.Integration.Infrastructure.EnchiladaFileProviderResolverTests
 {
     using System;
     using System.Collections.Generic;
     using Configuration;
-    using Enchilada.Infrastructure;
     using Enchilada.Infrastructure.Exceptions;
     using Filesystem;
-    using FluentAssertions;
     using Helpers;
     using Xunit;
+    using FluentAssertions;
 
     public class When_opening_a_directory
     {

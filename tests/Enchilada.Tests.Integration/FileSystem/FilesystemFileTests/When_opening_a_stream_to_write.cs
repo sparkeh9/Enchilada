@@ -1,12 +1,12 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemFileTests
+﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemFileTests
 {
     using System;
     using System.IO;
     using System.Threading.Tasks;
     using Filesystem;
-    using FluentAssertions;
     using Helpers;
     using Xunit;
+    using FluentAssertions;
 
     public class When_opening_a_stream_to_write
     {

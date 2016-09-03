@@ -1,9 +1,9 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemDirectoryTests
+﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemDirectoryTests
 {
-    using System.Linq;
     using Filesystem;
     using FluentAssertions;
     using Helpers;
+    using System.Linq;
     using Xunit;
 
     public class When_enumerating_a_directory

@@ -1,12 +1,12 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemDirectoryTests
+﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemDirectoryTests
 {
     using System;
     using System.IO;
     using System.Threading.Tasks;
     using Filesystem;
-    using FluentAssertions;
     using Helpers;
     using Xunit;
+    using FluentAssertions;
 
     public class When_getting_file
     {

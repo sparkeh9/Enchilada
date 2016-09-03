@@ -1,11 +1,11 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemFileTests
+﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemFileTests
 {
     using System.Text;
     using System.Threading.Tasks;
     using Filesystem;
     using Helpers;
-    using FluentAssertions;
     using Xunit;
+    using FluentAssertions;
 
     public class When_reading_to_end_of_stream
     {

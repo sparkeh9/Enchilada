@@ -1,13 +1,13 @@
-﻿namespace Enchilada.Tests.Unit.FileSystem.FilesystemFileProviderTests
+﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemFileProviderTests
 {
     using System;
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
     using Filesystem;
-    using FluentAssertions;
     using Helpers;
     using Xunit;
+    using FluentAssertions;
 
     public class When_opening_a_file
     {

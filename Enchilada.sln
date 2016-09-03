@@ -7,7 +7,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Enchilada", "src\Enchilada\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E6AFB850-E9AE-44FD-860E-2C90592A9FA4}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Enchilada.Tests.Unit", "tests\Enchilada.Tests.Unit\Enchilada.Tests.Unit.xproj", "{95BE51D4-0195-4E0B-9A8B-DD737DF3B84B}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Enchilada.Tests.Integration", "tests\Enchilada.Tests.Integration\Enchilada.Tests.Integration.xproj", "{95BE51D4-0195-4E0B-9A8B-DD737DF3B84B}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Enchilada.Azure", "src\Enchilada.Azure\Enchilada.Azure.xproj", "{A938BCB5-D6C7-401C-97FB-306DF25B74CA}"
 EndProject

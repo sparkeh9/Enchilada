@@ -104,7 +104,7 @@
             BlobContinuationToken continuationToken = null;
             do
             {
-                var response = Task.Run( () => BlobContainer.ListBlobsSegmentedAsync( Path, continuationToken ) ).Result;
+                var response = Task.Run( () => BlobContainer.GetDirectoryReference( Path ).ListBlobsSegmentedAsync( continuationToken ) ).Result;
                 continuationToken = response.ContinuationToken;
 
                 foreach ( var result in response.Results.Where( x => x is CloudBlockBlob ) )
