@@ -4,11 +4,10 @@ namespace Enchilada.Infrastructure.Interface
 
     public interface IDirectory : INode, IEnumerable<INode>
     {
-
         IEnumerable<IFile> Files { get; }
         IEnumerable<IDirectory> Directories { get; }
-        IEnumerable<IDirectory> GetDirectories( string path );
-        IDirectory GetDirectory( string path );
+        IReadOnlyCollection<IDirectory> GetDirectories( string path );
+        IDirectory GetDirectory(string path );
         void CreateDirectory();
         IFile GetFile( string fileName );
     }

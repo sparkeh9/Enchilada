@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -23,9 +24,9 @@
 
         public string RealPath => BlobContainer.GetDirectoryReference( Path ).Uri.ToString().StripDoubleSlash();
 
-        public IEnumerable<IFile> Files => GetBlobFiles();
+        public IEnumerable<IFile> Files => new ReadOnlyCollection<IFile>( GetBlobFiles().ToList() );
 
-        public IEnumerable<IDirectory> Directories => GetBlobDirectories();
+        public IEnumerable<IDirectory> Directories => new ReadOnlyCollection<IDirectory>( GetBlobDirectories().ToList() );
 
         public bool Exists => true;
 
@@ -40,12 +41,12 @@
             BlobContinuationToken continuationToken = null;
             do
             {
-                var response = Task.Run( () => BlobContainer.ListBlobsSegmentedAsync( Path, continuationToken ) ).Result;
+                var response = Task.Run( () => BlobContainer.ListBlobsSegmentedAsync( Path, true, new BlobListingDetails(), 999, continuationToken, new BlobRequestOptions(), null ) ).Result;
                 continuationToken = response.ContinuationToken;
 
                 foreach ( var result in response.Results )
                 {
-                    var blob = result as CloudBlockBlob;
+                    var blob = result as CloudBlob;
                     if ( blob != null )
                     {
                         await blob.DeleteIfExistsAsync();
@@ -66,9 +67,9 @@
             return GetEnumerator();
         }
 
-        public IEnumerable<IDirectory> GetDirectories( string path )
+        public IReadOnlyCollection<IDirectory> GetDirectories( string path )
         {
-            return GetBlobDirectories( path );
+            return new ReadOnlyCollection<IDirectory>( GetBlobDirectories( path ).ToList() );
         }
 
         public IDirectory GetDirectory( string path )
@@ -91,7 +92,7 @@
                 var response = Task.Run( () => BlobContainer.ListBlobsSegmentedAsync( Path, continuationToken ) ).Result;
                 continuationToken = response.ContinuationToken;
 
-                foreach ( var result in response.Results.Where( x => x is CloudBlobDirectory && path == null || ( (CloudBlobDirectory) x ).Prefix.EndsWith( path ) ) )
+                foreach ( var result in response.Results.Where( x => x is CloudBlobDirectory && path == null || ( (CloudBlobDirectory) x ).Prefix.EndsWith( $"{path}/" ) ) )
                 {
                     yield return new BlobStorageDirectory( BlobContainer, ( (CloudBlobDirectory) result ).Prefix );
                 }

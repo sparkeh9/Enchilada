@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -58,10 +59,12 @@
             return GetEnumerator();
         }
 
-        public IEnumerable<IDirectory> GetDirectories( string path )
+        public IReadOnlyCollection<IDirectory> GetDirectories( string path )
         {
-            return BackingDirectory.GetDirectories( path, SearchOption.TopDirectoryOnly )
-                                   .Select( x => new FilesystemDirectory( x ) );
+            var list = BackingDirectory.GetDirectories( path, SearchOption.TopDirectoryOnly )
+                                       .Select( x => new FilesystemDirectory( x ) )
+                                       .ToList();
+            return new ReadOnlyCollection<FilesystemDirectory>( list );
         }
 
         public IDirectory GetDirectory( string path )

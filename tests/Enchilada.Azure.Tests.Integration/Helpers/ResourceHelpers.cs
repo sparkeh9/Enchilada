@@ -33,7 +33,7 @@
             }
         }
 
-        public static async Task CreateFileWithContentAsync( CloudBlobContainer container, string filename, string content )
+        public static async Task<BlobStorageFile> CreateFileWithContentAsync( CloudBlobContainer container, string filename, string content )
         {
             var blobFile = new BlobStorageFile( container, filename );
 
@@ -42,7 +42,8 @@
             {
                 writer.Write( content );
             }
-        }
 
+            return blobFile;
+        }
     }
 }
