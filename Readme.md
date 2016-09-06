@@ -20,7 +20,7 @@ fileSystemResolver.OpenFileReference( "enchilada://blob_storage/image.jpg" );
 ```
 
 The URI is made up of three parts:
-- The protocol: Simply by convention this is normally enchilada://, but any such protocol can be specified)
+- The protocol: Simply by convention this is normally enchilada://, but any such protocol can be specified
 - The provider name: This mirrors the configurations you have specified in the appsettings file. It can be anything which looks like a valid URI hostname, however it must have a corresponding configuration.
 - The path: as you might imagine, this is the path to the file.
 
