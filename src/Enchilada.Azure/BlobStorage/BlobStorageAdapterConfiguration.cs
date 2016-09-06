@@ -1,9 +1,10 @@
 ﻿namespace Enchilada.Azure.BlobStorage
 {
     using System;
-    using System.Reflection;
     using Configuration;
+    using Infrastructure.Attributes;
 
+    [ FilesystemAdapterMoniker( "azure-blob" ) ]
     public class BlobStorageAdapterConfiguration : IEnchiladaAdapterConfiguration
     {
         public string AdapterName { get; set; }
