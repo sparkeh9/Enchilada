@@ -4,12 +4,25 @@ Enchilada is a filesystem abstraction layer written in C#, the aim is to enable
 the seamless use of file operations over and between different providers.
 
 Implemented:
-- Local Filesystem
-- Azure Blob Storage
+- Local Filesystem - (local)
+- Azure Blob Storage - (azure-blob)
 
 Planned:
 - FTP/S (FTP over SSL)
-- SFTP (FTP over SSH)
+- SCP (Secure Copy)
+
+##Usage##
+To reference a file, simply inject the filesystem resolver (IEnchiladaFilesystemResolver) into your code, which will normally be a single instance of Enchilada.Infrastructure.EnchiladaFileProviderResolver.
+Once injected, simply supply a URI (as below) to OpenFileReference, this will produce an instance of IFile, which represents the file on whatever platform your configuration specifies, regardless of whether it exists yet or not.
+
+```
+fileSystemResolver.OpenFileReference( "enchilada://blob_storage/image.jpg" );
+```
+
+The URI is made up of three parts:
+- The protocol: Simply by convention this is normally enchilada://, but any such protocol can be specified)
+- The provider name: This mirrors the configurations you have specified in the appsettings file. It can be anything which looks like a valid URI hostname, however it must have a corresponding configuration.
+- The path: as you might imagine, this is the path to the file.
 
 ##Local##
 The local adapter allows the resolution of files on the local filesystem or UNC path. 
