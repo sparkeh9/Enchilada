@@ -1,17 +1,18 @@
 {
-  "version": "1.0.0-*",
+    "version": "0.0.1-*",
 
-  "dependencies": {
-    "Enchilada": "1.0.0-*",
-    "NETStandard.Library": "1.6.0",
-    "WindowsAzure.Storage": "7.2.0"
-  },
-
-  "frameworks": {
-    "netstandard1.6": {
-      "imports": [ "dnxcore50", "portable-net451+win8" ]
+    "dependencies": {
+        "Enchilada": "0.0.1-*",
+        "NETStandard.Library": "1.6.0",
+        "WindowsAzure.Storage": "7.2.1"
     },
-    "net452": {
+
+    "frameworks": {
+        "netstandard1.6": {
+            "imports": ["dnxcore50", "portable-net45+netcore45+wp8"]
+        },
+        "net46": {
+    
+        }
     }
-  }
 }

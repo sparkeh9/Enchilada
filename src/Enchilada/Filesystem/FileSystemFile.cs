@@ -53,7 +53,7 @@
         {
             using ( var fileStream = await OpenReadAsync() )
             {
-                return await fileStream.ReadStreamToEndAsync();
+                return await fileStream.ReadStreamToEndResetAsync();
             }
         }
 
@@ -86,5 +86,7 @@
             task.Start();
             await task;
         }
+
+        public void Dispose() {}
     }
 }

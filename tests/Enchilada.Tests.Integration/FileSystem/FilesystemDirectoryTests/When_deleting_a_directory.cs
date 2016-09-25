@@ -15,7 +15,7 @@
             var resourceDirectory = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
 
             var sut = resourceDirectory.GetDirectory( $"testfolder_{Guid.NewGuid()}" );
-            sut.CreateDirectory();
+            await sut.CreateDirectoryAsync();
 
             sut.Exists.Should().BeTrue();
             await sut.DeleteAsync();

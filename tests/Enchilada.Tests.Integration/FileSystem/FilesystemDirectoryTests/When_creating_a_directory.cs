@@ -17,7 +17,7 @@
             var sut = resourceDirectory.GetDirectory( $"testfolder_{Guid.NewGuid()}" );
             sut.Exists.Should().BeFalse();
 
-            sut.CreateDirectory();
+            await sut.CreateDirectoryAsync();
 
             sut.Exists.Should().BeTrue();
 
@@ -31,9 +31,9 @@
 
             var sut = resourceDirectory.GetDirectory( $"testfolder_{Guid.NewGuid()}" );
 
-            sut.CreateDirectory();
+            await sut.CreateDirectoryAsync();
             sut.Exists.Should().BeTrue();
-            sut.CreateDirectory();
+            await sut.CreateDirectoryAsync();
 
             await sut.DeleteAsync();
         }

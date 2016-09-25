@@ -1,11 +1,9 @@
 ﻿namespace Enchilada.Azure.Tests.Integration.BlobStorage.BlobStorageDirectoryTests
 {
     using System;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
-    using Filesystem;
     using FluentAssertions;
     using Helpers;
     using Xunit;
@@ -32,24 +30,9 @@
 
             var sut = new BlobStorageDirectory( ResourceHelpers.GetLocalDevelopmentContainer(), "folder1" );
 
-            var level1List = sut.GetDirectories( "folder1" );
+            var level1List = await sut.GetDirectoriesAsync();
 
             level1List.Should().NotBeEmpty();
-
-            await sut.DeleteAsync();
-        }
-
-
-        [ Fact ]
-        public async Task Should_not_find_nonexistent_path()
-        {
-            await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), $"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff" );
-
-            var sut = new BlobStorageDirectory( ResourceHelpers.GetLocalDevelopmentContainer(), "folder1" );
-
-            var nonexistentPathList = sut.GetDirectories( "abc123" );
-
-            nonexistentPathList.Should().BeEmpty();
 
             await sut.DeleteAsync();
         }
@@ -57,8 +40,8 @@
         [ Fact ]
         public async Task Should_list_all_nodes()
         {
-            var file = await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), $"folder1/{Guid.NewGuid()}.txt", "stuff" );
-            var file2 = await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), $"folder1/folder2/{Guid.NewGuid()}.txt", "stuff" );
+            await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), $"folder1/{Guid.NewGuid()}.txt", "stuff" );
+            await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), $"folder1/folder2/{Guid.NewGuid()}.txt", "stuff" );
 
             var sut = new BlobStorageDirectory( ResourceHelpers.GetLocalDevelopmentContainer(), "folder1" );
 

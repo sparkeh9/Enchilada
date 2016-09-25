@@ -62,7 +62,7 @@
         {
             using ( var fileStream = await OpenReadAsync() )
             {
-                return await fileStream.ReadStreamToEndAsync();
+                return await fileStream.ReadStreamToEndResetAsync();
             }
         }
 
@@ -88,5 +88,7 @@
             var blob = BlobContainer.GetBlockBlobReference( FilePath );
             await blob.DeleteIfExistsAsync();
         }
+
+        public void Dispose() {}
     }
 }

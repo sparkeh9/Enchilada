@@ -8,7 +8,6 @@
 
     public class BlobStorageFileProvider : IFileProvider
     {
-        private readonly char[] DirectorySeparators = { '/', '\\' };
         protected DirectoryInfo BackingRootDirectory;
 
         public IDirectory RootDirectory { get; protected set; }
@@ -22,8 +21,7 @@
             bool isDirectory = filePath.EndsWith( "/" );
             string blobPath = filePath.StripLeadingSlash();
             bool isRootContainer = blobPath.IsNullOrWhiteSpace();
-
-
+            
             var account = CloudStorageAccount.Parse( configuration.ConnectionString );
             var blobClient = account.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference( configuration.ContainerReference );
@@ -52,6 +50,11 @@
 
             RootDirectory = new BlobStorageDirectory( container, blobPath.RemoveFilename() );
             File = RootDirectory.GetFile( blobPath );
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿namespace Enchilada.Infrastructure.Interface
 {
-    public interface IFileProvider
+    using System;
+
+    public interface IFileProvider : IDisposable
     {
         IDirectory RootDirectory { get; }
         IFile File { get; }

@@ -6,8 +6,8 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>7ad94b7a-554d-4ff0-814b-a303fc2eceed</ProjectGuid>
-    <RootNamespace>Enchilada</RootNamespace>
+    <ProjectGuid>09bbf3dd-9b01-4005-ab1b-88653d4248a0</ProjectGuid>
+    <RootNamespace>Enchilada.Ftp</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -18,7 +18,7 @@
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties project_1json__JSONSchema="http://json.schemastore.org/schema-org-thing" />
+      <UserProperties project_1json__JSONSchema="http://json.schemastore.org/project-1.0.0-beta4" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

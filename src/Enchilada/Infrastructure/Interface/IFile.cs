@@ -1,10 +1,11 @@
 ﻿namespace Enchilada.Infrastructure.Interface
 {
+    using System;
     using System.IO;
     using System.Threading.Tasks;
     using FileMode = Infrastructure.FileMode;
 
-    public interface IFile : INode
+    public interface IFile : INode, IDisposable
     {
         /// <summary>
         /// Provides a Stream in read-only mode

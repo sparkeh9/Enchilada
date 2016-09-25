@@ -48,5 +48,7 @@
             BackingRootDirectory = directoryInfo;
             RootDirectory = new FilesystemDirectory( BackingRootDirectory );
         }
+
+        public void Dispose() {}
     }
 }

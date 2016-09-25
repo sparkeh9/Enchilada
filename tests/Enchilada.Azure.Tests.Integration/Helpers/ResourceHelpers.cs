@@ -46,9 +46,9 @@
             return blobFile;
         }
 
-        public static DirectoryInfo GetResourceDirectoryInfo(string directory = "")
+        public static DirectoryInfo GetResourceDirectoryInfo( string directory = "" )
         {
-            return new DirectoryInfo($"{Directory.GetCurrentDirectory()}/Resources/{directory}");
+            return new DirectoryInfo( $"{AppContext.BaseDirectory}/Resources/{directory}" );
         }
     }
 }

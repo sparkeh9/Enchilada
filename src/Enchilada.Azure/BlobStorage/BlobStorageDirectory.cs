@@ -24,10 +24,6 @@
 
         public string RealPath => BlobContainer.GetDirectoryReference( Path ).Uri.ToString().StripDoubleSlash();
 
-        public IEnumerable<IFile> Files => new ReadOnlyCollection<IFile>( GetBlobFiles().ToList() );
-
-        public IEnumerable<IDirectory> Directories => new ReadOnlyCollection<IDirectory>( GetBlobDirectories().ToList() );
-
         public bool Exists => true;
 
         public BlobStorageDirectory( CloudBlobContainer blobContainer, string path )
@@ -57,9 +53,9 @@
 
         public IEnumerator<INode> GetEnumerator()
         {
-            return Directories
-                .Union( Files.Cast<INode>() )
-                .GetEnumerator();
+            return GetAllNodesAsync().GetAwaiter()
+                                     .GetResult()
+                                     .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -67,9 +63,17 @@
             return GetEnumerator();
         }
 
-        public IReadOnlyCollection<IDirectory> GetDirectories( string path )
+
+        public async Task<IReadOnlyCollection<IDirectory>> GetDirectoriesAsync()
         {
-            return new ReadOnlyCollection<IDirectory>( GetBlobDirectories( path ).ToList() );
+            await Task.CompletedTask;
+            return new ReadOnlyCollection<IDirectory>( GetBlobDirectories().ToList() );
+        }
+
+        public async Task<IReadOnlyCollection<IFile>> GetFilesAsync()
+        {
+            await Task.CompletedTask;
+            return new ReadOnlyCollection<IFile>( GetBlobFiles().ToList() );
         }
 
         public IDirectory GetDirectory( string path )
@@ -82,7 +86,20 @@
             return new BlobStorageFile( BlobContainer, fileName );
         }
 
-        public void CreateDirectory() {}
+        public async Task<IReadOnlyCollection<INode>> GetAllNodesAsync()
+        {
+            var directories = await GetDirectoriesAsync();
+            var files = await GetFilesAsync();
+
+            return directories.Union( files.Cast<INode>() )
+                              .ToList()
+                              .AsReadOnly();
+        }
+
+        public Task CreateDirectoryAsync()
+        {
+            return Task.CompletedTask;
+        }
 
         private IEnumerable<IDirectory> GetBlobDirectories( string path = null )
         {

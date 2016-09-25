@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -19,12 +18,6 @@
         public bool IsDirectory => true;
 
         public string RealPath => BackingDirectory.FullName;
-
-        public IEnumerable<IFile> Files => from file in BackingDirectory.GetFiles()
-                                           select new FilesystemFile( file );
-
-        public IEnumerable<IDirectory> Directories => from directory in BackingDirectory.GetDirectories()
-                                                      select new FilesystemDirectory( directory );
 
         public bool Exists => Directory.Exists( BackingDirectory.FullName );
 
@@ -49,9 +42,9 @@
 
         public IEnumerator<INode> GetEnumerator()
         {
-            return Directories
-                .Union( Files.Cast<INode>() )
-                .GetEnumerator();
+            return GetAllNodesAsync().GetAwaiter()
+                                     .GetResult()
+                                     .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -59,13 +52,53 @@
             return GetEnumerator();
         }
 
-        public IReadOnlyCollection<IDirectory> GetDirectories( string path )
+        public async Task<IReadOnlyCollection<INode>> GetAllNodesAsync()
         {
+            var directories = await GetDirectoriesAsync();
+            var files = await GetFilesAsync();
+
+            return directories.Union( files.Cast<INode>() )
+                              .ToList()
+                              .AsReadOnly();
+        }
+
+        public async Task<IReadOnlyCollection<IDirectory>> GetDirectoriesAsync()
+        {
+            await Task.CompletedTask;
+
+            var list = BackingDirectory.GetDirectories()
+                                       .Select( x => new FilesystemDirectory( x ) )
+                                       .ToList();
+
+            return list.AsReadOnly();
+        }
+
+        public async Task<IReadOnlyCollection<IDirectory>> GetDirectoriesAsync( string path )
+        {
+            await Task.CompletedTask;
             var list = BackingDirectory.GetDirectories( path, SearchOption.TopDirectoryOnly )
                                        .Select( x => new FilesystemDirectory( x ) )
                                        .ToList();
-            return new ReadOnlyCollection<FilesystemDirectory>( list );
+            return list.AsReadOnly();
         }
+
+        public async Task<IReadOnlyCollection<IFile>> GetFilesAsync()
+        {
+            await Task.CompletedTask;
+            var list = BackingDirectory.GetFiles()
+                                       .Select( x => new FilesystemFile( x ) )
+                                       .ToList();
+            return list.AsReadOnly();
+        }
+
+        public async Task<IReadOnlyCollection<IFile>> GetFilesAsync( string path )
+        {
+            await Task.CompletedTask;
+            var list = ( from file in BackingDirectory.GetFiles()
+                         select new FilesystemFile( file ) ).ToList();
+            return list.AsReadOnly();
+        }
+
 
         public IDirectory GetDirectory( string path )
         {
@@ -77,10 +110,11 @@
             return new FilesystemFile( new FileInfo( Path.Combine( RealPath, fileName ) ) );
         }
 
-        public void CreateDirectory()
+        public async Task CreateDirectoryAsync()
         {
             BackingDirectory.Create();
             BackingDirectory.Refresh();
+            await Task.CompletedTask;
         }
     }
 }
