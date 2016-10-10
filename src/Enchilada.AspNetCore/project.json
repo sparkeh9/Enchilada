@@ -1,5 +1,11 @@
 {
   "version": "0.0.1-*",
+  "copyright": "Nick Briscoe 2016",
+  "language": "en",
+  "packOptions": {
+    "projectUrl": "https://github.com/sparkeh9/Enchilada",
+    "tags": [ "filesystem", "abstraction", "core", "vnext" ]
+  },
 
   "dependencies": {
     "Enchilada": "0.0.1-*",
