@@ -1,17 +1,14 @@
 {
-  "version": "1.0.0-*",
-
-  "dependencies": {
-    "NETStandard.Library": "1.6.0"
-  },
+  "version": "0.0.1-*",
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
     },
-    "net452": {
-    
-    }
+    "net452": {}
   },
   "scripts": {
     "postcompile": [

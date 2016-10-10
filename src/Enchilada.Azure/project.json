@@ -1,17 +1,23 @@
 {
-  "version": "1.0.0-*",
+  "version": "0.0.1-*",
 
   "dependencies": {
-    "Enchilada": "1.0.0-*",
-    "NETStandard.Library": "1.6.0",
+    "Enchilada": "0.0.1-*",
     "WindowsAzure.Storage": "7.2.0"
   },
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": [ "dnxcore50", "portable-net451+win8" ]
+      "imports": ["dnxcore50", "portable-net451+win8"],
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
     },
-    "net452": {
-    }
+    "net452": {}
+  },
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration %compile:Configuration%"
+    ]
   }
 }

@@ -1,20 +1,25 @@
 {
-  "version": "1.0.0-*",
+  "version": "0.0.1-*",
 
   "dependencies": {
-    "Enchilada": "1.0.0-*",
+    "Enchilada": "0.0.1-*",
     "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
     "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
-    "Microsoft.Extensions.DependencyModel": "1.0.0",
-    "NETStandard.Library": "1.6.0"
+    "Microsoft.Extensions.DependencyModel": "1.0.0"
   },
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
     },
-    "net452": {
-    
-    }
+    "net452": {}
+  },
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration %compile:Configuration%"
+    ]
   }
 }
