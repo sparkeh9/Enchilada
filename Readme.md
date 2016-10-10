@@ -1,6 +1,11 @@
 # Enchilada
 [![Build Status: Windows](https://ci.appveyor.com/api/projects/status/github/sparkeh9/enchilada?branch=master&svg=true)](https://ci.appveyor.com/api/projects/status/github/sparkeh9/enchilada?branch=master&svg=true)
 
+### Nuget Packages ###
+- https://www.nuget.org/packages/Enchilada/ - The main package, provides local filesystem support
+- https://www.nuget.org/packages/Enchilada.Azure/ - Provides Azure blob storage
+- https://www.nuget.org/packages/Enchilada.AspNetCore/ - Provides ASP.NET Core configuration support
+
 Enchilada is a filesystem abstraction layer written in C#, the aim is to enable 
 the seamless use of file operations over and between different providers.
 
