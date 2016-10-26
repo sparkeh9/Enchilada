@@ -1,19 +1,18 @@
 {
     "dependencies": {
-        "CoreFtp": "1.1.2",
-        "Enchilada": "0.0.1-*",
-        "NETStandard.Library": "1.6.0"
+        "Enchilada": "0.0.1-*"
     },
     "frameworks": {
         "netstandard1.6": {
             "buildOptions": {
                 "define": ["NETSTANDARD"]
             },
-            "imports": ["dnxcore50"]
+            "imports": ["dnxcore50"],
+            "dependencies": {
+                "NETStandard.Library": "1.6.0"
+            }
         },
-        "net46": {
-        
-        }
+        "net46": {}
     },
     "version": "0.0.1-*"
 }

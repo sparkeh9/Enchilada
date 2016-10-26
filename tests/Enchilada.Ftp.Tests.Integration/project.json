@@ -16,12 +16,11 @@
         "Microsoft.Extensions.Logging": "1.0.0",
         "Microsoft.Extensions.Logging.Console": "1.0.0",
         "Microsoft.Extensions.Logging.Debug": "1.0.0",
-        "FluentAssertions": "4.15.0",
         "Microsoft.NETCore.App": {
             "type": "platform",
             "version": "1.0.0"
         },
-        "CoreFtp": "1.1.2"
+        "FluentAssertions": "4.16.0"
     },
     "testRunner": "xunit",
     "frameworks": {

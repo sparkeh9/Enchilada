@@ -1,18 +1,29 @@
 {
-    "version": "0.0.1-*",
+  "version": "0.0.1-*",
+  "copyright": "Nick Briscoe 2016",
+  "language": "en",
+  "packOptions": {
+    "projectUrl": "https://github.com/sparkeh9/Enchilada",
+    "tags": ["filesystem", "abstraction", "azure", "blob", "core", "vnext"]
+  },
 
-    "dependencies": {
-        "Enchilada": "0.0.1-*",
-        "NETStandard.Library": "1.6.0",
-        "WindowsAzure.Storage": "7.2.1"
+  "dependencies": {
+    "Enchilada": "0.0.1-*",
+    "WindowsAzure.Storage": "7.2.1"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": ["dnxcore50", "portable-net451+win8"],
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
     },
-
-    "frameworks": {
-        "netstandard1.6": {
-            "imports": ["dnxcore50", "portable-net45+netcore45+wp8"]
-        },
-        "net46": {
-    
-        }
-    }
+    "net452": {}
+  },
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration %compile:Configuration%"
+    ]
+  }
 }
