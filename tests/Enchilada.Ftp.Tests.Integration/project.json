@@ -20,7 +20,8 @@
             "type": "platform",
             "version": "1.0.0"
         },
-        "FluentAssertions": "4.16.0"
+        "FluentAssertions": "4.16.0",
+        "CoreFtp": "1.1.2"
     },
     "testRunner": "xunit",
     "frameworks": {

@@ -66,13 +66,13 @@
 
         public async Task<IReadOnlyCollection<IDirectory>> GetDirectoriesAsync()
         {
-            await Task.CompletedTask;
+            await Task.Delay( 0 );
             return new ReadOnlyCollection<IDirectory>( GetBlobDirectories().ToList() );
         }
 
         public async Task<IReadOnlyCollection<IFile>> GetFilesAsync()
         {
-            await Task.CompletedTask;
+            await Task.Delay( 0 );
             return new ReadOnlyCollection<IFile>( GetBlobFiles().ToList() );
         }
 
@@ -98,7 +98,7 @@
 
         public Task CreateDirectoryAsync()
         {
-            return Task.CompletedTask;
+            return Task.Delay( 0 );
         }
 
         private IEnumerable<IDirectory> GetBlobDirectories( string path = null )

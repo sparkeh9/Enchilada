@@ -64,7 +64,7 @@
 
         public async Task<IReadOnlyCollection<IDirectory>> GetDirectoriesAsync()
         {
-            await Task.CompletedTask;
+            await Task.Delay( 0 );
 
             var list = BackingDirectory.GetDirectories()
                                        .Select( x => new FilesystemDirectory( x ) )
@@ -75,7 +75,7 @@
 
         public async Task<IReadOnlyCollection<IDirectory>> GetDirectoriesAsync( string path )
         {
-            await Task.CompletedTask;
+            await Task.Delay( 0 );
             var list = BackingDirectory.GetDirectories( path, SearchOption.TopDirectoryOnly )
                                        .Select( x => new FilesystemDirectory( x ) )
                                        .ToList();
@@ -84,7 +84,7 @@
 
         public async Task<IReadOnlyCollection<IFile>> GetFilesAsync()
         {
-            await Task.CompletedTask;
+            await Task.Delay( 0 );
             var list = BackingDirectory.GetFiles()
                                        .Select( x => new FilesystemFile( x ) )
                                        .ToList();
@@ -93,7 +93,7 @@
 
         public async Task<IReadOnlyCollection<IFile>> GetFilesAsync( string path )
         {
-            await Task.CompletedTask;
+            await Task.Delay( 0 );
             var list = ( from file in BackingDirectory.GetFiles()
                          select new FilesystemFile( file ) ).ToList();
             return list.AsReadOnly();
@@ -114,7 +114,7 @@
         {
             BackingDirectory.Create();
             BackingDirectory.Refresh();
-            await Task.CompletedTask;
+            await Task.Delay( 0 );
         }
     }
 }
