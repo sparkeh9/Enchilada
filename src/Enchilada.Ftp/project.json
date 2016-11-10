@@ -1,7 +1,7 @@
 {
     "dependencies": {
         "CoreFtp": "1.1.5",
-        "Enchilada": "0.0.1-*"
+        "Enchilada": "1.0.0-*"
     },
     "frameworks": {
         "netstandard1.3": {
@@ -15,5 +15,5 @@
         },
         "net452": {}
     },
-    "version": "0.0.1-*"
+    "version": "1.0.0-*"
 }
