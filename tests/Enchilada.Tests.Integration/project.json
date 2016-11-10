@@ -1,7 +1,7 @@
 {
     "version": "1.0.0-*",
     "dependencies": {
-        "Enchilada": "0.0.1-*",
+        "Enchilada": "1.0.0-*",
         "Microsoft.NETCore.App": {
             "type": "platform",
             "version": "1.0.0"

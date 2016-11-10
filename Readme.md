@@ -5,6 +5,7 @@
 - https://www.nuget.org/packages/Enchilada/ - The main package, provides local filesystem support
 - https://www.nuget.org/packages/Enchilada.Azure/ - Provides Azure blob storage
 - https://www.nuget.org/packages/Enchilada.AspNetCore/ - Provides ASP.NET Core configuration support
+- https://www.nuget.org/packages/Enchilada.Ftp/ - Provides FTP (no SSL yet)
 
 
 Enchilada is a filesystem abstraction layer written in C#, the aim is to enable 
@@ -13,6 +14,7 @@ the seamless use of file operations over and between different providers.
 Implemented:
 - Local Filesystem - (local)
 - Azure Blob Storage - (azure-blob)
+- FTP - (ftp)
 
 Planned:
 - FTP/S (FTP over SSL)

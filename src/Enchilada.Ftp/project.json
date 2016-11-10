@@ -1,4 +1,12 @@
 {
+    "version": "1.0.0-*",
+    "copyright": "Nick Briscoe 2016",
+    "language": "en",
+    "packOptions": {
+        "projectUrl": "https://github.com/sparkeh9/Enchilada",
+        "tags": ["filesystem", "abstraction", "azure", "blob", "core", "vnext"]
+    },
+
     "dependencies": {
         "CoreFtp": "1.1.5",
         "Enchilada": "1.0.0-*"
@@ -15,5 +23,10 @@
         },
         "net452": {}
     },
-    "version": "1.0.0-*"
+
+    "scripts": {
+        "postcompile": [
+            "dotnet pack --no-build --configuration %compile:Configuration%"
+        ]
+    }
 }
