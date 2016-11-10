@@ -30,7 +30,6 @@
         /// <summary>
         /// Deletes the given file
         /// </summary>
-        /// <param name="recursive"></param>
-        Task DeleteAsync( bool recursive = true );
+        Task DeleteAsync();
     }
 }

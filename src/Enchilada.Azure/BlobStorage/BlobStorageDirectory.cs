@@ -4,7 +4,6 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Infrastructure.Extensions;
@@ -15,7 +14,6 @@
     {
         private readonly CloudBlobContainer BlobContainer;
         private readonly string Path;
-        protected DirectoryInfo BackingDirectory;
 
         public string Name => BlobContainer.GetDirectoryReference( Path ).Prefix;
         public DateTime? LastModified => GetBlobFiles().OrderBy( x => x.LastModified ).FirstOrDefault()?.LastModified;
@@ -32,7 +30,7 @@
             Path = path;
         }
 
-        public async Task DeleteAsync( bool recursive = true )
+        public async Task DeleteAsync()
         {
             BlobContinuationToken continuationToken = null;
             do

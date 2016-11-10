@@ -2,14 +2,13 @@
 {
     using System;
     using System.Threading.Tasks;
-    using FluentAssertions;
     using Helpers;
     using Xunit;
 
     public class When_deleting_a_directory : FtpTestBase
     {
         [ Fact ]
-        public async Task When_creating_nested_folders()
+        public async Task Should_delete_deep_structure()
         {
             await ResourceHelpers.CreateFileWithContentAsync( $"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff" );
 
@@ -17,9 +16,7 @@
             {
                 ftpClient.Logger = Logger;
                 var sut = new FtpDirectory( ftpClient, "folder1" );
-
-                sut.IsDirectory.Should().BeTrue();
-                sut.Name.Should().Be( "folder1/" );
+                await sut.DeleteAsync();
             }
         }
 

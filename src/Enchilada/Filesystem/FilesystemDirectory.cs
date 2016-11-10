@@ -10,7 +10,7 @@
 
     public class FilesystemDirectory : IDirectory
     {
-        protected DirectoryInfo BackingDirectory;
+        private readonly DirectoryInfo BackingDirectory;
 
         public string Name => BackingDirectory.Name;
         public DateTime? LastModified => BackingDirectory.LastWriteTime;
@@ -26,7 +26,7 @@
             BackingDirectory = directoryInfo;
         }
 
-        public async Task DeleteAsync( bool recursive = true )
+        public async Task DeleteAsync()
         {
             try
             {

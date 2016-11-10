@@ -9,7 +9,6 @@
     using Infrastructure;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
-    using Microsoft.Extensions.Logging;
     using FileMode = Infrastructure.FileMode;
 
     public class FtpFile : IFile
@@ -108,17 +107,10 @@
 
         public async Task<Stream> OpenReadAsync()
         {
-            try
-            {
-                await EnsureConnectedAsync();
-                await ftpClient.ChangeWorkingDirectoryAsync( Path );
-                var stream = await ftpClient.OpenFileReadStreamAsync( fileName ).ConfigureAwait( false );
-                return stream;
-            }
-            catch ( Exception e )
-            {
-                throw;
-            }
+            await EnsureConnectedAsync();
+            await ftpClient.ChangeWorkingDirectoryAsync( Path );
+            var stream = await ftpClient.OpenFileReadStreamAsync( fileName );
+            return stream;
         }
 
         public async Task<string> GetHashAsync()
@@ -155,7 +147,7 @@
             return await ftpClient.OpenFileWriteStreamAsync( fileName );
         }
 
-        public async Task DeleteAsync( bool recursive = true )
+        public async Task DeleteAsync()
         {
             await EnsureConnectedAsync();
             await ftpClient.ChangeWorkingDirectoryAsync( Path );

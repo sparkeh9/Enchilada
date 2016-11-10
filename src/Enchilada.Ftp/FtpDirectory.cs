@@ -16,7 +16,11 @@
         private readonly string endOfPath;
 
         public string Name => string.Empty;
-        public DateTime? LastModified => null; //GetBlobFiles().OrderBy( x => x.LastModified ).FirstOrDefault()?.LastModified;
+
+        public DateTime? LastModified => GetAllNodesAsync().GetAwaiter()
+                                                           .GetResult()
+                                                           .OrderBy( x => x.LastModified )
+                                                           .FirstOrDefault()?.LastModified;
 
         public bool IsDirectory => true;
 
@@ -44,7 +48,7 @@
                 await ftpClient.ChangeWorkingDirectoryAsync( path );
         }
 
-        public async Task DeleteAsync( bool recursive = true )
+        public async Task DeleteAsync()
         {
             await EnsureConnectedAsync();
 
@@ -56,7 +60,7 @@
                 await ftpClient.ChangeWorkingDirectoryAsync( ".." );
             }
 
-            await Task.WhenAny( ftpClient.DeleteDirectoryAsync( endOfPath ), Task.Delay( 100 ) );
+            await ftpClient.DeleteDirectoryAsync( endOfPath );
         }
 
         public IEnumerator<INode> GetEnumerator()

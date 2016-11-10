@@ -10,7 +10,7 @@
 
     public class FilesystemFile : IFile
     {
-        protected FileInfo BackingFile;
+        private readonly FileInfo BackingFile;
 
         public string Name => BackingFile.Name;
         public string Extension => BackingFile.Extension;
@@ -80,7 +80,7 @@
             return await task;
         }
 
-        public async Task DeleteAsync( bool recursive = true )
+        public async Task DeleteAsync()
         {
             var task = new Task( BackingFile.Delete );
             task.Start();

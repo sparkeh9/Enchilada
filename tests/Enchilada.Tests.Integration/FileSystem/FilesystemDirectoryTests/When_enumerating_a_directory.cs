@@ -49,8 +49,8 @@
 
             var nodes = sut.ToList();
 
-            nodes.Count( x => x.IsDirectory ).Should().Be( 1 );
-            nodes.Count( x => !x.IsDirectory ).Should().Be( 1 );
+            nodes.Any( x => x.Name == "level2" ).Should().BeTrue();
+            nodes.Any( x => x.Name == "level1content.txt" ).Should().BeTrue();
         }
     }
 }

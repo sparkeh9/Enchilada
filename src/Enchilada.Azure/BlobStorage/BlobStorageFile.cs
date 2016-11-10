@@ -83,7 +83,7 @@
             }
         }
 
-        public async Task DeleteAsync( bool recursive = true )
+        public async Task DeleteAsync()
         {
             var blob = BlobContainer.GetBlockBlobReference( FilePath );
             await blob.DeleteIfExistsAsync();
