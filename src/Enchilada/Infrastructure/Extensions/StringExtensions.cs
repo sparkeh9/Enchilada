@@ -1,6 +1,7 @@
 ﻿namespace Enchilada.Infrastructure.Extensions
 {
     using System;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     public static class StringExtensions
@@ -38,6 +39,11 @@
             }
 
             return string.Empty;
+        }
+
+        public static string RemovePath( this string operand )
+        {
+            return operand.Split( '/' ).LastOrDefault();
         }
     }
 }

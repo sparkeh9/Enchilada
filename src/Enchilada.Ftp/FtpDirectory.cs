@@ -16,7 +16,7 @@
         private readonly string endOfPath;
         private IReadOnlyCollection<INode> allNodes;
 
-        public string Name => string.Empty;
+        public string Name => directoryPath;
 
 
         public DateTime? LastModified => allNodes.OrderBy( x => x.LastModified )
@@ -24,7 +24,7 @@
 
         public bool IsDirectory => true;
 
-        public string RealPath => string.Empty;
+        public string RealPath => $"/{directoryPath}";
 
         public bool Exists => true;
 
@@ -36,7 +36,12 @@
             this.directoryPath = directoryPath;
 
 
-            EnsureConnectedAsync().ContinueWith( async _ => { allNodes = await GetAllNodesAsync(); } );
+            EnsureConnectedAsync().ContinueWith( async task =>
+            {
+                allNodes = task.IsFaulted
+                    ? new List<INode>().AsReadOnly()
+                    : await GetAllNodesAsync();
+            } );
         }
 
         private async Task EnsureConnectedAsync()
@@ -63,6 +68,8 @@
             }
 
             await ftpClient.DeleteDirectoryAsync( endOfPath );
+
+            allNodes = new List<INode>().AsReadOnly();
         }
 
         public IEnumerator<INode> GetEnumerator()
@@ -101,7 +108,7 @@
 
         public IFile GetFile( string fileName )
         {
-            return new FtpFile( ftpClient, fileName, directoryPath );
+            return new FtpFile( ftpClient, fileName.RemovePath(), directoryPath );
         }
 
         public async Task<IReadOnlyCollection<INode>> GetAllNodesAsync()
@@ -117,6 +124,7 @@
         public async Task CreateDirectoryAsync()
         {
             await ftpClient.CreateDirectoryAsync( directoryPath );
+            allNodes = await GetAllNodesAsync();
         }
     }
 }

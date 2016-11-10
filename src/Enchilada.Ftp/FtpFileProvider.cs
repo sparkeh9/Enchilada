@@ -20,49 +20,33 @@
         public FtpFileProvider( FtpAdapterConfiguration configuration, string filePath )
         {
             bool isDirectory = filePath.EndsWith( "/" );
-            string blobPath = filePath.StripLeadingSlash();
-            bool isRootContainer = blobPath.IsNullOrWhiteSpace();
+            string ftpPath = filePath.StripLeadingSlash();
+            bool isRootContainer = ftpPath.IsNullOrWhiteSpace();
 
 
             ftpClient = new FtpClient( new FtpClientConfiguration
-                                       {
-                                           Host = configuration.Host,
-                                           Port = configuration.Port,
-                                           Username = configuration.Username,
-                                           Password = configuration.Password,
-                                           BaseDirectory = configuration.Directory
-                                       } );
+            {
+                Host = configuration.Host,
+                Port = configuration.Port,
+                Username = configuration.Username,
+                Password = configuration.Password,
+                BaseDirectory = configuration.Directory
+            } );
 
+            if ( isRootContainer )
+            {
+                RootDirectory = new FtpDirectory( ftpClient, "/" );
+                return;
+            }
 
-//
-//            var account = CloudStorageAccount.Parse( configuration.ConnectionString );
-//            var blobClient = account.CreateCloudBlobClient();
-//            var container = blobClient.GetContainerReference( configuration.ContainerReference );
-//
-//            if ( configuration.CreateContainer )
-//            {
-//                container.CreateIfNotExistsAsync().Wait();
-//
-//                container.SetPermissionsAsync( new BlobContainerPermissions
-//                                               {
-//                                                   PublicAccess = configuration.IsPublicAccess ? BlobContainerPublicAccessType.Container : BlobContainerPublicAccessType.Off,
-//                                               } ).Wait();
-//            }
-//
-//            if ( isRootContainer )
-//            {
-//                RootDirectory = new BlobStorageDirectory( container, "/" );
-//                return;
-//            }
-//
-//            if ( isDirectory )
-//            {
-//                RootDirectory = new BlobStorageDirectory( container, blobPath );
-//                return;
-//            }
-//
-//            RootDirectory = new BlobStorageDirectory( container, blobPath.RemoveFilename() );
-//            File = RootDirectory.GetFile( blobPath );
+            if ( isDirectory )
+            {
+                RootDirectory = new FtpDirectory( ftpClient, ftpPath );
+                return;
+            }
+
+            RootDirectory = new FtpDirectory( ftpClient, ftpPath.RemoveFilename() );
+            File = RootDirectory.GetFile( ftpPath );
         }
 
         public void Dispose()

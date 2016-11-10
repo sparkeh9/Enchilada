@@ -11,17 +11,17 @@
 
     public class When_opening_a_file
     {
-//        [ Fact ]
-//        public void Should_have_root_directory_as_directory_containing_file()
-//        {
-//            string filesystemPath = ResourceHelpers.GetResourceDirectoryInfo().FullName;
-//            var filesystemProvider = new FilesystemFileProvider( new FilesystemAdapterConfiguration
-//                                                                 {
-//                                                                     Directory = filesystemPath
-//                                                                 }, "level1/level2/level2content.txt" );
-//
-//            filesystemProvider.RootDirectory.RealPath.Should().Be( string.Format( "{0}level1{1}level2", filesystemPath, Path.DirectorySeparatorChar ) );
-//        }
+        [ Fact ]
+        public void Should_have_root_directory_as_directory_containing_file()
+        {
+            string filesystemPath = ResourceHelpers.GetResourceDirectoryInfo().FullName;
+            var filesystemProvider = new FilesystemFileProvider( new FilesystemAdapterConfiguration
+                                                                 {
+                                                                     Directory = filesystemPath
+                                                                 }, "level1/level2/level2content.txt" );
+
+            filesystemProvider.RootDirectory.RealPath.Should().Be( string.Format( "{0}level1{1}level2", filesystemPath, Path.DirectorySeparatorChar ) );
+        }
 //
 //        [ Fact ]
 //        public async Task Should_present_file()
