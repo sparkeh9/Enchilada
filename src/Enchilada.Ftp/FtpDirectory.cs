@@ -12,15 +12,15 @@
     public class FtpDirectory : IDirectory
     {
         private readonly FtpClient ftpClient;
-        private readonly string path;
+        private readonly string directoryPath;
         private readonly string endOfPath;
+        private IReadOnlyCollection<INode> allNodes;
 
         public string Name => string.Empty;
 
-        public DateTime? LastModified => GetAllNodesAsync().GetAwaiter()
-                                                           .GetResult()
-                                                           .OrderBy( x => x.LastModified )
-                                                           .FirstOrDefault()?.LastModified;
+
+        public DateTime? LastModified => allNodes.OrderBy( x => x.LastModified )
+                                                 .FirstOrDefault()?.LastModified;
 
         public bool IsDirectory => true;
 
@@ -28,13 +28,15 @@
 
         public bool Exists => true;
 
-        public FtpDirectory( FtpClient ftpClient, string path )
+        public FtpDirectory( FtpClient ftpClient, string directoryPath )
         {
-            endOfPath = path.Split( '/' ).LastOrDefault();
+            endOfPath = directoryPath.Split( '/' ).LastOrDefault();
 
             this.ftpClient = ftpClient;
-            this.path = path;
-            EnsureConnectedAsync().Wait();
+            this.directoryPath = directoryPath;
+
+
+            EnsureConnectedAsync().ContinueWith( async _ => { allNodes = await GetAllNodesAsync(); } );
         }
 
         private async Task EnsureConnectedAsync()
@@ -44,8 +46,8 @@
 
             await ftpClient.LoginAsync();
 
-            if ( !path.IsNullOrWhiteSpace() )
-                await ftpClient.ChangeWorkingDirectoryAsync( path );
+            if ( !directoryPath.IsNullOrWhiteSpace() )
+                await ftpClient.ChangeWorkingDirectoryAsync( directoryPath );
         }
 
         public async Task DeleteAsync()
@@ -65,9 +67,8 @@
 
         public IEnumerator<INode> GetEnumerator()
         {
-            return GetAllNodesAsync().GetAwaiter()
-                                     .GetResult()
-                                     .GetEnumerator();
+            return allNodes
+                .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -79,7 +80,7 @@
         {
             var ftpNodes = await ftpClient.ListDirectoriesAsync();
 
-            return ftpNodes.Select( ftpNode => new FtpDirectory( ftpClient, $"{path}/{ftpNode.Name}" ) )
+            return ftpNodes.Select( ftpNode => new FtpDirectory( ftpClient, $"{directoryPath}/{ftpNode.Name}" ) )
                            .ToList()
                            .AsReadOnly();
         }
@@ -88,19 +89,19 @@
         {
             var ftpNodes = await ftpClient.ListFilesAsync();
 
-            return ftpNodes.Select( ftpNode => new FtpFile( ftpClient, ftpNode.Name, path ) )
+            return ftpNodes.Select( ftpNode => new FtpFile( ftpClient, ftpNode.Name, directoryPath ) )
                            .ToList()
                            .AsReadOnly();
         }
 
         public IDirectory GetDirectory( string path )
         {
-            return new FtpDirectory( ftpClient, $"{this.path}/{path}" );
+            return new FtpDirectory( ftpClient, $"{directoryPath}/{path}" );
         }
 
         public IFile GetFile( string fileName )
         {
-            return new FtpFile( ftpClient, fileName, path );
+            return new FtpFile( ftpClient, fileName, directoryPath );
         }
 
         public async Task<IReadOnlyCollection<INode>> GetAllNodesAsync()
@@ -115,7 +116,7 @@
 
         public async Task CreateDirectoryAsync()
         {
-            await ftpClient.CreateDirectoryAsync( path );
+            await ftpClient.CreateDirectoryAsync( directoryPath );
         }
     }
 }

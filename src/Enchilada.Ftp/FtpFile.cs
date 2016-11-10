@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
     using CoreFtp;
     using CoreFtp.Infrastructure;
-    using Infrastructure;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
     using FileMode = Infrastructure.FileMode;
@@ -16,10 +15,6 @@
         private readonly FtpClient ftpClient;
         private readonly string path;
         private readonly string fileName;
-        private long size;
-        private DateTime? lastModified;
-
-        private readonly AsyncLazy<bool> HasMetadata;
 
         public string Name => fileName;
 
@@ -29,25 +24,9 @@
 
         public bool IsDirectory => false;
 
-        public long Size
-        {
-            get
-            {
-                HasMetadata.GetAwaiter().GetResult();
-                return size;
-            }
-            private set { size = value; }
-        }
+        public long Size { get; protected set; }
 
-        public DateTime? LastModified
-        {
-            get
-            {
-                HasMetadata.GetAwaiter().GetResult();
-                return lastModified;
-            }
-            private set { lastModified = value; }
-        }
+        public DateTime? LastModified { get; protected set; }
 
         private bool? exists;
 
@@ -57,8 +36,8 @@
             {
                 if ( exists.HasValue )
                     return exists.Value;
-                HasMetadata.GetAwaiter().GetResult();
-                exists = size > 0;
+
+                exists = Size > 0;
 
                 return exists.Value;
             }
@@ -70,13 +49,12 @@
             this.path = path;
             this.fileName = fileName;
 
-            EnsureConnectedAsync().Wait();
 
-            HasMetadata = new AsyncLazy<bool>( async () =>
-                                               {
-                                                   await GetFileMetadataAsync();
-                                                   return true;
-                                               } );
+            Task.WaitAll( Task.Run( async () =>
+            {
+                await EnsureConnectedAsync();
+                await GetFileMetadataAsync();
+            } ) );
         }
 
         private async Task EnsureConnectedAsync()
@@ -151,8 +129,13 @@
         {
             await EnsureConnectedAsync();
             await ftpClient.ChangeWorkingDirectoryAsync( Path );
-            await Task.WhenAny( ftpClient.DeleteFileAsync( fileName ), Task.Delay( 100 ) );
-            exists = false;
+
+            try
+            {
+                await ftpClient.DeleteFileAsync( fileName );
+                exists = false;
+            }
+            catch ( FtpException ) {}
         }
 
         public void Dispose()

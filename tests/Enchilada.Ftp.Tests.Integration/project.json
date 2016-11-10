@@ -21,7 +21,7 @@
             "version": "1.0.0"
         },
         "FluentAssertions": "4.16.0",
-        "CoreFtp": "1.1.3"
+        "CoreFtp": "1.1.5"
     },
     "testRunner": "xunit",
     "frameworks": {

@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "CoreFtp": "1.1.3",
+        "CoreFtp": "1.1.5",
         "Enchilada": "0.0.1-*"
     },
     "frameworks": {

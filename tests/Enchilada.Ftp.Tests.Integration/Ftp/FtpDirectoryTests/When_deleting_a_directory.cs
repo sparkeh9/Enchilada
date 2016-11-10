@@ -1,7 +1,9 @@
 ﻿namespace Enchilada.Ftp.Tests.Integration.Ftp.FtpDirectoryTests
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
+    using FluentAssertions;
     using Helpers;
     using Xunit;
 
@@ -17,6 +19,9 @@
                 ftpClient.Logger = Logger;
                 var sut = new FtpDirectory( ftpClient, "folder1" );
                 await sut.DeleteAsync();
+
+                var folders = await sut.GetDirectoriesAsync();
+                folders.Any( x => x.Name == "folder1" ).Should().BeFalse();
             }
         }
 
