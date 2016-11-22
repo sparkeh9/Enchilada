@@ -38,5 +38,7 @@
         /// <param name="sourceFile"></param>
         /// <returns></returns>
         Task CopyFromAsync( IFile sourceFile );
+
+        Task CopyFromAsync( Stream sourceStream );
     }
 }

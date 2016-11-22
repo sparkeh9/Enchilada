@@ -3,7 +3,6 @@
     using System;
     using System.IO;
     using System.Threading.Tasks;
-    using Infrastructure;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
     using FileMode = Infrastructure.FileMode;
@@ -42,7 +41,11 @@
 
         public async Task CopyFromAsync( IFile sourceFile )
         {
-            using ( var sourceStream = await sourceFile.OpenReadAsync() )
+            await CopyFromAsync( await sourceFile.OpenReadAsync() );
+        }
+
+        public async Task CopyFromAsync( Stream sourceStream )
+        {
             using ( var targetStream = await OpenWriteAsync() )
             {
                 await sourceStream.CopyToAsync( targetStream );

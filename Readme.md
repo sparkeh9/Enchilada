@@ -55,6 +55,18 @@ Authentication is handled via the connection string.
 	"createContainer": true,
 	"isPublicAccess": true
 }
+
+##FTP##
+The FTP adapter enables non-encrypted file transfer to a passive mode FTP server.
+```
+"your_configuration_name": {
+	"adapter": "ftp",
+	"host": "ftp.github.com",
+	"port": "21",
+	"directory": "/sub/folder",
+	"username": "user@ftpserver.com",
+	"password": "$up3r.$3cur3.p4$$w0rd"
+}
 ```
 
 ## AspNetCore configuration ##
