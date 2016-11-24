@@ -55,6 +55,7 @@ Authentication is handled via the connection string.
 	"createContainer": true,
 	"isPublicAccess": true
 }
+```
 
 ##FTP##
 The FTP adapter enables non-encrypted file transfer to a passive mode FTP server.
