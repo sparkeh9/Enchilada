@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1-*",
+    "version": "1.0.2-*",
     "copyright": "Nick Briscoe 2016",
     "language": "en",
     "packOptions": {
@@ -9,7 +9,7 @@
 
     "dependencies": {
         "CoreFtp": "1.1.10",
-        "Enchilada": "1.0.0-*"
+        "Enchilada": "1.0.2-*"
     },
     "frameworks": {
         "netstandard1.3": {

@@ -1,24 +1,24 @@
 {
-  "version": "1.0.1-*",
-  "copyright": "Nick Briscoe 2016",
-  "language": "en",
-  "packOptions": {
-    "projectUrl": "https://github.com/sparkeh9/Enchilada",
-    "tags": ["filesystem", "abstraction", "ftp", "azure", "blob", "core", "vnext"]
-  },
-
-  "frameworks": {
-    "netstandard1.3": {
-        "imports": "dnxcore50",
-        "dependencies": {
-            "NETStandard.Library": "1.6.0"
-        }
+    "version": "1.0.2-*",
+    "copyright": "Nick Briscoe 2016",
+    "language": "en",
+    "packOptions": {
+        "projectUrl": "https://github.com/sparkeh9/Enchilada",
+        "tags": ["filesystem", "abstraction", "ftp", "azure", "blob", "core", "vnext"]
     },
-    "net452": {}
-  },
-  "scripts": {
-    "postcompile": [
-      "dotnet pack --no-build --configuration %compile:Configuration%"
-    ]
-  }
+
+    "frameworks": {
+        "netstandard1.3": {
+            "imports": "dnxcore50",
+            "dependencies": {
+                "NETStandard.Library": "1.6.0"
+            }
+        },
+        "net452": {}
+    },
+    "scripts": {
+        "postcompile": [
+            "dotnet pack --no-build --configuration %compile:Configuration%"
+        ]
+    }
 }
