@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1-*",
+    "version": "1.0.2-*",
     "dependencies": {
         "Microsoft.NETCore.App": {
             "type": "platform",
@@ -7,8 +7,8 @@
         },
         "NETStandard.Library": "1.6.0",
         "NSubstitute": "2.0.0-rc",
-        "Enchilada": "1.0.0-*",
-        "Enchilada.Azure": "1.0.0-*",
+        "Enchilada": "1.0.2-*",
+        "Enchilada.Azure": "1.0.2-*",
         "xunit": "2.2.0-beta2-build3300",
         "dotnet-test-xunit": "2.2.0-preview2-build1029",
         "FluentAssertions": "4.17.0"
@@ -16,7 +16,7 @@
     "testRunner": "xunit",
     "frameworks": {
         "netcoreapp1.0": {
-            "imports": [ "dnxcore50", "portable-net45+netcore45+wp8" ]
+            "imports": ["dnxcore50", "portable-net45+netcore45+wp8"]
 
         }
     },

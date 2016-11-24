@@ -1,31 +1,31 @@
 {
-  "version": "1.0.1-*",
-  "copyright": "Nick Briscoe 2016",
-  "language": "en",
-  "packOptions": {
-    "projectUrl": "https://github.com/sparkeh9/Enchilada",
-    "tags": [ "filesystem", "abstraction", "core", "vnext" ]
-  },
-
-  "dependencies": {
-    "Enchilada": "1.0.0-*",
-    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
-    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
-    "Microsoft.Extensions.DependencyModel": "1.0.0"
-  },
-
-  "frameworks": {
-    "netstandard1.6": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "NETStandard.Library": "1.6.0"
-      }
+    "version": "1.0.2-*",
+    "copyright": "Nick Briscoe 2016",
+    "language": "en",
+    "packOptions": {
+        "projectUrl": "https://github.com/sparkeh9/Enchilada",
+        "tags": ["filesystem", "abstraction", "core", "vnext"]
     },
-    "net452": {}
-  },
-  "scripts": {
-    "postcompile": [
-      "dotnet pack --no-build --configuration %compile:Configuration%"
-    ]
-  }
+
+    "dependencies": {
+        "Enchilada": "1.0.2-*",
+        "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
+        "Microsoft.Extensions.DependencyModel": "1.0.0"
+    },
+
+    "frameworks": {
+        "netstandard1.6": {
+            "imports": "dnxcore50",
+            "dependencies": {
+                "NETStandard.Library": "1.6.0"
+            }
+        },
+        "net452": {}
+    },
+    "scripts": {
+        "postcompile": [
+            "dotnet pack --no-build --configuration %compile:Configuration%"
+        ]
+    }
 }
