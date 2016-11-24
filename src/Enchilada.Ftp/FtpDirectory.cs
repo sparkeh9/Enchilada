@@ -28,20 +28,21 @@
 
         public bool Exists => true;
 
-        public FtpDirectory( FtpClient ftpClient, string directoryPath )
+        public FtpDirectory( FtpClient ftpClient, string directoryPath, bool getNodes = true )
         {
             endOfPath = directoryPath.Split( '/' ).LastOrDefault();
 
             this.ftpClient = ftpClient;
             this.directoryPath = directoryPath;
 
-
-            EnsureConnectedAsync().ContinueWith( async task =>
+            if ( getNodes )
             {
-                allNodes = task.IsFaulted
-                    ? new List<INode>().AsReadOnly()
-                    : await GetAllNodesAsync();
-            } );
+                Task.WaitAny( Task.Run( async () =>
+                {
+                    await EnsureConnectedAsync();
+                    allNodes = await GetAllNodesAsync();
+                } ) );
+            }
         }
 
         private async Task EnsureConnectedAsync()
@@ -87,7 +88,7 @@
         {
             var ftpNodes = await ftpClient.ListDirectoriesAsync();
 
-            return ftpNodes.Select( ftpNode => new FtpDirectory( ftpClient, $"{directoryPath}/{ftpNode.Name}" ) )
+            return ftpNodes.Select( ftpNode => new FtpDirectory( ftpClient, $"{directoryPath}/{ftpNode.Name}", getNodes: false ) )
                            .ToList()
                            .AsReadOnly();
         }

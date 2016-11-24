@@ -56,5 +56,23 @@
 
             await sut.DeleteAsync();
         }
+
+        [ Fact ]
+        public async Task Should_write_content_to_file_with_base_path()
+        {
+            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient($"/{Guid.NewGuid()}/abc/123"), $"{Guid.NewGuid()}.txt", "test1" );
+
+            using ( var stream = await sut.OpenWriteAsync() )
+            using ( var writer = new StreamWriter( stream ) )
+            {
+                writer.Write( WRITE_CONTENT );
+            }
+
+            string fileContents = Encoding.UTF8.GetString( await sut.ReadToEndAsync() );
+
+            fileContents.Should().Be( WRITE_CONTENT );
+
+            await sut.DeleteAsync();
+        }
     }
 }

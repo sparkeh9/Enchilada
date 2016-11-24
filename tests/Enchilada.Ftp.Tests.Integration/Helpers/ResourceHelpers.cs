@@ -7,17 +7,18 @@
 
     public static class ResourceHelpers
     {
-        public static FtpClient GetLocalFtpClient()
+        public static FtpClient GetLocalFtpClient( string baseDirectory = "/" )
         {
             Program.Initialise();
 
             return new FtpClient( new FtpClientConfiguration
-                                  {
-                                      Host = Program.FtpConfiguration.Host,
-                                      Username = Program.FtpConfiguration.Username,
-                                      Password = Program.FtpConfiguration.Password,
-                                      Port = Program.FtpConfiguration.Port
-                                  } );
+            {
+                Host = Program.FtpConfiguration.Host,
+                Username = Program.FtpConfiguration.Username,
+                Password = Program.FtpConfiguration.Password,
+                Port = Program.FtpConfiguration.Port,
+                BaseDirectory = baseDirectory
+            } );
         }
 
         public static async Task<FtpFile> CreateFileWithContentAsync( string filename, string content )

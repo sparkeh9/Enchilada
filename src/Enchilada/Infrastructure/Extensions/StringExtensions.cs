@@ -33,17 +33,19 @@
 
         public static string RemoveFilename( this string operand )
         {
-            if ( operand.Contains( "/" ) )
-            {
-                return operand.Substring( 0, operand.LastIndexOf( '/' ) );
-            }
-
-            return string.Empty;
+            return operand.Contains( "/" )
+                ? operand.Substring( 0, operand.LastIndexOf( '/' ) )
+                : string.Empty;
         }
 
         public static string RemovePath( this string operand )
         {
             return operand.Split( '/' ).LastOrDefault();
+        }
+
+        public static string CombineAsUriWith( this string operand, string rightHandSide )
+        {
+            return string.Format( "{0}/{1}", operand.TrimEnd( '/' ), rightHandSide.Trim( '/' ) );
         }
     }
 }

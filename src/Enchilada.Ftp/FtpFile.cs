@@ -46,9 +46,9 @@
         public FtpFile( FtpClient ftpClient, string fileName, string path = null )
         {
             this.ftpClient = ftpClient;
-            this.path = path;
             this.fileName = fileName;
 
+            this.path = ftpClient.Configuration.BaseDirectory.CombineAsUriWith( path );
 
             Task.WaitAll( Task.Run( async () =>
             {

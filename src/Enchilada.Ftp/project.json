@@ -8,7 +8,7 @@
     },
 
     "dependencies": {
-        "CoreFtp": "1.1.5",
+        "CoreFtp": "1.1.10",
         "Enchilada": "1.0.0-*"
     },
     "frameworks": {
