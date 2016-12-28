@@ -7,6 +7,8 @@
 
     public interface IFile : INode, IDisposable
     {
+        long Size { get; }
+
         /// <summary>
         /// Provides a Stream in read-only mode
         /// </summary>

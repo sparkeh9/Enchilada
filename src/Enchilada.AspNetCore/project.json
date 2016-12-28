@@ -1,5 +1,5 @@
 {
-    "version": "1.0.2-*",
+    "version": "1.0.3-*",
     "copyright": "Nick Briscoe 2016",
     "language": "en",
     "packOptions": {
@@ -8,7 +8,7 @@
     },
 
     "dependencies": {
-        "Enchilada": "1.0.2-*",
+        "Enchilada": "1.0.3-*",
         "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
         "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
         "Microsoft.Extensions.DependencyModel": "1.0.0"

@@ -19,14 +19,14 @@
         public string Name => fileName;
 
         public string Extension => System.IO.Path.GetExtension( fileName );
-        public string Path => $"/{path}".StripDoubleSlash();
+        private string Path => $"/{path}".StripDoubleSlash();
         public string RealPath => $"/{path}/{fileName}".StripDoubleSlash();
 
         public bool IsDirectory => false;
 
-        public long Size { get; protected set; }
+        public long Size { get; private set; }
 
-        public DateTime? LastModified { get; protected set; }
+        public DateTime? LastModified { get; private set; }
 
         private bool? exists;
 
