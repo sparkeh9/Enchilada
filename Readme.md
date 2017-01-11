@@ -31,6 +31,21 @@ The URI is made up of three parts:
 - The provider name: This mirrors the configurations you have specified in the appsettings file. It can be anything which looks like a valid URI hostname, however it must have a corresponding configuration.
 - The path: as you might imagine, this is the path to the file.
 
+### Saving a file from a stream
+``` C#
+// Injected filesystem resolver
+IEnchiladaFilesystemResolver enchilada;
+
+var tempFile = new FileInfo( "C:\\test.png" );
+using ( var filestream = tempFile.OpenReadStream() )
+{
+	using ( var fileReference = enchilada.OpenFileReference( filepath ) )
+	{
+	    await fileReference.CopyFromAsync( filestream );
+	}
+}
+```
+
 ## Local
 The local adapter allows the resolution of files on the local filesystem or UNC path. 
 It does not currently handle connecting to resources which require authentication.
