@@ -45,6 +45,9 @@
 
         public static string CombineAsUriWith( this string operand, string rightHandSide )
         {
+            if ( rightHandSide.IsNullOrEmpty() )
+                return operand;
+
             return string.Format( "{0}/{1}", operand.TrimEnd( '/' ), rightHandSide.Trim( '/' ) );
         }
     }

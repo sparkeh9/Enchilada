@@ -15,8 +15,8 @@
         public async Task Should_give_stream()
         {
             string fileName = $"{Guid.NewGuid()}.txt";
-            await ResourceHelpers.CreateFileWithContentAsync( fileName, FileContent );
-            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient(), fileName );
+            await ResourceHelpers.CreateFileWithContentAsync( fileName, FileContent, Logger );
+            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient( Logger ), fileName );
 
             using ( var stream = await sut.OpenReadAsync() )
             {
@@ -31,8 +31,8 @@
         public async Task Should_be_able_to_read_file_contents_from_stream()
         {
             string fileName = $"{Guid.NewGuid()}.txt";
-            await ResourceHelpers.CreateFileWithContentAsync( fileName, FileContent );
-            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient() )
+            await ResourceHelpers.CreateFileWithContentAsync( fileName, FileContent, Logger);
+            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient( Logger ) )
             {
                 localFtpClient.Logger = Logger;
 

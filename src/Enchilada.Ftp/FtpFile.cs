@@ -76,7 +76,7 @@
                 var fileNode = ( await ftpClient.ListFilesAsync() ).FirstOrDefault( x => x.Name == fileName );
                 LastModified = fileNode?.DateModified;
             }
-            catch ( FtpException )
+            catch ( FtpException e)
             {
                 Size = 0;
                 LastModified = default( DateTime? );

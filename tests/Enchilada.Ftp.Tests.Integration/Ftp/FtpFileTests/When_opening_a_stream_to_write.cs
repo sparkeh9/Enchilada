@@ -15,7 +15,7 @@
         [ Fact ]
         public void Should_not_have_file_in_place_before_creation()
         {
-            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient(), $"{Guid.NewGuid()}.txt" );
+            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient( Logger ), $"{Guid.NewGuid()}.txt" );
             sut.Exists.Should().BeFalse();
         }
 
@@ -23,7 +23,7 @@
         [ Fact ]
         public async Task Should_write_content_to_file()
         {
-            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient(), $"{Guid.NewGuid()}.txt" );
+            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient( Logger ), $"{Guid.NewGuid()}.txt" );
 
             using ( var stream = await sut.OpenWriteAsync() )
             using ( var writer = new StreamWriter( stream ) )
@@ -42,7 +42,7 @@
         [ Fact ]
         public async Task Should_write_content_to_file_in_deep_structure()
         {
-            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient(), $"{Guid.NewGuid()}.txt", "test1" );
+            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient( Logger ), $"{Guid.NewGuid()}.txt", "test1" );
 
             using ( var stream = await sut.OpenWriteAsync() )
             using ( var writer = new StreamWriter( stream ) )
@@ -60,7 +60,7 @@
         [ Fact ]
         public async Task Should_write_content_to_file_with_base_path()
         {
-            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient($"/{Guid.NewGuid()}/abc/123"), $"{Guid.NewGuid()}.txt", "test1" );
+            var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient( Logger, $"/{Guid.NewGuid()}/abc/123"), $"{Guid.NewGuid()}.txt", "test1" );
 
             using ( var stream = await sut.OpenWriteAsync() )
             using ( var writer = new StreamWriter( stream ) )
