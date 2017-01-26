@@ -24,7 +24,7 @@
          var controllerForTest = new ExampleController( enchilada );
          await controllerForTest.Index( "a-bucket", "jibble.jpg" );
 
-         enchilada.Received( 1 ).OpenFileReference( Arg.Any<string>() );
+         enchilada.Received( 1 ).OpenFileReference( "enchilada://a-bucket/jibble.jpg" );
       }
    }
 }

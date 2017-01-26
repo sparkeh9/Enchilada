@@ -15,7 +15,7 @@ namespace Enchilada.Tests.Integration.Infrastructure.EnchiladaFileProviderResolv
 
       public async Task<string> Index( string bucket, string imageName )
       {
-         using( var downloadFileReference = enchilada.OpenFileReference( "enchilada://blob/myfile.jpg" ) )
+         using( var downloadFileReference = enchilada.OpenFileReference( $"enchilada://{bucket}/{imageName}" ) )
          {
             using( var downloadFileStream = await downloadFileReference.OpenReadAsync() )
             {
