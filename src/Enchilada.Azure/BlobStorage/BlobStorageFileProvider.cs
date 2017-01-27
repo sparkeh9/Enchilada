@@ -1,6 +1,7 @@
 ﻿namespace Enchilada.Azure.BlobStorage
 {
     using System.IO;
+    using System.Linq;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
     using Microsoft.WindowsAzure.Storage;
@@ -18,6 +19,12 @@
 
         public BlobStorageFileProvider( BlobStorageAdapterConfiguration configuration, string filePath )
         {
+            if( configuration.ContainerReference.Any( c => char.IsUpper( c ) ) )
+            {
+                throw new InvalidOperationException( "Blob container names can contain only lowercase letters, numbers, and hyphens, and must begin" +
+                                                     " and end with a letter or a number. The name can't contain two consecutive hyphens." );
+            }
+
             bool isDirectory = filePath.EndsWith( "/" );
             string blobPath = filePath.StripLeadingSlash();
             bool isRootContainer = blobPath.IsNullOrWhiteSpace();
