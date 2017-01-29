@@ -1,14 +1,14 @@
 {
-    "version": "1.0.4-*",
+    "version": "1.0.6-*",
     "copyright": "Nick Briscoe 2016",
     "language": "en",
     "packOptions": {
         "projectUrl": "https://github.com/sparkeh9/Enchilada",
-        "tags": ["filesystem", "abstraction", "core", "vnext"]
+        "tags": [ "filesystem", "abstraction", "core", "vnext" ]
     },
 
     "dependencies": {
-        "Enchilada": "1.0.4-*",
+        "Enchilada": "*",
         "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
         "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
         "Microsoft.Extensions.DependencyModel": "1.0.0"

@@ -1,5 +1,5 @@
 {
-    "version": "1.0.4-*",
+    "version": "1.0.6-*",
     "copyright": "Nick Briscoe 2016",
     "language": "en",
     "packOptions": {
@@ -8,7 +8,7 @@
     },
 
     "dependencies": {
-        "Enchilada": "1.0.4-*",
+        "Enchilada": "*",
         "WindowsAzure.Storage": "8.0.1"
     },
 
