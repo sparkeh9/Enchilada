@@ -6,12 +6,12 @@
             "version": "1.0.0"
         },
         "NETStandard.Library": "1.6.0",
-        "NSubstitute": "2.0.0-rc",
-        "Enchilada": "1.0.3-*",
-        "Enchilada.Azure": "1.0.2-*",
-        "xunit": "2.2.0-beta2-build3300",
+        "Enchilada": "*",
+        "Enchilada.Azure": "*",
         "dotnet-test-xunit": "2.2.0-preview2-build1029",
-        "FluentAssertions": "4.17.0"
+        "FluentAssertions": "4.18.0",
+        "NSubstitute": "2.0.1-rc",
+        "xunit": "2.2.0-beta5-build3474"
     },
     "testRunner": "xunit",
     "frameworks": {
