@@ -1,10 +1,8 @@
 {
     "dependencies": {
         "NETStandard.Library": "1.6.0",
-        "NSubstitute": "2.0.0-rc",
         "Enchilada": "*",
         "Enchilada.Ftp": "*",
-        "xunit": "2.2.0-beta2-build3300",
         "dotnet-test-xunit": "2.2.0-preview2-build1029",
         "Microsoft.Extensions.Configuration": "1.0.0",
         "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
@@ -18,8 +16,10 @@
             "type": "platform",
             "version": "1.0.0"
         },
-        "CoreFtp": "1.1.10",
-        "FluentAssertions": "4.17.0"
+        "FluentAssertions": "4.18.0",
+        "NSubstitute": "2.0.1-rc",
+        "xunit": "2.2.0-beta5-build3474",
+        "CoreFtp": "1.3.3"
     },
     "testRunner": "xunit",
     "frameworks": {

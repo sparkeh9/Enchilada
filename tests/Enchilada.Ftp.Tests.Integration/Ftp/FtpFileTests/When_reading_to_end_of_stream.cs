@@ -15,8 +15,8 @@
         public async Task Should_return_contents_of_file()
         {
             string fileName = $"{Guid.NewGuid()}.txt";
-            await ResourceHelpers.CreateFileWithContentAsync( fileName, FileContent );
-            using ( var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient(), fileName ) )
+            await ResourceHelpers.CreateFileWithContentAsync( fileName, FileContent, Logger );
+            using ( var sut = new FtpFile( ResourceHelpers.GetLocalFtpClient( Logger ), fileName ) )
             {
                 var bytes = await sut.ReadToEndAsync();
                 string contents = Encoding.UTF8.GetString( bytes );

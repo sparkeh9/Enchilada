@@ -15,8 +15,8 @@
         {
             string fileName = $"{Guid.NewGuid()}.txt";
 
-            await ResourceHelpers.CreateFileWithContentAsync( fileName, FileContent );
-            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient() )
+            await ResourceHelpers.CreateFileWithContentAsync( fileName, FileContent, Logger );
+            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient( Logger ) )
             {
                 localFtpClient.Logger = Logger;
                 var sut = new FtpFile( localFtpClient, fileName );

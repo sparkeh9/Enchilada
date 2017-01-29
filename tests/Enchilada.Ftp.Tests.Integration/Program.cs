@@ -1,10 +1,12 @@
 ﻿namespace Enchilada.Ftp.Tests.Integration
 {
     using System;
+    using Logger;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using Xunit.Abstractions;
 
     public static class Program
     {
@@ -17,14 +19,14 @@
             Initialise();
         }
 
-        public static void Initialise()
+        public static void Initialise( ITestOutputHelper outputHelper = null )
         {
             if ( invoked )
                 return;
             invoked = true;
 
             LoggerFactory = new LoggerFactory()
-                .AddConsole()
+                .AddXunitConsole(outputHelper)
                 .AddDebug( LogLevel.Debug );
 
             var builder = new ConfigurationBuilder()

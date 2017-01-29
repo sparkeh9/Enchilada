@@ -13,7 +13,7 @@
         {
             Program.Initialise();
 
-            await ResourceHelpers.CreateFileWithContentAsync( "level1/level2/level2content.txt", "Lorem ipsum dolor sit amet" );
+            await ResourceHelpers.CreateFileWithContentAsync( "level1/level2/level2content.txt", "Lorem ipsum dolor sit amet", Logger );
 
             var filesystemProvider = new FtpFileProvider( new FtpAdapterConfiguration
             {

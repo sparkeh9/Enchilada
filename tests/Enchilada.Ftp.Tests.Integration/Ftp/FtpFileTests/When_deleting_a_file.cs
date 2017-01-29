@@ -13,8 +13,8 @@
         {
             string fileName = $"{Guid.NewGuid()}.txt";
 
-            await ResourceHelpers.CreateFileWithContentAsync( fileName, "test" );
-            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient() )
+            await ResourceHelpers.CreateFileWithContentAsync( fileName, "test", Logger );
+            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient( Logger ) )
             {
                 localFtpClient.Logger = Logger;
                 var sut = new FtpFile( localFtpClient, fileName );
@@ -32,7 +32,7 @@
         public async Task Should_not_blow_up_if_file_does_not_exist()
         {
             string fileName = $"{Guid.NewGuid()}.txt";
-            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient() )
+            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient( Logger ) )
             {
                 var sut = new FtpFile( localFtpClient, fileName );
 

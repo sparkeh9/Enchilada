@@ -4,26 +4,30 @@
     using System.IO;
     using System.Threading.Tasks;
     using CoreFtp;
+    using Microsoft.Extensions.Logging;
 
     public static class ResourceHelpers
     {
-        public static FtpClient GetLocalFtpClient( string baseDirectory = "/" )
+        private static FtpClient ftpClient;
+
+        public static FtpClient GetLocalFtpClient( ILogger logger, string baseDirectory = "/" )
         {
             Program.Initialise();
 
-            return new FtpClient( new FtpClientConfiguration
+            ftpClient = new FtpClient( new FtpClientConfiguration
             {
                 Host = Program.FtpConfiguration.Host,
                 Username = Program.FtpConfiguration.Username,
                 Password = Program.FtpConfiguration.Password,
                 Port = Program.FtpConfiguration.Port,
                 BaseDirectory = baseDirectory
-            } );
+            } ) { Logger = logger };
+            return ftpClient;
         }
 
-        public static async Task<FtpFile> CreateFileWithContentAsync( string filename, string content )
+        public static async Task<FtpFile> CreateFileWithContentAsync( string filename, string content, ILogger logger )
         {
-            using ( var client = GetLocalFtpClient() )
+            using ( var client = GetLocalFtpClient( logger ) )
             {
                 var ftpFile = new FtpFile( client, filename );
 

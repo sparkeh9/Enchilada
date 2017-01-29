@@ -12,9 +12,9 @@
         [ Fact ]
         public async Task Should_delete_deep_structure()
         {
-            await ResourceHelpers.CreateFileWithContentAsync( $"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff" );
+            await ResourceHelpers.CreateFileWithContentAsync( $"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff", Logger );
 
-            using ( var ftpClient = ResourceHelpers.GetLocalFtpClient() )
+            using ( var ftpClient = ResourceHelpers.GetLocalFtpClient( Logger ) )
             {
                 ftpClient.Logger = Logger;
                 var sut = new FtpDirectory( ftpClient, "folder1" );

@@ -30,7 +30,11 @@
                 Port = configuration.Port,
                 Username = configuration.Username,
                 Password = configuration.Password,
-                BaseDirectory = configuration.Directory
+                BaseDirectory = configuration.Directory,
+                IpVersion = configuration.IpVersion,
+                EncryptionType = configuration.EncryptionType,
+                IgnoreCertificateErrors = configuration.IgnoreCertificateErrors,
+                SslProtocols = configuration.SslProtocols
             } );
 
             if ( isRootContainer )
