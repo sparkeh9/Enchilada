@@ -23,7 +23,7 @@
             var providerUri = new Uri( uri );
 
             var matchingProvider = enchiladaConfiguration.Adapters
-                                                         .FirstOrDefault( x => x.AdapterName == providerUri.Host );
+                                                         .FirstOrDefault( x => string.Equals(x.AdapterName, providerUri.Host, StringComparison.OrdinalIgnoreCase) );
 
             return (IFileProvider) Activator.CreateInstance( matchingProvider.FileProvider, matchingProvider, providerUri.PathAndQuery );
         }
