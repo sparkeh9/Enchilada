@@ -60,7 +60,7 @@
                                                          } );
             var directory = sut.OpenDirectoryReference( "enchilada://blob_filesystem/" );
             directory.Should().BeOfType<BlobStorageDirectory>();
-            directory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/" );
+            directory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test" );
         }
 
         [ Fact ]
@@ -95,7 +95,7 @@
 
             var firstProvider = sut.OpenDirectoryReference( "enchilada://blob_filesystem/" );
             firstProvider.Should().BeOfType<BlobStorageDirectory>();
-            firstProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/" );
+            firstProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test" );
 
             var secondProvider = sut.OpenDirectoryReference( "enchilada://another_filesystem/abc123/" );
             secondProvider.Should().BeOfType<BlobStorageDirectory>();

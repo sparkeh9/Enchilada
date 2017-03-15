@@ -1,9 +1,12 @@
 ﻿namespace Enchilada.Azure.Tests.Integration.BlobStorage.BlobStorageDirectoryTests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
+    using Configuration;
+    using Enchilada.Infrastructure;
     using FluentAssertions;
     using Helpers;
     using Xunit;
@@ -65,6 +68,34 @@
          nodes.Count().Should().Be(1);
 
          await sut.DeleteAsync();
+      }
+
+      [Fact]
+      public async Task Should_list_all_nodes_at_root_2()
+      {
+         await ResourceHelpers.CreateFileWithContentAsync(ResourceHelpers.GetLocalDevelopmentContainer(), $"{Guid.NewGuid()}.txt", "stuff");
+
+         var sut = new EnchiladaFileProviderResolver(new EnchiladaConfiguration
+         {
+            Adapters = new List<IEnchiladaAdapterConfiguration>
+                                                             {
+                                                                 new BlobStorageAdapterConfiguration
+                                                                 {
+                                                                     AdapterName = "blob_filesystem",
+                                                                     CreateContainer = true,
+                                                                     ConnectionString = "UseDevelopmentStorage=true;",
+                                                                     ContainerReference = "test",
+                                                                     IsPublicAccess = true
+                                                                 }
+                                                             }
+         });
+         var directory = sut.OpenDirectoryReference("enchilada://blob_filesystem");
+
+         var nodes = await directory.GetFilesAsync();
+
+         nodes.Count().Should().Be(1);
+
+         await directory.DeleteAsync();
       }
    }
 }
