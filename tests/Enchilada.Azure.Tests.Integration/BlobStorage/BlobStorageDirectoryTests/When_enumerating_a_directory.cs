@@ -51,6 +51,20 @@
             nodes.Count( x => !x.IsDirectory ).Should().Be( 1 );
 
             await sut.DeleteAsync();
-        }
-    }
+      }
+
+      [Fact]
+      public async Task Should_list_all_nodes_at_root()
+      {
+         await ResourceHelpers.CreateFileWithContentAsync(ResourceHelpers.GetLocalDevelopmentContainer(), $"{Guid.NewGuid()}.txt", "stuff");
+
+         var sut = new BlobStorageDirectory(ResourceHelpers.GetLocalDevelopmentContainer(), "");
+
+         var nodes = await sut.GetFilesAsync();
+
+         nodes.Count().Should().Be(1);
+
+         await sut.DeleteAsync();
+      }
+   }
 }
