@@ -46,7 +46,7 @@
 
             if ( isRootContainer )
             {
-                RootDirectory = new BlobStorageDirectory( container, "/" );
+                RootDirectory = new BlobStorageDirectory( container, "" );
                 return;
             }
 

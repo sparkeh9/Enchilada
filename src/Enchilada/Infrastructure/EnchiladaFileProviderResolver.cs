@@ -21,11 +21,10 @@
                 throw new ConfigurationMissingException();
 
             var providerUri = new Uri( uri );
-
             var matchingProvider = enchiladaConfiguration.Adapters
                                                          .FirstOrDefault( x => string.Equals(x.AdapterName, providerUri.Host, StringComparison.OrdinalIgnoreCase) );
 
-            return (IFileProvider) Activator.CreateInstance( matchingProvider.FileProvider, matchingProvider, providerUri.PathAndQuery );
+            return (IFileProvider) Activator.CreateInstance( matchingProvider.FileProvider, matchingProvider, providerUri.PathAndQuery);
         }
 
         public IDirectory OpenDirectoryReference( string uri )

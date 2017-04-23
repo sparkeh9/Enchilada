@@ -21,6 +21,7 @@ Planned:
 - SCP (Secure Copy)
 
 ## Usage
+
 To reference a file, simply inject the filesystem resolver (`IEnchiladaFilesystemResolver`) into your code, which will normally be a single instance of `Enchilada.Infrastructure.EnchiladaFileProviderResolver`.
 Once injected, simply pass in a URI (see below) to `IEnchiladaFilesystemResolver.OpenFileReference`, which will produce an instance of `IFile`, which represents the file on whatever platform your configuration specifies, regardless of whether it exists yet or not.
 ```
@@ -32,6 +33,7 @@ The URI is made up of three parts:
 - The path: as you might imagine, this is the path to the file.
 
 ### Saving a file from a stream
+
 ``` C#
 // Injected filesystem resolver
 IEnchiladaFilesystemResolver enchilada;
