@@ -24,9 +24,9 @@
                                    select CreateConfigurationInstance( matchingFilesystemAdapter, configuredAdapter, adapterProperties ) ).ToList();
 
             var enchiladaFileProviderResolver = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
-                                                                                   {
-                                                                                       Adapters = configurations
-                                                                                   } );
+            {
+                Adapters = configurations
+            } );
             serviceCollection.AddSingleton<IEnchiladaFilesystemResolver>( enchiladaFileProviderResolver );
 
             return serviceCollection;
@@ -56,19 +56,19 @@
                     if ( property == null )
                         continue;
 
-                    if ( property.PropertyType == typeof( bool ) )
+                    if ( property.PropertyType == typeof(bool) )
                     {
                         property.SetValue( instance, Convert.ToBoolean( adapterProperty.Value ) );
                         continue;
                     }
 
-                    if ( property.PropertyType == typeof( int ) )
+                    if ( property.PropertyType == typeof(int) )
                     {
                         property.SetValue( instance, Convert.ToInt32( adapterProperty.Value ) );
                         continue;
                     }
 
-                    if ( property.PropertyType == typeof( long ) )
+                    if ( property.PropertyType == typeof(long) )
                     {
                         property.SetValue( instance, Convert.ToInt64( adapterProperty.Value ) );
                         continue;
@@ -76,14 +76,14 @@
 
                     property.SetValue( instance, adapterProperty.Value );
                 }
-                catch ( ArgumentException ) {}
+                catch ( ArgumentException ) { }
             return instance;
         }
 
         private static List<Type> GetAvailableEnchiladaAdapters( IEnumerable<Assembly> assemblies )
         {
             var availableAdapters = assemblies.SelectMany( assembly => assembly.GetTypes() )
-                                              .Where( type => typeof( IEnchiladaAdapterConfiguration ).IsAssignableFrom( type ) && type.GetTypeInfo().IsClass )
+                                              .Where( type => typeof(IEnchiladaAdapterConfiguration).IsAssignableFrom( type ) && type.GetTypeInfo().IsClass )
                                               .ToList();
             return availableAdapters;
         }
@@ -95,7 +95,7 @@
 
             var assemblies = DependencyContext.Default
                                               .RuntimeLibraries
-                                              .Where( x => assembliesToCheck.Contains( x.Name ) || x.Name.StartsWith( "Enchilada" ) )
+                                              .Where( x => assembliesToCheck.Contains( x.Name ) || x.Name.StartsWith( nameof( Enchilada ), StringComparison.CurrentCultureIgnoreCase) )
                                               .Select( x => Assembly.Load( new AssemblyName( x.Name ) ) );
             return assemblies;
         }

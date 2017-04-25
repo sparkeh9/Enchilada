@@ -26,7 +26,7 @@
             invoked = true;
 
             LoggerFactory = new LoggerFactory()
-                .AddXunitConsole(outputHelper)
+                .AddXunitConsole( outputHelper )
                 .AddDebug( LogLevel.Debug );
 
             var builder = new ConfigurationBuilder()
