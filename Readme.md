@@ -1,30 +1,36 @@
 # Enchilada
 [![Build Status: Windows](https://ci.appveyor.com/api/projects/status/github/sparkeh9/enchilada?branch=master&svg=true)](https://ci.appveyor.com/api/projects/status/github/sparkeh9/enchilada?branch=master&svg=true)
 
-### Nuget Packages
-- https://www.nuget.org/packages/Enchilada/ - The main package, provides local filesystem support
-- https://www.nuget.org/packages/Enchilada.Azure/ - Provides Azure blob storage
-- https://www.nuget.org/packages/Enchilada.AspNetCore/ - Provides ASP.NET Core configuration support
-- https://www.nuget.org/packages/Enchilada.Ftp/ - Provides FTP (no SSL yet)
-
-
-Enchilada is a filesystem abstraction layer written in C#, the aim is to enable 
-the seamless use of file operations over and between different providers.
+## What is it?
+Enchilada is a filesystem abstraction layer written in C#, the aim is to enable the seamless use of file operations over and between different providers.
 
 Implemented:
 - Local Filesystem - (local)
 - Azure Blob Storage - (azure-blob)
-- FTP - (ftp)
+- FTP/S - (ftp)
 
 Planned:
-- FTP/S (FTP over SSL)
 - SCP (Secure Copy)
+- AWS S3
+
+
+## How to contribute
+1. Fork
+1. Hack!
+1. Pull Request
+
+### Nuget Packages
+- https://www.nuget.org/packages/Enchilada/ - The main package, provides local filesystem support
+- https://www.nuget.org/packages/Enchilada.Azure/ - Provides Azure blob storage
+- https://www.nuget.org/packages/Enchilada.AspNetCore/ - Provides ASP.NET Core configuration support
+- https://www.nuget.org/packages/Enchilada.Ftp/ - Provides FTP/S
+
 
 ## Usage
 
 To reference a file, simply inject the filesystem resolver (`IEnchiladaFilesystemResolver`) into your code, which will normally be a single instance of `Enchilada.Infrastructure.EnchiladaFileProviderResolver`.
 Once injected, simply pass in a URI (see below) to `IEnchiladaFilesystemResolver.OpenFileReference`, which will produce an instance of `IFile`, which represents the file on whatever platform your configuration specifies, regardless of whether it exists yet or not.
-```
+``` C#
 fileSystemResolver.OpenFileReference( "enchilada://blob_storage/image.jpg" );
 ```
 The URI is made up of three parts:
