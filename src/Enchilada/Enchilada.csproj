@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Copyright>Nick Briscoe 2016</Copyright>
     <VersionPrefix>1.0.7</VersionPrefix>
-    <TargetFrameworks>netstandard1.3;net452</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Enchilada</AssemblyName>
     <PackageId>Enchilada</PackageId>
     <PackageTags>filesystem;abstraction;ftp;azure;blob;core;vnext</PackageTags>

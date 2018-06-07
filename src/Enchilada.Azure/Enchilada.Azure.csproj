@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Copyright>Nick Briscoe 2016</Copyright>
     <VersionPrefix>1.0.7</VersionPrefix>
-    <TargetFrameworks>netstandard1.3;net452</TargetFrameworks>
+      <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Enchilada.Azure</AssemblyName>
     <PackageId>Enchilada.Azure</PackageId>
     <PackageTags>filesystem;abstraction;azure;blob;core;vnext</PackageTags>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WindowsAzure.Storage" Version="8.0.1" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.2.0" />
   </ItemGroup>
   
   <Target Name="PostcompileScript" AfterTargets="Build" Condition=" '$(IsCrossTargetingBuild)' != 'true' ">
