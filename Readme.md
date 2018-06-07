@@ -30,7 +30,7 @@ Planned:
 
 To reference a file, simply inject the filesystem resolver (`IEnchiladaFilesystemResolver`) into your code, which will normally be a single instance of `Enchilada.Infrastructure.EnchiladaFileProviderResolver`.
 Once injected, simply pass in a URI (see below) to `IEnchiladaFilesystemResolver.OpenFileReference`, which will produce an instance of `IFile`, which represents the file on whatever platform your configuration specifies, regardless of whether it exists yet or not.
-``` C#
+```C#
 fileSystemResolver.OpenFileReference( "enchilada://blob_storage/image.jpg" );
 ```
 The URI is made up of three parts:
@@ -40,7 +40,7 @@ The URI is made up of three parts:
 
 ### Saving a file from a stream
 
-``` C#
+```C#
 // Injected filesystem resolver
 IEnchiladaFilesystemResolver enchilada;
 
@@ -57,7 +57,7 @@ using ( var filestream = tempFile.OpenReadStream() )
 ## Local
 The local adapter allows the resolution of files on the local filesystem or UNC path. 
 It does not currently handle connecting to resources which require authentication.
-```
+```json
 "your_configuration_name": {
 	"adapter": "local",
 	"directory": "C:\\my-folder"
@@ -67,7 +67,7 @@ It does not currently handle connecting to resources which require authenticatio
 ## Azure Blob
 The Azure Blob (Binary Large Object) adapter allows the resolution of files on the azure service.
 Authentication is handled via the connection string.
-```
+```json
 "your_configuration_name": {
 	"adapter": "azure-blob",
 	"connectionString": "UseDevelopmentStorage=true;",
@@ -79,7 +79,7 @@ Authentication is handled via the connection string.
 
 ## FTP
 The FTP adapter enables non-encrypted file transfer to a passive mode FTP server.
-```
+```json
 "your_configuration_name": {
 	"adapter": "ftp",
 	"host": "ftp.github.com",
@@ -95,7 +95,7 @@ The FTP adapter enables non-encrypted file transfer to a passive mode FTP server
 into the AspNetCore Dependency Injection framework. To configure, simply amend the `ConfigureServices` method 
 in `Startup.cs` as follows.
 
-```
+```C#
 services.AddEnchilada( new EnchiladaBuilderOptions
                         {
                             Adapters = Configuration.GetSection( "Enchilada:Adapters" )
@@ -103,7 +103,7 @@ services.AddEnchilada( new EnchiladaBuilderOptions
 ```
 
 And provide configuration in the appsettings file, e.g.
-```
+```json
 {
   "Enchilada": {
     "Adapters": {

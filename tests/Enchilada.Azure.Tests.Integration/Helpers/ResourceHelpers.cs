@@ -20,7 +20,9 @@
 
         public static CloudBlobContainer GetLocalDevelopmentContainer()
         {
-            return GetContainer( "UseDevelopmentStorage=true;", "test" );
+            var container = GetContainer( "UseDevelopmentStorage=true;", "enchilada-test" );
+            container.CreateIfNotExistsAsync().Wait();
+            return container;
         }
 
         public static async Task<string> MakeHttpRequestAsync( this string url )

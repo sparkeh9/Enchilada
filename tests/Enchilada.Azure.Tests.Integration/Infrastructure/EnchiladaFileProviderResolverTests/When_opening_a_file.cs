@@ -15,19 +15,19 @@
         public void Should_throw_exception_if_uri_invalid()
         {
             var sut = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
-                                                         {
-                                                             Adapters = new List<IEnchiladaAdapterConfiguration>
-                                                             {
-                                                                 new BlobStorageAdapterConfiguration
-                                                                 {
-                                                                     AdapterName = "blob_filesystem",
-                                                                     CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
-                                                                     ContainerReference = "test",
-                                                                     IsPublicAccess = true
-                                                                 }
-                                                             }
-                                                         } );
+            {
+                Adapters = new List<IEnchiladaAdapterConfiguration>
+                {
+                    new BlobStorageAdapterConfiguration
+                    {
+                        AdapterName = "blob_filesystem",
+                        CreateContainer = true,
+                        ConnectionString = "UseDevelopmentStorage=true;",
+                        ContainerReference = "test",
+                        IsPublicAccess = true
+                    }
+                }
+            } );
 
             Assert.Throws<UriFormatException>( () => sut.OpenFileReference( "abc" ) );
         }
@@ -37,19 +37,19 @@
         public void Should_give_blob_provider()
         {
             var sut = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
-                                                         {
-                                                             Adapters = new List<IEnchiladaAdapterConfiguration>
-                                                             {
-                                                                 new BlobStorageAdapterConfiguration
-                                                                 {
-                                                                     AdapterName = "blob_filesystem",
-                                                                     CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
-                                                                     ContainerReference = "test",
-                                                                     IsPublicAccess = true
-                                                                 }
-                                                             }
-                                                         } );
+            {
+                Adapters = new List<IEnchiladaAdapterConfiguration>
+                {
+                    new BlobStorageAdapterConfiguration
+                    {
+                        AdapterName = "blob_filesystem",
+                        CreateContainer = true,
+                        ConnectionString = "UseDevelopmentStorage=true;",
+                        ContainerReference = "test",
+                        IsPublicAccess = true
+                    }
+                }
+            } );
 
             var provider = sut.OpenFileReference( "enchilada://blob_filesystem/ABC123.txt" );
             provider.Should().BeOfType<BlobStorageFile>();
@@ -61,26 +61,26 @@
         public void Should_give_correct_blob_filesystem_provider()
         {
             var sut = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
-                                                         {
-                                                             Adapters = new List<IEnchiladaAdapterConfiguration>
-                                                             {
-                                                                 new BlobStorageAdapterConfiguration
-                                                                 {
-                                                                     AdapterName = "blob_filesystem",
-                                                                     CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
-                                                                     ContainerReference = "test",
-                                                                     IsPublicAccess = true
-                                                                 },
-                                                                 new BlobStorageAdapterConfiguration
-                                                                 {
-                                                                     AdapterName = "another_filesystem",
-                                                                     CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
-                                                                     ContainerReference = "test123"
-                                                                 }
-                                                             }
-                                                         } );
+            {
+                Adapters = new List<IEnchiladaAdapterConfiguration>
+                {
+                    new BlobStorageAdapterConfiguration
+                    {
+                        AdapterName = "blob_filesystem",
+                        CreateContainer = true,
+                        ConnectionString = "UseDevelopmentStorage=true;",
+                        ContainerReference = "test",
+                        IsPublicAccess = true
+                    },
+                    new BlobStorageAdapterConfiguration
+                    {
+                        AdapterName = "another_filesystem",
+                        CreateContainer = true,
+                        ConnectionString = "UseDevelopmentStorage=true;",
+                        ContainerReference = "enchilada-test"
+                    }
+                }
+            } );
 
             var firstProvider = sut.OpenFileReference( "enchilada://blob_filesystem/SampleContent.txt" );
             firstProvider.Should().BeOfType<BlobStorageFile>();
@@ -89,7 +89,7 @@
 
             var secondProvider = sut.OpenFileReference( "enchilada://another_filesystem/SampleContent.txt" );
             secondProvider.Should().BeOfType<BlobStorageFile>();
-            secondProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test123/SampleContent.txt" );
+            secondProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/enchilada-test/SampleContent.txt" );
             secondProvider.Name.Should().Be( "SampleContent.txt" );
         }
     }

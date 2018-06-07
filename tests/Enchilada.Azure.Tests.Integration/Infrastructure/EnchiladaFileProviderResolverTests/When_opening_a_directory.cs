@@ -83,7 +83,7 @@
                                                                      AdapterName = "another_filesystem",
                                                                      CreateContainer = true,
                                                                      ConnectionString = "UseDevelopmentStorage=true;",
-                                                                     ContainerReference = "test123"
+                                                                     ContainerReference = "enchilada-test"
                                                                  },
                                                                  new FilesystemAdapterConfiguration
                                                                  {
@@ -99,7 +99,7 @@
 
             var secondProvider = sut.OpenDirectoryReference( "enchilada://another_filesystem/abc123/" );
             secondProvider.Should().BeOfType<BlobStorageDirectory>();
-            secondProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test123/abc123/" );
+            secondProvider.RealPath.Should().Be("http://127.0.0.1:10000/devstoreaccount1/enchilada-test/abc123/");
 
             var thirdProvider = sut.OpenDirectoryReference( "enchilada://local_filesystem/abc123/" );
             thirdProvider.Should().BeOfType<FilesystemDirectory>();

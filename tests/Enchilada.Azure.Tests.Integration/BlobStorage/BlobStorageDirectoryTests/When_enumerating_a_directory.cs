@@ -65,7 +65,7 @@
 
          var nodes = await sut.GetFilesAsync();
 
-         nodes.Count().Should().Be(1);
+         nodes.Count().Should().BeGreaterOrEqualTo(1);
 
          await sut.DeleteAsync();
       }
