@@ -5,26 +5,28 @@
     using System.Threading.Tasks;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
-    using Microsoft.WindowsAzure.Storage.Blob;
+    using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Specialized;
+    using Azure.Storage.Blobs.Models;
     using FileMode = Infrastructure.FileMode;
 
     public class BlobStorageFile : IFile
     {
-        private readonly CloudBlobContainer BlobContainer;
+        private readonly BlobContainerClient BlobContainer;
         private readonly string FilePath;
-        private CloudBlockBlob BlockBlobReference => BlobContainer.GetBlockBlobReference( FilePath );
+        private BlobClient BlobClient => BlobContainer.GetBlobClient( FilePath );
 
         public string Name => Path.GetFileName( FilePath );
 
         public string Extension => Path.GetExtension( FilePath );
-        public string RealPath => BlockBlobReference.Uri.ToString();
+        public string RealPath => BlobClient.Uri.ToString();
 
-        public long Size => BlockBlobReference.Properties.Length;
-        public DateTime? LastModified => BlockBlobReference.Properties.LastModified?.LocalDateTime;
+        public long Size => BlobClient.GetProperties().Value.ContentLength;
+        public DateTime? LastModified => BlobClient.GetProperties().Value.LastModified.LocalDateTime;
         public bool IsDirectory => false;
-        public bool Exists => BlockBlobReference.ExistsAsync().Result;
+        public bool Exists => BlobClient.Exists().Value;
 
-        public BlobStorageFile( CloudBlobContainer blobContainer, string filePath )
+        public BlobStorageFile( BlobContainerClient blobContainer, string filePath )
         {
             BlobContainer = blobContainer;
             FilePath = filePath;
@@ -32,13 +34,7 @@
 
         public async Task<Stream> OpenReadAsync()
         {
-            var blob = BlobContainer.GetBlockBlobReference( FilePath );
-
-            var stream = new MemoryStream();
-
-            await blob.DownloadToStreamAsync( stream );
-            stream.Seek( 0, SeekOrigin.Begin );
-            return stream;
+            return await BlobClient.OpenReadAsync();
         }
 
         public async Task<string> GetHashAsync()
@@ -77,11 +73,11 @@
                 case FileMode.Overwrite:
                 case FileMode.Truncate:
                     await DeleteAsync();
-                    return await BlobContainer.GetBlockBlobReference( FilePath )
-                                              .OpenWriteAsync();
+                    return await BlobClient.OpenWriteAsync( overwrite: true );
                 case FileMode.Append:
-                    return await BlobContainer.GetAppendBlobReference( FilePath )
-                                              .OpenWriteAsync( true );
+                    var appendClient = BlobContainer.GetAppendBlobClient( FilePath );
+                    await appendClient.CreateIfNotExistsAsync();
+                    return await appendClient.OpenWriteAsync( overwrite: false );
                 default:
                     throw new NotImplementedException();
             }
@@ -89,8 +85,7 @@
 
         public async Task DeleteAsync()
         {
-            var blob = BlobContainer.GetBlockBlobReference( FilePath );
-            await blob.DeleteIfExistsAsync();
+            await BlobClient.DeleteIfExistsAsync();
         }
 
         public void Dispose() {}

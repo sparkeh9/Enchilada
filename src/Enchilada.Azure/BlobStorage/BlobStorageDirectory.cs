@@ -8,23 +8,24 @@
     using System.Threading.Tasks;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
-    using Microsoft.WindowsAzure.Storage.Blob;
+    using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Models;
 
     public class BlobStorageDirectory : IDirectory
     {
-        private readonly CloudBlobContainer BlobContainer;
+        private readonly BlobContainerClient BlobContainer;
         private readonly string Path;
 
-        public string Name => BlobContainer.GetDirectoryReference( Path ).Prefix;
+        public string Name => string.IsNullOrEmpty( Path ) ? $"{BlobContainer.Name}/" : $"{Path.TrimEnd('/')}/";
         public DateTime? LastModified => GetBlobFiles().OrderBy( x => x.LastModified ).FirstOrDefault()?.LastModified;
 
         public bool IsDirectory => true;
 
-        public string RealPath => BlobContainer.GetDirectoryReference( Path ).Uri.ToString().StripDoubleSlash();
+        public string RealPath => $"{BlobContainer.Uri.ToString().StripDoubleSlash()}/{Path}".StripDoubleSlash();
 
         public bool Exists => true;
 
-        public BlobStorageDirectory( CloudBlobContainer blobContainer, string path )
+        public BlobStorageDirectory( BlobContainerClient blobContainer, string path )
         {
             BlobContainer = blobContainer;
             Path = path;
@@ -32,21 +33,10 @@
 
         public async Task DeleteAsync()
         {
-            BlobContinuationToken continuationToken = null;
-            do
+            await foreach ( var blob in BlobContainer.GetBlobsAsync( prefix: Path ) )
             {
-                var response = Task.Run( () => BlobContainer.ListBlobsSegmentedAsync( Path, true, new BlobListingDetails(), 999, continuationToken, new BlobRequestOptions(), null ) ).Result;
-                continuationToken = response.ContinuationToken;
-
-                foreach ( var result in response.Results )
-                {
-                    var blob = result as CloudBlob;
-                    if ( blob != null )
-                    {
-                        await blob.DeleteIfExistsAsync();
-                    }
-                }
-            } while ( continuationToken != null );
+                await BlobContainer.DeleteBlobIfExistsAsync( blob.Name );
+            }
         }
 
         public IEnumerator<INode> GetEnumerator()
@@ -101,32 +91,28 @@
 
         private IEnumerable<IDirectory> GetBlobDirectories( string path = null )
         {
-            BlobContinuationToken continuationToken = null;
-            do
-            {
-                var response = Task.Run( () => BlobContainer.ListBlobsSegmentedAsync( Path, continuationToken ) ).Result;
-                continuationToken = response.ContinuationToken;
+            var results = BlobContainer.GetBlobsByHierarchy( prefix: Path, delimiter: "/" );
 
-                foreach ( var result in response.Results.Where( x => x is CloudBlobDirectory && path == null || ( (CloudBlobDirectory) x ).Prefix.EndsWith( $"{path}/" ) ) )
+            foreach ( var item in results )
+            {
+                if ( item.IsPrefix && ( path == null || item.Prefix.EndsWith( $"{path}/" ) ) )
                 {
-                    yield return new BlobStorageDirectory( BlobContainer, ( (CloudBlobDirectory) result ).Prefix );
+                    yield return new BlobStorageDirectory( BlobContainer, item.Prefix );
                 }
-            } while ( continuationToken != null );
+            }
         }
 
         private IEnumerable<IFile> GetBlobFiles()
         {
-            BlobContinuationToken continuationToken = null;
-            do
-            {
-                var response = Task.Run( () => BlobContainer.GetDirectoryReference( Path ).ListBlobsSegmentedAsync( continuationToken ) ).Result;
-                continuationToken = response.ContinuationToken;
+            var results = BlobContainer.GetBlobsByHierarchy( prefix: Path, delimiter: "/" );
 
-                foreach ( var result in response.Results.Where( x => x is CloudBlockBlob ) )
+            foreach ( var item in results )
+            {
+                if ( !item.IsPrefix )
                 {
-                    yield return new BlobStorageFile( BlobContainer, ( (CloudBlockBlob) result ).Uri.ToString() );
+                    yield return new BlobStorageFile( BlobContainer, item.Blob.Name );
                 }
-            } while ( continuationToken != null );
+            }
         }
     }
 }
