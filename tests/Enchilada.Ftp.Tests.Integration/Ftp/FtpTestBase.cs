@@ -3,6 +3,7 @@
     using System;
     using Microsoft.Extensions.Logging;
     using Xunit.Abstractions;
+    using Enchilada.Ftp.Tests.Integration.Logger;
 
     public abstract class FtpTestBase : IDisposable
     {
@@ -10,8 +11,7 @@
 
         protected FtpTestBase( ITestOutputHelper outputHelper = null )
         {
-            Program.Initialise( outputHelper );
-            Logger = Program.LoggerFactory.CreateLogger( GetType().Name );
+            Logger = new XUnitConsoleLogger(GetType().FullName, (category, level) => true, outputHelper);
         }
 
         protected virtual void Dispose( bool disposing )

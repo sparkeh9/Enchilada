@@ -5,7 +5,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_deleting_a_directory
     {
@@ -17,10 +17,10 @@
             var sut = resourceDirectory.GetDirectory( $"testfolder_{Guid.NewGuid()}" );
             await sut.CreateDirectoryAsync();
 
-            sut.Exists.Should().BeTrue();
+            sut.Exists.ShouldBeTrue();
             await sut.DeleteAsync();
 
-            sut.Exists.Should().BeFalse();
+            sut.Exists.ShouldBeFalse();
         }
 
         [ Fact ]

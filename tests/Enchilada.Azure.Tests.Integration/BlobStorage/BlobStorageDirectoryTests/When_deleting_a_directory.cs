@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using Azure.BlobStorage;
     using Filesystem;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -24,7 +24,7 @@
 
             var sut = new BlobStorageDirectory( ResourceHelpers.GetLocalDevelopmentContainer(), "folder1" );
 
-            sut.Exists.Should().BeTrue();
+            sut.Exists.ShouldBeTrue();
             await sut.DeleteAsync();
         }
 

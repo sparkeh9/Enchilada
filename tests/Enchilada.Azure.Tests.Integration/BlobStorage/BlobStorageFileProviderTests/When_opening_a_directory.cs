@@ -3,7 +3,7 @@
     using System.IO;
     using Azure.BlobStorage;
     using Filesystem;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -16,13 +16,13 @@
                                                                   {
                                                                       AdapterName = "blob_filesystem",
                                                                       CreateContainer = true,
-                                                                      ConnectionString = "UseDevelopmentStorage=true;",
+                                                                      ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                                                                       ContainerReference = "test",
                                                                       IsPublicAccess = true
                                                                   }, "level1/level2/" );
 
-            filesystemProvider.Should().BeOfType<BlobStorageFileProvider>();
-            filesystemProvider.RootDirectory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/level1/level2/" );
+            filesystemProvider.ShouldBeOfType<BlobStorageFileProvider>();
+            filesystemProvider.RootDirectory.RealPath.ShouldEndWith( "/level1/level2/" );
         }
     }
 }

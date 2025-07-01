@@ -19,6 +19,6 @@
         public IpVersion IpVersion { get; set; } = IpVersion.IpV4;
         public FtpEncryption EncryptionType { get; set; } = FtpEncryption.None;
         public bool IgnoreCertificateErrors { get; set; } = false;
-        public SslProtocols SslProtocols { get; set; } = SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12;
+        public SslProtocols SslProtocols { get; set; } = SslProtocols.None;
     }
 }

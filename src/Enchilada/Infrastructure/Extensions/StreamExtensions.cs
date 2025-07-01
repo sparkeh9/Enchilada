@@ -18,13 +18,15 @@
         public static async Task<byte[]> ReadStreamToEndAsync( this Stream stream )
         {
             var bytes = new List<byte>();
-            var buffer = new byte[4096]; // 4kb buffer size
-            int readCount = 0;
+            var buffer = new byte[4096];
+            int readCount;
+
             while ( ( readCount = await stream.ReadAsync( buffer, 0, buffer.Length ) ) != 0 )
             {
                 bytes.AddRange( buffer.Take( readCount ) );
             }
-            return bytes.ToArray();
+
+            return RemoveUtf8Bom( bytes.ToArray() );
         }
 
         public static async Task<byte[]> ReadStreamToEndResetAsync( this Stream stream )
@@ -37,7 +39,7 @@
             {
                 bytes.AddRange( buffer.Take( readCount ) );
             }
-            return bytes.ToArray();
+            return RemoveUtf8Bom( bytes.ToArray() );
         }
 
         public static async Task<string> ToMd5HashAsync( this Stream stream )
@@ -57,6 +59,16 @@
                                    .Replace( "-", "" )
                                    .ToLower();
             }
+        }
+
+        private static byte[] RemoveUtf8Bom( byte[] input )
+        {
+            if ( input.Length >= 3 && input[ 0 ] == 0xEF && input[ 1 ] == 0xBB && input[ 2 ] == 0xBF )
+            {
+                return input.Skip( 3 ).ToArray();
+            }
+
+            return input;
         }
     }
 }

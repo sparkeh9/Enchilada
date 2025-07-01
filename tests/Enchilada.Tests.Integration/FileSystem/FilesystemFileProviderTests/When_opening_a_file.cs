@@ -7,7 +7,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_opening_a_file
     {
@@ -20,7 +20,7 @@
                                                                      Directory = filesystemPath
                                                                  }, "level1/level2/level2content.txt" );
 
-            filesystemProvider.RootDirectory.RealPath.Should().Be( string.Format( "{0}level1{1}level2", filesystemPath, Path.DirectorySeparatorChar ) );
+            filesystemProvider.RootDirectory.RealPath.ShouldBe( string.Format( "{0}level1{1}level2", filesystemPath, Path.DirectorySeparatorChar ) );
         }
 
         [ Fact ]
@@ -32,13 +32,13 @@
                                                                      Directory = filesystemPath
                                                                  }, "level1/level2/level2content.txt" );
 
-            filesystemProvider.IsFile.Should().BeTrue();
-            filesystemProvider.File.Should().NotBeNull();
+            filesystemProvider.IsFile.ShouldBeTrue();
+            filesystemProvider.File.ShouldNotBeNull();
 
             var bytes = await filesystemProvider.File.ReadToEndAsync();
             string contents = Encoding.UTF8.GetString( bytes );
 
-            contents.Should().StartWith( "Lorem ipsum" );
+            contents.ShouldStartWith( "Lorem ipsum" );
         }
 
         [ Fact ]
@@ -50,11 +50,11 @@
                                                                      Directory = filesystemPath
                                                                  }, $"level1/level2/not_a_real_file_{Guid.NewGuid()}.txt" );
 
-            filesystemProvider.IsFile.Should().BeTrue();
-            filesystemProvider.File.Should().NotBeNull();
-            filesystemProvider.File.Exists.Should().BeFalse();
-            filesystemProvider.RootDirectory.Should().NotBeNull();
-            filesystemProvider.RootDirectory.RealPath.Should().Be( string.Format( "{0}level1{1}level2", filesystemPath, Path.DirectorySeparatorChar ) );
+            filesystemProvider.IsFile.ShouldBeTrue();
+            filesystemProvider.File.ShouldNotBeNull();
+            filesystemProvider.File.Exists.ShouldBeFalse();
+            filesystemProvider.RootDirectory.ShouldNotBeNull();
+            filesystemProvider.RootDirectory.RealPath.ShouldBe( string.Format( "{0}level1{1}level2", filesystemPath, Path.DirectorySeparatorChar ) );
         }
     }
 }

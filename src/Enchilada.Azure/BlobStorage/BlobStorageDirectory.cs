@@ -8,20 +8,26 @@
     using System.Threading.Tasks;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
-    using Azure.Storage.Blobs;
-    using Azure.Storage.Blobs.Models;
+    using global::Azure.Storage.Blobs;
 
     public class BlobStorageDirectory : IDirectory
     {
         private readonly BlobContainerClient BlobContainer;
         private readonly string Path;
 
+        // Ensures the prefix used with Azure listing calls ends with a slash when targeting a sub-directory.
+        private string Prefix => string.IsNullOrEmpty( Path )
+                                    ? string.Empty
+                                    : Path.TrimEnd( '/' ) + "/";
+
         public string Name => string.IsNullOrEmpty( Path ) ? $"{BlobContainer.Name}/" : $"{Path.TrimEnd('/')}/";
         public DateTime? LastModified => GetBlobFiles().OrderBy( x => x.LastModified ).FirstOrDefault()?.LastModified;
 
         public bool IsDirectory => true;
 
-        public string RealPath => $"{BlobContainer.Uri.ToString().StripDoubleSlash()}/{Path}".StripDoubleSlash();
+        public string RealPath => string.IsNullOrEmpty( Path )
+            ? BlobContainer.Uri.ToString().StripDoubleSlash()
+            : ($"{BlobContainer.Uri.ToString().StripDoubleSlash()}/{Path.TrimEnd('/')}/").StripDoubleSlash();
 
         public bool Exists => true;
 
@@ -33,7 +39,7 @@
 
         public async Task DeleteAsync()
         {
-            await foreach ( var blob in BlobContainer.GetBlobsAsync( prefix: Path ) )
+            await foreach ( var blob in BlobContainer.GetBlobsAsync( prefix: Prefix ) )
             {
                 await BlobContainer.DeleteBlobIfExistsAsync( blob.Name );
             }
@@ -91,7 +97,7 @@
 
         private IEnumerable<IDirectory> GetBlobDirectories( string path = null )
         {
-            var results = BlobContainer.GetBlobsByHierarchy( prefix: Path, delimiter: "/" );
+            var results = BlobContainer.GetBlobsByHierarchy( prefix: Prefix, delimiter: "/" );
 
             foreach ( var item in results )
             {
@@ -104,7 +110,7 @@
 
         private IEnumerable<IFile> GetBlobFiles()
         {
-            var results = BlobContainer.GetBlobsByHierarchy( prefix: Path, delimiter: "/" );
+            var results = BlobContainer.GetBlobsByHierarchy( prefix: Prefix, delimiter: "/" );
 
             foreach ( var item in results )
             {

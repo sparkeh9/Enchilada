@@ -5,33 +5,42 @@
     using Helpers;
     using Xunit;
     using FluentAssertions;
+    using Microsoft.Extensions.Configuration;
+    using Xunit.Abstractions;
 
     public class When_opening_a_file : FtpTestBase
     {
-        [ Fact ]
+        public When_opening_a_file(ITestOutputHelper outputHelper) : base(outputHelper)
+        {
+        }
+
+        [Fact]
         public async Task Should_present_file()
         {
-            Program.Initialise();
+            var ftpConfig = new ConfigurationBuilder()
+                .SetBasePath(System.AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build().GetSection("Ftp").Get<FtpConfiguration>();
 
-            await ResourceHelpers.CreateFileWithContentAsync( "level1/level2/level2content.txt", "Lorem ipsum dolor sit amet", Logger );
+            await ResourceHelpers.CreateFileWithContentAsync("level1/level2/level2content.txt", "Lorem ipsum dolor sit amet", ftpConfig, Logger);
 
-            var filesystemProvider = new FtpFileProvider( new FtpAdapterConfiguration
+            var filesystemProvider = new FtpFileProvider(new FtpAdapterConfiguration
             {
                 AdapterName = "ftp_filesystem",
-                Host = Program.FtpConfiguration.Host,
-                Username = Program.FtpConfiguration.Username,
-                Password = Program.FtpConfiguration.Password,
-                Port = Program.FtpConfiguration.Port,
+                Host = ftpConfig.Host,
+                Username = ftpConfig.Username,
+                Password = ftpConfig.Password,
+                Port = ftpConfig.Port,
                 Directory = "/"
-            }, "level1/level2/level2content.txt" );
+            }, "level1/level2/level2content.txt");
 
             filesystemProvider.IsFile.Should().BeTrue();
             filesystemProvider.File.Should().NotBeNull();
 
             var bytes = await filesystemProvider.File.ReadToEndAsync();
-            string contents = Encoding.UTF8.GetString( bytes );
+            string contents = Encoding.UTF8.GetString(bytes);
 
-            contents.Should().StartWith( "Lorem ipsum" );
+            contents.Should().StartWith("Lorem ipsum");
         }
     }
 }

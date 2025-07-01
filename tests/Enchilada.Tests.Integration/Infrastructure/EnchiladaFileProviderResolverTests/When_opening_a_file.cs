@@ -8,7 +8,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_opening_a_file
     {
@@ -60,12 +60,12 @@
                                                          } );
 
             var firstProvider = sut.OpenFileReference( "enchilada://test_filesystem/abc.txt" );
-            firstProvider.Should().BeOfType<FilesystemFile>();
-            firstProvider.RealPath.Should().Be( $"{firstProviderPath}\\abc.txt" );
+            firstProvider.ShouldBeOfType<FilesystemFile>();
+            firstProvider.RealPath.ShouldBe( $"{firstProviderPath}\\abc.txt" );
 
             var secondProvider = sut.OpenFileReference( "enchilada://another_filesystem/123.txt" );
-            secondProvider.Should().BeOfType<FilesystemFile>();
-            secondProvider.RealPath.Should().Be( $"{secondProviderPath}\\123.txt" );
+            secondProvider.ShouldBeOfType<FilesystemFile>();
+            secondProvider.RealPath.ShouldBe( $"{secondProviderPath}\\123.txt" );
         }
     }
 }

@@ -5,9 +5,8 @@
     using System.Threading.Tasks;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
-    using Azure.Storage.Blobs;
-    using Azure.Storage.Blobs.Specialized;
-    using Azure.Storage.Blobs.Models;
+    using global::Azure.Storage.Blobs;
+    using global::Azure.Storage.Blobs.Specialized;
     using FileMode = Infrastructure.FileMode;
 
     public class BlobStorageFile : IFile

@@ -1,14 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>netstandard2.0</TargetFramework>
+      <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Enchilada.Tests.Integration</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Enchilada.Tests.Integration</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <!-- <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion> -->
-    <!-- <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion> -->
-    <!-- <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback> -->
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -25,14 +22,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.9.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FluentAssertions" Version="5.4.2" />
-    <PackageReference Include="NSubstitute" Version="3.1.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="Shouldly" Version="4.2.1" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
   </ItemGroup>
 
 </Project>

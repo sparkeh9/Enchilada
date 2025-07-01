@@ -4,7 +4,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -22,7 +22,7 @@
             var bytes = await sut.ReadToEndAsync();
             string contents = Encoding.UTF8.GetString( bytes );
 
-            contents.Should().Be( FileContent );
+            contents.ShouldBe( FileContent );
             await sut.DeleteAsync();
         }
     }

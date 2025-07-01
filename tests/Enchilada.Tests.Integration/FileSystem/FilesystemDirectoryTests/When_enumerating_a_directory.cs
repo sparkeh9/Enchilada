@@ -1,7 +1,7 @@
 ﻿namespace Enchilada.Tests.Integration.FileSystem.FilesystemDirectoryTests
 {
     using Filesystem;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using System.Linq;
     using System.Threading.Tasks;
@@ -13,8 +13,8 @@
         public void Should_represent_directory()
         {
             var sut = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
-            sut.IsDirectory.Should().BeTrue();
-            sut.Name.Should().Be( "Resources" );
+            sut.IsDirectory.ShouldBeTrue();
+            sut.Name.ShouldBe( "Resources" );
         }
 
         [ Fact ]
@@ -23,11 +23,11 @@
             var sut = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
 
             var fileList = ( await sut.GetFilesAsync() ).ToList();
-            fileList.Count.Should().Be( 1 );
+            fileList.Count.ShouldBe( 1 );
 
             var firstFile = fileList.First();
-            firstFile.IsDirectory.Should().BeFalse();
-            firstFile.Name.Should().Be( "SampleContent.txt" );
+            firstFile.IsDirectory.ShouldBeFalse();
+            firstFile.Name.ShouldBe( "SampleContent.txt" );
         }
 
 
@@ -38,8 +38,8 @@
 
             var deepestDirectory = ( await ( await sut.GetDirectoriesAsync() ).First().GetDirectoriesAsync() ).First();
 
-            deepestDirectory.Name.Should().Be( "level2" );
-            ( await deepestDirectory.GetFilesAsync() ).First().Name.Should().Be( "level2content.txt" );
+            deepestDirectory.Name.ShouldBe( "level2" );
+            ( await deepestDirectory.GetFilesAsync() ).First().Name.ShouldBe( "level2content.txt" );
         }
 
         [ Fact ]
@@ -49,8 +49,8 @@
 
             var nodes = sut.ToList();
 
-            nodes.Any( x => x.Name == "level2" ).Should().BeTrue();
-            nodes.Any( x => x.Name == "level1content.txt" ).Should().BeTrue();
+            nodes.Any( x => x.Name == "level2" ).ShouldBeTrue();
+            nodes.Any( x => x.Name == "level1content.txt" ).ShouldBeTrue();
         }
     }
 }

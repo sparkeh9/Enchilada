@@ -4,32 +4,35 @@
     using System.Threading.Tasks;
     using FluentAssertions;
     using Helpers;
+    using Microsoft.Extensions.Configuration;
     using Xunit;
+    using Xunit.Abstractions;
 
     public class When_enumerating_a_directory : FtpTestBase
     {
-//        [ Fact ]
-//        public async Task Should_represent_directory()
-//        {
-//            await ResourceHelpers.CreateFileWithContentAsync( $"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff" );
-//
-//            using ( var ftpClient = ResourceHelpers.GetLocalFtpClient() )
-//            {
-//                var sut = new FtpDirectory( ftpClient, "folder1" );
-//
-//                sut.IsDirectory.Should().BeTrue();
-//                sut.Name.Should().Be( "folder1/" );
-//            }
+        public When_enumerating_a_directory(ITestOutputHelper outputHelper) : base(outputHelper)
+        {
+        }
 
+        [Fact]
+        public async Task Should_represent_directory()
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(System.AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+            await ResourceHelpers.CreateFileWithContentAsync($"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff", config, Logger);
 
-//            var sut = new BlobStorageDirectory( ResourceHelpers.GetLocalDevelopmentContainer(), "folder1" );
-//            sut.IsDirectory.Should().BeTrue();
-//            sut.Name.Should().Be( "folder1/" );
-//
+            using (var ftpClient = ResourceHelpers.GetLocalFtpClient(config, Logger))
+            {
+                var sut = new FtpDirectory(ftpClient, "folder1");
 
-//            await sut.DeleteAsync();
+                sut.IsDirectory.Should().BeTrue();
+                sut.Name.Should().Be("folder1/");
+            }
+        }
     }
-
+}
 //
 //        [ Fact ]
 //        public async Task Should_be_able_to_search()
@@ -75,4 +78,3 @@
 //
 //            await sut.DeleteAsync();
 //        }
-}

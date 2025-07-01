@@ -4,7 +4,7 @@
     using System.IO;
     using System.Threading.Tasks;
     using Filesystem;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -22,8 +22,8 @@
 //
 //            var tempFile = directory.GetFile( tempFileName );
 //
-//            tempFile.Exists.Should().BeFalse();
-//            tempFile.RealPath.Should().Be( Path.Combine( directory.RealPath, tempFileName ) );
+//            tempFile.Exists.ShouldBeFalse();
+//            tempFile.RealPath.ShouldBe( Path.Combine( directory.RealPath, tempFileName ) );
 //
 //            await directory.DeleteAsync();
 //        }
@@ -44,7 +44,7 @@
 //                writer.Write( WRITE_CONTENT );
 //            }
 //
-//            File.Exists( tempFile.RealPath ).Should().BeTrue();
+//            File.Exists( tempFile.RealPath ).ShouldBeTrue();
 //            File.Delete( tempFile.RealPath );
 //
 //            await directory.DeleteAsync();

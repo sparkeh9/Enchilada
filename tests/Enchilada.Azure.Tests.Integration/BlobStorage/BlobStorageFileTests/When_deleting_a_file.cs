@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -17,11 +17,11 @@
             await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), fileName, "test" );
             var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), fileName );
 
-            sut.Exists.Should().BeTrue();
+            sut.Exists.ShouldBeTrue();
 
             await sut.DeleteAsync();
 
-            sut.Exists.Should().BeFalse();
+            sut.Exists.ShouldBeFalse();
         }
 
 
@@ -31,7 +31,7 @@
             string fileName = $"{Guid.NewGuid()}.txt";
             var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), fileName );
 
-            sut.Exists.Should().BeFalse();
+            sut.Exists.ShouldBeFalse();
 
             await sut.DeleteAsync();
         }

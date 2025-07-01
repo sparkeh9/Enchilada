@@ -8,7 +8,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_opening_a_directory
     {
@@ -53,8 +53,8 @@
                                                              }
                                                          } );
             var provider = sut.OpenDirectoryReference( "enchilada://test_filesystem/" );
-            provider.Should().BeOfType<FilesystemDirectory>();
-            provider.RealPath.Should().Be( filesystemPath );
+            provider.ShouldBeOfType<FilesystemDirectory>();
+            provider.RealPath.ShouldBe( filesystemPath );
         }
 
         [ Fact ]
@@ -80,12 +80,12 @@
                                                          } );
 
             var firstProvider = sut.OpenDirectoryReference( "enchilada://test_filesystem/" );
-            firstProvider.Should().BeOfType<FilesystemDirectory>();
-            firstProvider.RealPath.Should().Be( firstProviderPath );
+            firstProvider.ShouldBeOfType<FilesystemDirectory>();
+            firstProvider.RealPath.ShouldBe( firstProviderPath );
 
             var secondProvider = sut.OpenDirectoryReference( "enchilada://another_filesystem/" );
-            secondProvider.Should().BeOfType<FilesystemDirectory>();
-            secondProvider.RealPath.Should().Be( secondProviderPath );
+            secondProvider.ShouldBeOfType<FilesystemDirectory>();
+            secondProvider.RealPath.ShouldBe( secondProviderPath );
         }
 
 
@@ -105,8 +105,8 @@
                                                              }
                                                          } );
             var provider = sut.OpenDirectoryReference( "enchilada://test_filesystem/test.folder/" );
-            provider.Should().BeOfType<FilesystemDirectory>();
-            provider.RealPath.Should().EndWith( "test.folder" );
+            provider.ShouldBeOfType<FilesystemDirectory>();
+            provider.RealPath.ShouldEndWith( "test.folder" );
         }
     }
 }
