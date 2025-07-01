@@ -5,8 +5,8 @@
     using System.Linq;
     using Infrastructure.Extensions;
     using Infrastructure.Interface;
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Blob;
+    using global::Azure.Storage.Blobs;
+    using global::Azure.Storage.Blobs.Models;
 
     public class BlobStorageFileProvider : IFileProvider
     {
@@ -30,18 +30,14 @@
             string blobPath = filePath.StripLeadingSlash();
             bool isRootContainer = blobPath.IsNullOrWhiteSpace();
 
-            var account = CloudStorageAccount.Parse( configuration.ConnectionString );
-            var blobClient = account.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference( configuration.ContainerReference );
+            var blobServiceClient = new BlobServiceClient( configuration.ConnectionString );
+            var container = blobServiceClient.GetBlobContainerClient( configuration.ContainerReference );
 
             if ( configuration.CreateContainer )
             {
                 container.CreateIfNotExistsAsync().Wait();
 
-                container.SetPermissionsAsync( new BlobContainerPermissions
-                {
-                    PublicAccess = configuration.IsPublicAccess ? BlobContainerPublicAccessType.Container : BlobContainerPublicAccessType.Off,
-                } ).Wait();
+                container.SetAccessPolicyAsync( configuration.IsPublicAccess ? PublicAccessType.BlobContainer : PublicAccessType.None ).Wait();
             }
 
             if ( isRootContainer )
