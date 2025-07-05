@@ -3,9 +3,8 @@
     using System;
     using System.Text;
     using System.Threading.Tasks;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
-    using Microsoft.Extensions.Configuration;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -21,17 +20,14 @@
         public async Task Should_return_contents_of_file()
         {
             string fileName = $"{Guid.NewGuid()}.txt";
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            await ResourceHelpers.CreateFileWithContentAsync(fileName, FileContent, config, Logger);
-            using (var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(config, Logger), fileName))
+            var ftpConfig = FtpConfig;
+            await ResourceHelpers.CreateFileWithContentAsync(fileName, FileContent, ftpConfig, Logger);
+            using (var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), fileName))
             {
                 var bytes = await sut.ReadToEndAsync();
                 string contents = Encoding.UTF8.GetString(bytes);
 
-                contents.Should().Be(FileContent);
+                contents.ShouldBe(FileContent);
                 await sut.DeleteAsync();
             }
         }

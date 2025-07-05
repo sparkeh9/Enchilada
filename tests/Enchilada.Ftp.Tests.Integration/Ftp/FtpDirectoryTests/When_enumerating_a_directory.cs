@@ -2,9 +2,8 @@
 {
     using System;
     using System.Threading.Tasks;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
-    using Microsoft.Extensions.Configuration;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -17,18 +16,15 @@
         [Fact]
         public async Task Should_represent_directory()
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            await ResourceHelpers.CreateFileWithContentAsync($"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff", config, Logger);
+            var ftpConfig = FtpConfig;
+            await ResourceHelpers.CreateFileWithContentAsync($"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff", ftpConfig, Logger);
 
-            using (var ftpClient = ResourceHelpers.GetLocalFtpClient(config, Logger))
+            using (var ftpClient = ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger))
             {
                 var sut = new FtpDirectory(ftpClient, "folder1");
 
-                sut.IsDirectory.Should().BeTrue();
-                sut.Name.Should().Be("folder1/");
+                sut.IsDirectory.ShouldBeTrue();
+                sut.Name.ShouldBe("folder1/");
             }
         }
     }

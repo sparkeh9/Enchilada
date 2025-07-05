@@ -4,9 +4,8 @@
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
-    using Microsoft.Extensions.Configuration;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -21,23 +20,17 @@
         [Fact]
         public void Should_not_have_file_in_place_before_creation()
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(config, Logger), $"{Guid.NewGuid()}.txt");
-            sut.Exists.Should().BeFalse();
+            var ftpConfig = FtpConfig;
+            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt");
+            sut.Exists.ShouldBeFalse();
         }
 
 
         [Fact]
         public async Task Should_write_content_to_file()
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(config, Logger), $"{Guid.NewGuid()}.txt");
+            var ftpConfig = FtpConfig;
+            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt");
 
             using (var stream = await sut.OpenWriteAsync())
             using (var writer = new StreamWriter(stream))
@@ -47,7 +40,7 @@
 
             string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
 
-            fileContents.Should().Be(WRITE_CONTENT);
+            fileContents.ShouldBe(WRITE_CONTENT);
 
             await sut.DeleteAsync();
         }
@@ -56,11 +49,8 @@
         [Fact]
         public async Task Should_write_content_to_file_in_deep_structure()
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(config, Logger), $"{Guid.NewGuid()}.txt", "test1");
+            var ftpConfig = FtpConfig;
+            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt", "test1");
 
             using (var stream = await sut.OpenWriteAsync())
             using (var writer = new StreamWriter(stream))
@@ -70,7 +60,7 @@
 
             string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
 
-            fileContents.Should().Be(WRITE_CONTENT);
+            fileContents.ShouldBe(WRITE_CONTENT);
 
             await sut.DeleteAsync();
         }
@@ -78,11 +68,8 @@
         [Fact]
         public async Task Should_write_content_to_file_with_base_path()
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(config, Logger, $"/{Guid.NewGuid()}/abc/123"), $"{Guid.NewGuid()}.txt", "test1");
+            var ftpConfig = FtpConfig;
+            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger, $"/{Guid.NewGuid()}/abc/123"), $"{Guid.NewGuid()}.txt", "test1");
 
             using (var stream = await sut.OpenWriteAsync())
             using (var writer = new StreamWriter(stream))
@@ -92,7 +79,7 @@
 
             string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
 
-            fileContents.Should().Be(WRITE_CONTENT);
+            fileContents.ShouldBe(WRITE_CONTENT);
 
             await sut.DeleteAsync();
         }

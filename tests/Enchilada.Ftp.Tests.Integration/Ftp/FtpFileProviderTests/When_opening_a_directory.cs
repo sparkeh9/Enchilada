@@ -1,8 +1,9 @@
 ﻿namespace Enchilada.Ftp.Tests.Integration.Ftp.FtpFileProviderTests
 {
-    using FluentAssertions;
-    using Microsoft.Extensions.Configuration;
+    using System.Threading.Tasks;
+    using Helpers;
     using Xunit;
+    using Shouldly;
     using Xunit.Abstractions;
 
     public class When_opening_a_directory : FtpTestBase
@@ -12,12 +13,11 @@
         }
 
         [Fact]
-        public void Should_give_deep_path()
+        public async Task Should_present_directory()
         {
-            var ftpConfig = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build().GetSection("Ftp").Get<FtpConfiguration>();
+            var ftpConfig = FtpConfig;
+
+            await ResourceHelpers.CreateFileWithContentAsync("level1/level2/level2content.txt", "Lorem ipsum dolor sit amet", ftpConfig, Logger);
 
             var filesystemProvider = new FtpFileProvider(new FtpAdapterConfiguration
             {
@@ -28,9 +28,9 @@
                 Port = ftpConfig.Port,
                 Directory = "/"
             }, "level1/level2/");
-
-            filesystemProvider.Should().BeOfType<FtpFileProvider>();
-            filesystemProvider.RootDirectory.RealPath.Should().Be("/level1/level2/");
+            
+            filesystemProvider.ShouldBeOfType<FtpFileProvider>();
+            filesystemProvider.RootDirectory.RealPath.ShouldEndWith("/level1/level2/");
         }
     }
 }

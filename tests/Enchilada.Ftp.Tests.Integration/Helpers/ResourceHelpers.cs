@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using CoreFtp;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Enchilada.Ftp.Tests.Integration.Helpers
@@ -11,10 +10,8 @@ namespace Enchilada.Ftp.Tests.Integration.Helpers
     {
         private static FtpClient ftpClient;
 
-        public static FtpClient GetLocalFtpClient(IConfiguration configuration, ILogger logger, string baseDirectory = "/")
+        public static FtpClient GetLocalFtpClient(FtpConfiguration ftpConfig, ILogger logger, string baseDirectory = "/")
         {
-            var ftpConfig = configuration.GetSection("Ftp").Get<FtpConfiguration>();
-
             ftpClient = new FtpClient(new FtpClientConfiguration
             {
                 Host = ftpConfig.Host,
@@ -26,9 +23,9 @@ namespace Enchilada.Ftp.Tests.Integration.Helpers
             return ftpClient;
         }
 
-        public static async Task<FtpFile> CreateFileWithContentAsync(string filename, string content, IConfiguration configuration, ILogger logger)
+        public static async Task<FtpFile> CreateFileWithContentAsync(string filename, string content, FtpConfiguration ftpConfig, ILogger logger)
         {
-            using (var client = GetLocalFtpClient(configuration, logger))
+            using (var client = GetLocalFtpClient(ftpConfig, logger))
             {
                 var ftpFile = new FtpFile(client, filename);
 

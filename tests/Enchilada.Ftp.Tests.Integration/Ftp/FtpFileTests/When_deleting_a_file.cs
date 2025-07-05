@@ -3,9 +3,8 @@
     using System;
     using System.Threading.Tasks;
     using Helpers;
-    using Microsoft.Extensions.Configuration;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
     using Xunit.Abstractions;
 
     public class When_deleting_a_file : FtpTestBase
@@ -19,22 +18,19 @@
         {
             string fileName = $"{Guid.NewGuid()}.txt";
 
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
+            var ftpConfig = FtpConfig;
 
-            await ResourceHelpers.CreateFileWithContentAsync(fileName, "test", config, Logger);
-            using (var localFtpClient = ResourceHelpers.GetLocalFtpClient(config, Logger))
+            await ResourceHelpers.CreateFileWithContentAsync(fileName, "test", ftpConfig, Logger);
+            using (var localFtpClient = ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger))
             {
                 localFtpClient.Logger = Logger;
                 var sut = new FtpFile(localFtpClient, fileName);
 
-                sut.Exists.Should().BeTrue();
+                sut.Exists.ShouldBeTrue();
 
                 await sut.DeleteAsync();
 
-                sut.Exists.Should().BeFalse();
+                sut.Exists.ShouldBeFalse();
             }
         }
 
@@ -43,15 +39,12 @@
         public async Task Should_not_blow_up_if_file_does_not_exist()
         {
             string fileName = $"{Guid.NewGuid()}.txt";
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            using (var localFtpClient = ResourceHelpers.GetLocalFtpClient(config, Logger))
+            var ftpConfig = FtpConfig;
+            using (var localFtpClient = ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger))
             {
                 var sut = new FtpFile(localFtpClient, fileName);
 
-                sut.Exists.Should().BeFalse();
+                sut.Exists.ShouldBeFalse();
 
                 await sut.DeleteAsync();
             }
