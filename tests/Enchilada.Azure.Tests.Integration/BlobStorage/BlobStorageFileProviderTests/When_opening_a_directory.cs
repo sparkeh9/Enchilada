@@ -1,10 +1,7 @@
 ﻿namespace Enchilada.Azure.Tests.Integration.BlobStorage.BlobStorageFileProviderTests
 {
-    using System.IO;
     using Azure.BlobStorage;
-    using Filesystem;
     using Shouldly;
-    using Helpers;
     using Xunit;
 
     public class When_opening_a_directory

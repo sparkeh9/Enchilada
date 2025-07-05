@@ -7,7 +7,7 @@
 
     public class FtpFileProvider : IFileProvider
     {
-        private readonly char[] DirectorySeparators = { '/', '\\' };
+        private readonly char[] DirectorySeparators = ['/', '\\'];
         protected DirectoryInfo BackingRootDirectory;
         private readonly FtpClient ftpClient;
 

@@ -1,13 +1,5 @@
 ﻿namespace Enchilada.Azure.Tests.Integration.BlobStorage.BlobStorageDirectoryTests
 {
-    using System;
-    using System.IO;
-    using System.Threading.Tasks;
-    using Filesystem;
-    using Shouldly;
-    using Helpers;
-    using Xunit;
-
     public class When_getting_file
     {
 //        private const string WRITE_CONTENT = "this is a test - 88e416a7-f5fe-4f21-9c5e-168ae5efb87c";

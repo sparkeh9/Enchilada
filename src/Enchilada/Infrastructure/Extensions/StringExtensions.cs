@@ -50,5 +50,20 @@
 
             return string.Format( "{0}/{1}", operand.TrimEnd( '/' ), rightHandSide.Trim( '/' ) );
         }
+
+        public static string GetFilenameFromPath( this string operand )
+        {
+            return operand.Contains( "/" ) ? operand.Substring( operand.LastIndexOf( '/' ) + 1 ) : operand;
+        }
+
+        public static string GetDirectoryNameFromPath( this string operand )
+        {
+            return operand.Contains( "/" ) ? operand.Substring( 0, operand.LastIndexOf( '/' ) + 1 ) : string.Empty;
+        }
+
+        public static string EnsureTrailingSlash( this string operand )
+        {
+            return operand.EndsWith( "/" ) ? operand : operand + "/";
+        }
     }
 }

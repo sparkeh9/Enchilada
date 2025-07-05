@@ -5,7 +5,6 @@
     using Azure.BlobStorage;
     using Configuration;
     using Enchilada.Infrastructure;
-    using Filesystem;
     using Xunit;
     using Shouldly;
 

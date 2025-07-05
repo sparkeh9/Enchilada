@@ -2,12 +2,10 @@
 {
     using System;
     using System.IO;
-    using System.Net;
     using System.Net.Http;
-    using System.Text;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
-    using Enchilada.Azure.Tests.Integration;
+    using Integration;
     using global::Azure.Storage.Blobs;
 
     public static class ResourceHelpers

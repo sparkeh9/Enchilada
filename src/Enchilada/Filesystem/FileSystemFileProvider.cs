@@ -6,7 +6,7 @@
 
     public class FilesystemFileProvider : IFileProvider
     {
-        private readonly char[] DirectorySeparators = { '/', '\\' };
+        private readonly char[] DirectorySeparators = ['/', '\\'];
         protected DirectoryInfo BackingRootDirectory;
 
         public IDirectory RootDirectory { get; protected set; }
