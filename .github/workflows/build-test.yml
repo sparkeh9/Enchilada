@@ -12,6 +12,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: read
+    
     services:
       # FTP service for integration tests
       ftp:
