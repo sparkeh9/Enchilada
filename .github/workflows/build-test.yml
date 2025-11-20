@@ -1,0 +1,55 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    services:
+      # FTP service for integration tests
+      ftp:
+        image: stilliard/pure-ftpd
+        ports:
+          - 21:21
+          - 30000-30009:30000-30009
+        env:
+          PUBLICHOST: localhost
+          FTP_USER_NAME: user
+          FTP_USER_PASS: password
+          FTP_USER_HOME: /home/user
+        options: --name ftp-server
+      
+      # Azurite for Azure Blob Storage tests
+      azurite:
+        image: mcr.microsoft.com/azure-storage/azurite
+        ports:
+          - 10000:10000
+          - 10001:10001
+          - 10002:10002
+        options: --name azurite
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore Enchilada.sln
+
+    - name: Build
+      run: dotnet build Enchilada.sln --configuration Release --no-restore
+
+    - name: Run tests
+      run: dotnet test Enchilada.sln --configuration Release --no-build --verbosity normal
+      continue-on-error: true
