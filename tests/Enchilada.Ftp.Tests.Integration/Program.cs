@@ -14,11 +14,6 @@
         public static FtpConfiguration FtpConfiguration;
         public static ILoggerFactory LoggerFactory;
 
-        public static void Main( string[] args )
-        {
-            Initialise();
-        }
-
         public static void Initialise( ITestOutputHelper outputHelper = null )
         {
             if ( invoked )
