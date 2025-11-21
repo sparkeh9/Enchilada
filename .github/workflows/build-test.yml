@@ -3,10 +3,13 @@ name: Build and Test
 on:
   push:
     branches:
-      - '**'        # Temporarily run on all branches (including this feature branch)
+      - master
   pull_request:
     branches:
-      - '**'        # Temporarily run on PRs targeting any branch
+      - master
+  # Allow manual runs on any branch so we can debug Azure test hangs without
+  # changing triggers again.
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -28,30 +31,16 @@ jobs:
       run: dotnet restore Enchilada.sln
 
     - name: Build
-      run: dotnet build Enchilada.sln --configuration Release --no-restore
+      run: dotnet build Enchilada.sln --configuration Debug --no-restore
 
-    - name: Run tests
-      timeout-minutes: 5
+    - name: Run Azure integration tests (diagnostic)
+      timeout-minutes: 10
       env:
         TESTCONTAINERS_RYUK_DISABLED: "true"
       run: |
         set -e
-
-        echo "Discovering test projects under ./tests at $(date)"
-        # Exclude Azure integration tests for now as they currently hang in CI.
-        test_projects=$(find tests -type f -name '*Tests*.csproj' ! -path 'tests/Enchilada.Azure.Tests.Integration/*' | sort)
-
-        if [ -z "$test_projects" ]; then
-          echo "No test projects matching '*Tests*.csproj' were found under ./tests"
-          exit 1
-        fi
-
-        for proj in $test_projects; do
-          echo ""
-          echo "=== Running tests for $proj at $(date) ==="
-          dotnet test "$proj" -m:1 --configuration Debug --verbosity normal
-          echo "=== Completed tests for $proj at $(date) ==="
-        done
-
-        echo ""
-        echo "dotnet test completed for all discovered projects at $(date)"
+        echo "Running Azure integration tests with hang diagnostics at $(date)"
+        dotnet test tests/Enchilada.Azure.Tests.Integration/Enchilada.Azure.Tests.Integration.csproj \
+          -m:1 --configuration Debug --no-build --verbosity normal \
+          --blame-hang-timeout 5m --blame-hang-dump-type full --diag:"TestResults/azure-vstest-diag.log"
+        echo "Azure integration tests completed at $(date)"
