@@ -34,6 +34,7 @@ jobs:
       timeout-minutes: 10
       env:
         TESTCONTAINERS_RYUK_DISABLED: "true"
+      continue-on-error: true
       run: |
         set -e
         echo "Running Azure integration tests with hang diagnostics at $(date)"
@@ -41,3 +42,12 @@ jobs:
           -m:1 --configuration Debug --no-build --verbosity normal \
           --blame-hang-timeout 5m --blame-hang-dump-type full --diag:"TestResults/azure-vstest-diag.log"
         echo "Azure integration tests completed at $(date)"
+
+    - name: Upload Azure diagnostic artefacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: azure-test-diagnostics
+        path: |
+          tests/Enchilada.Azure.Tests.Integration/TestResults/**
+          TestResults/azure-vstest-diag.log
