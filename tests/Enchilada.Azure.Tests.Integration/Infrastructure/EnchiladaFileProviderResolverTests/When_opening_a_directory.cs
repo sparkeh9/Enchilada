@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Azure.BlobStorage;
     using Configuration;
     using Enchilada.Infrastructure;
@@ -67,6 +68,8 @@
         [ Fact ]
         public void Should_give_correct_blob_provider()
         {
+            var tempDirectory = Path.Combine( Path.GetTempPath(), "EnchiladaAzureLocalFsTest" );
+
             var sut = new EnchiladaFileProviderResolver( new EnchiladaConfiguration
                                                          {
                                                              Adapters = new List<IEnchiladaAdapterConfiguration>
@@ -89,7 +92,7 @@
                                                                  new FilesystemAdapterConfiguration
                                                                  {
                                                                      AdapterName = "local_filesystem",
-                                                                     Directory = "c:\\"
+                                                                     Directory = tempDirectory
                                                                  },
                                                              }
                                                          } );
@@ -104,7 +107,7 @@
 
             var thirdProvider = sut.OpenDirectoryReference( "enchilada://local_filesystem/abc123/" );
             thirdProvider.ShouldBeOfType<FilesystemDirectory>();
-            thirdProvider.RealPath.ShouldBe( "c:\\abc123" );
+            thirdProvider.RealPath.ShouldBe( Path.Combine( tempDirectory, "abc123" ) );
         }
     }
 }
