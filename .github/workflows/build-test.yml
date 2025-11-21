@@ -3,10 +3,10 @@ name: Build and Test
 on:
   push:
     branches:
-      - master
+      - '**'        # Temporarily run on all branches (including this feature branch)
   pull_request:
     branches:
-      - master
+      - '**'        # Temporarily run on PRs targeting any branch
 
 jobs:
   build-and-test:
