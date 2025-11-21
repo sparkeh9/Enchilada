@@ -21,8 +21,10 @@
         public void Should_not_have_file_in_place_before_creation()
         {
             var ftpConfig = FtpConfig;
-            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt");
-            sut.Exists.ShouldBeFalse();
+            using (var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt"))
+            {
+                sut.Exists.ShouldBeFalse();
+            }
         }
 
 
@@ -30,19 +32,20 @@
         public async Task Should_write_content_to_file()
         {
             var ftpConfig = FtpConfig;
-            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt");
-
-            using (var stream = await sut.OpenWriteAsync())
-            using (var writer = new StreamWriter(stream))
+            using (var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt"))
             {
-                writer.Write(WRITE_CONTENT);
+                using (var stream = await sut.OpenWriteAsync())
+                using (var writer = new StreamWriter(stream))
+                {
+                    writer.Write(WRITE_CONTENT);
+                }
+
+                string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
+
+                fileContents.ShouldBe(WRITE_CONTENT);
+
+                await sut.DeleteAsync();
             }
-
-            string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
-
-            fileContents.ShouldBe(WRITE_CONTENT);
-
-            await sut.DeleteAsync();
         }
 
 
@@ -50,38 +53,40 @@
         public async Task Should_write_content_to_file_in_deep_structure()
         {
             var ftpConfig = FtpConfig;
-            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt", "test1");
-
-            using (var stream = await sut.OpenWriteAsync())
-            using (var writer = new StreamWriter(stream))
+            using (var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger), $"{Guid.NewGuid()}.txt", "test1"))
             {
-                writer.Write(WRITE_CONTENT);
+                using (var stream = await sut.OpenWriteAsync())
+                using (var writer = new StreamWriter(stream))
+                {
+                    writer.Write(WRITE_CONTENT);
+                }
+
+                string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
+
+                fileContents.ShouldBe(WRITE_CONTENT);
+
+                await sut.DeleteAsync();
             }
-
-            string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
-
-            fileContents.ShouldBe(WRITE_CONTENT);
-
-            await sut.DeleteAsync();
         }
 
         [Fact]
         public async Task Should_write_content_to_file_with_base_path()
         {
             var ftpConfig = FtpConfig;
-            var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger, $"/{Guid.NewGuid()}/abc/123"), $"{Guid.NewGuid()}.txt", "test1");
-
-            using (var stream = await sut.OpenWriteAsync())
-            using (var writer = new StreamWriter(stream))
+            using (var sut = new FtpFile(ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger, $"/{Guid.NewGuid()}/abc/123"), $"{Guid.NewGuid()}.txt", "test1"))
             {
-                writer.Write(WRITE_CONTENT);
+                using (var stream = await sut.OpenWriteAsync())
+                using (var writer = new StreamWriter(stream))
+                {
+                    writer.Write(WRITE_CONTENT);
+                }
+
+                string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
+
+                fileContents.ShouldBe(WRITE_CONTENT);
+
+                await sut.DeleteAsync();
             }
-
-            string fileContents = Encoding.UTF8.GetString(await sut.ReadToEndAsync());
-
-            fileContents.ShouldBe(WRITE_CONTENT);
-
-            await sut.DeleteAsync();
         }
     }
 }

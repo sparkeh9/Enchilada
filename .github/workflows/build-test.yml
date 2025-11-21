@@ -3,10 +3,10 @@ name: Build and Test
 on:
   push:
     branches:
-      - '**'
+      - master
   pull_request:
     branches:
-      - '**'
+      - master
 
 jobs:
   build-and-test:
@@ -30,8 +30,42 @@ jobs:
     - name: Build
       run: dotnet build Enchilada.sln --configuration Debug --no-restore
 
-    - name: Run tests
+    - name: Run core filesystem integration tests
       timeout-minutes: 10
       env:
         TESTCONTAINERS_RYUK_DISABLED: "true"
-      run: dotnet test Enchilada.sln -m:1 --configuration Debug --no-build --verbosity normal
+      run: |
+        set -e
+        echo "Running core filesystem integration tests at $(date)"
+        dotnet test tests/Enchilada.Tests.Integration/Enchilada.Tests.Integration.csproj \
+          -m:1 --configuration Debug --no-build --verbosity normal
+
+    - name: Run FTP integration tests
+      timeout-minutes: 10
+      env:
+        TESTCONTAINERS_RYUK_DISABLED: "true"
+      run: |
+        set -e
+        echo "Running FTP integration tests at $(date)"
+        dotnet test tests/Enchilada.Ftp.Tests.Integration/Enchilada.Ftp.Tests.Integration.csproj \
+          -m:1 --configuration Debug --no-build --verbosity normal
+
+    - name: Run Azure integration tests
+      timeout-minutes: 10
+      env:
+        TESTCONTAINERS_RYUK_DISABLED: "true"
+      run: |
+        set -e
+        echo "Running Azure integration tests at $(date)"
+        dotnet test tests/Enchilada.Azure.Tests.Integration/Enchilada.Azure.Tests.Integration.csproj \
+          -m:1 --configuration Debug --no-build --verbosity normal
+
+    - name: Run S3 integration tests
+      timeout-minutes: 10
+      env:
+        TESTCONTAINERS_RYUK_DISABLED: "true"
+      run: |
+        set -e
+        echo "Running S3 integration tests at $(date)"
+        dotnet test tests/Enchilada.S3.Tests.Integration/Enchilada.S3.Tests.Integration.csproj \
+          -m:1 --configuration Debug --no-build --verbosity normal

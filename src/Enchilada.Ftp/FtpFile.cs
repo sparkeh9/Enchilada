@@ -86,7 +86,15 @@
         public async Task<Stream> OpenReadAsync()
         {
             await EnsureConnectedAsync();
-            await ftpClient.ChangeWorkingDirectoryAsync( Path );
+
+            // When the resolved path is the FTP root ("/"), changing directory is redundant and,
+            // on some FTP servers, issuing repeated CWD "/" calls can lead to transient failures
+            // or hangs. In that case, rely on the current working directory instead.
+            if ( !string.IsNullOrWhiteSpace( Path ) && Path != "/" )
+            {
+                await ftpClient.ChangeWorkingDirectoryAsync( Path );
+            }
+
             var stream = await ftpClient.OpenFileReadStreamAsync( fileName );
             return stream;
         }
