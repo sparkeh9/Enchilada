@@ -4,7 +4,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_opening_a_directory
     {
@@ -17,8 +17,8 @@
                                                                      Directory = filesystemPath
                                                                  }, "level1/level2" );
 
-            filesystemProvider.Should().BeOfType<FilesystemFileProvider>();
-            filesystemProvider.RootDirectory.RealPath.Should().Be( string.Format( "{0}{1}level1{1}level2", filesystemPath, Path.DirectorySeparatorChar ) );
+            filesystemProvider.ShouldBeOfType<FilesystemFileProvider>();
+            filesystemProvider.RootDirectory.RealPath.ShouldBe( string.Format( "{0}{1}level1{1}level2", filesystemPath, Path.DirectorySeparatorChar ) );
         }
     }
 }

@@ -5,13 +5,13 @@
 Enchilada is a filesystem abstraction layer written in C#, the aim is to enable the seamless use of file operations over and between different providers.
 
 Implemented:
-- Local Filesystem - (local)
-- Azure Blob Storage - (azure-blob)
-- FTP/S - (ftp)
+- Local Filesystem - `(local)`
+- Azure Blob Storage - `(azure-blob)`
+- FTP/S - `(ftp)`
+- AWS S3 - `(s3)`
 
 Planned:
 - SCP (Secure Copy)
-- AWS S3
 
 
 ## How to contribute
@@ -24,6 +24,7 @@ Planned:
 - https://www.nuget.org/packages/Enchilada.Azure/ - Provides Azure blob storage
 - https://www.nuget.org/packages/Enchilada.AspNetCore/ - Provides ASP.NET Core configuration support
 - https://www.nuget.org/packages/Enchilada.Ftp/ - Provides FTP/S
+- https://www.nuget.org/packages/Enchilada.S3/ - Provides AWS S3 / MinIO
 
 
 ## Usage
@@ -37,6 +38,16 @@ The URI is made up of three parts:
 - The scheme: Simply by convention this is normally `enchilada://`, but any such scheme can be specified
 - The provider name: This mirrors the configurations you have specified in the appsettings file. It can be anything which looks like a valid URI hostname, however it must have a corresponding configuration.
 - The path: as you might imagine, this is the path to the file.
+
+### URI structure
+
+The Enchilada URI is deliberately simple and technology-agnostic.  It consists of **three** logical parts:
+
+1. **Scheme** – usually `enchilada://`, but you can use any custom scheme.  Enchilada does **not** care what it is; the string before `://` is ignored once the URI reaches the resolver.
+2. **Adapter name** – the first segment after the scheme, e.g. `enchilada://my-assets/…`.  This is nothing more than a *logical* identifier that must match a key in your configuration (`Adapters` section).  It *does not* convey the underlying storage type – you decide that linkage in config.  For example both `cdn_images` and `archive` could point at Azure Blob, while `transient` could be local disk.
+3. **Path** – everything after the adapter name.  This is forwarded unmodified to the chosen provider.  What it represents depends on that provider (blob key, local file path, S3 object key, etc.).
+
+Because the adapter name is just an indirection layer, you are free to rename storage locations without chasing down every code reference; only the configuration needs to change.
 
 ### Saving a file from a stream
 
@@ -89,6 +100,33 @@ The FTP adapter enables non-encrypted file transfer to a passive mode FTP server
 	"password": "$up3r.$3cur3.p4$$w0rd"
 }
 ```
+
+## AWS S3 / MinIO
+The S3 adapter lets Enchilada operate on any S3-compatible storage (AWS S3, MinIO, etc.).
+
+Key points
+* Uses [AWS SDK for .NET] under the hood – any `ServiceUrl` that the SDK understands works.
+* Set `ForcePathStyle = true` internally to ease MinIO/localstack usage.
+* If `createBucket` is `true` the bucket is created automatically (ignored if it already exists).
+
+```json
+"your_configuration_name": {
+  "adapter": "s3",
+  "serviceUrl": "http://localhost:9000",        // Endpoint of your S3-compatible server
+  "accessKey": "minioadmin",
+  "secretKey": "minioadmin",
+  "bucketName": "my-bucket",
+  "createBucket": true
+}
+```
+
+Once configured you can reference objects via URIs such as:
+
+```
+enchilada://your_configuration_name/invoices/2025/01/receipt.pdf
+```
+
+The adapter name (`your_configuration_name`) resolves to the credentials above; the remaining path becomes the object key `invoices/2025/01/receipt.pdf`.
 
 ## AspNetCore configuration
 **Enchilada.AspNetCore** comes with functionality to plumb your app settings configuration, straight

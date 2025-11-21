@@ -7,7 +7,7 @@
     using Azure.BlobStorage;
     using Configuration;
     using Enchilada.Infrastructure;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -19,8 +19,8 @@
             await ResourceHelpers.CreateFileWithContentAsync( ResourceHelpers.GetLocalDevelopmentContainer(), $"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff" );
 
             var sut = new BlobStorageDirectory( ResourceHelpers.GetLocalDevelopmentContainer(), "folder1" );
-            sut.IsDirectory.Should().BeTrue();
-            sut.Name.Should().Be( "folder1/" );
+            sut.IsDirectory.ShouldBeTrue();
+            sut.Name.ShouldBe("folder1/");
 
 
             await sut.DeleteAsync();
@@ -35,7 +35,7 @@
 
             var level1List = await sut.GetDirectoriesAsync();
 
-            level1List.Should().NotBeEmpty();
+            level1List.ShouldNotBeEmpty();
 
             await sut.DeleteAsync();
         }
@@ -50,8 +50,8 @@
 
             var nodes = sut.ToList();
 
-            nodes.Count( x => x.IsDirectory ).Should().Be( 1 );
-            nodes.Count( x => !x.IsDirectory ).Should().Be( 1 );
+            nodes.Count( x => x.IsDirectory ).ShouldBe( 1 );
+            nodes.Count( x => !x.IsDirectory ).ShouldBe( 1 );
 
             await sut.DeleteAsync();
       }
@@ -65,7 +65,7 @@
 
          var nodes = await sut.GetFilesAsync();
 
-         nodes.Count().Should().BeGreaterOrEqualTo(1);
+         nodes.Count().ShouldBeGreaterThanOrEqualTo(1);
 
          await sut.DeleteAsync();
       }
@@ -73,7 +73,8 @@
       [Fact]
       public async Task Should_list_all_nodes_at_root_2()
       {
-         await ResourceHelpers.CreateFileWithContentAsync(ResourceHelpers.GetLocalDevelopmentContainer(), $"{Guid.NewGuid()}.txt", "stuff");
+         var container = ResourceHelpers.GetContainer(AzuriteTestcontainer.GetConnectionString(), "test");
+         await ResourceHelpers.CreateFileWithContentAsync(container, $"{Guid.NewGuid()}.txt", "stuff");
 
          var sut = new EnchiladaFileProviderResolver(new EnchiladaConfiguration
          {
@@ -83,7 +84,7 @@
                                                                  {
                                                                      AdapterName = "blob_filesystem",
                                                                      CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
+                                                                     ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                                                                      ContainerReference = "test",
                                                                      IsPublicAccess = true
                                                                  }
@@ -93,7 +94,7 @@
 
          var nodes = await directory.GetFilesAsync();
 
-         nodes.Count().Should().Be(1);
+         nodes.Count().ShouldBe(1);
 
          await directory.DeleteAsync();
       }

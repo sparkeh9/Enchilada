@@ -5,7 +5,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_creating_a_directory
     {
@@ -15,11 +15,11 @@
             var resourceDirectory = new FilesystemDirectory( ResourceHelpers.GetResourceDirectoryInfo() );
 
             var sut = resourceDirectory.GetDirectory( $"testfolder_{Guid.NewGuid()}" );
-            sut.Exists.Should().BeFalse();
+            sut.Exists.ShouldBeFalse();
 
             await sut.CreateDirectoryAsync();
 
-            sut.Exists.Should().BeTrue();
+            sut.Exists.ShouldBeTrue();
 
             await sut.DeleteAsync();
         }
@@ -32,7 +32,7 @@
             var sut = resourceDirectory.GetDirectory( $"testfolder_{Guid.NewGuid()}" );
 
             await sut.CreateDirectoryAsync();
-            sut.Exists.Should().BeTrue();
+            sut.Exists.ShouldBeTrue();
             await sut.CreateDirectoryAsync();
 
             await sut.DeleteAsync();

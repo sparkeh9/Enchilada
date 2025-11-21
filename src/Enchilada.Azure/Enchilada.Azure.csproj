@@ -2,19 +2,16 @@
 
   <PropertyGroup>
     <Copyright>Nick Briscoe 2016</Copyright>
-    <VersionPrefix>1.0.7</VersionPrefix>
-      <TargetFramework>netstandard2.0</TargetFramework>
+      <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Enchilada.Azure</AssemblyName>
     <PackageId>Enchilada.Azure</PackageId>
     <PackageTags>filesystem;abstraction;azure;blob;core;vnext</PackageTags>
     <PackageProjectUrl>https://github.com/sparkeh9/Enchilada</PackageProjectUrl>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.3' ">$(PackageTargetFallback);dnxcore50;portable-net451+win8</PackageTargetFallback>
-    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.0</NetStandardImplicitPackageVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.1.0</Version>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,16 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
-  </ItemGroup>
-  
-  <Target Name="PostcompileScript" AfterTargets="Build" Condition=" '$(IsCrossTargetingBuild)' != 'true' ">
-  </Target>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
-    <Reference Include="System.Xml" />
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.24.1" />
   </ItemGroup>
 
 </Project>

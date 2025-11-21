@@ -6,7 +6,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_opening_a_stream_to_write
     {
@@ -16,7 +16,7 @@
         public void Should_not_have_file_in_place_before_creation()
         {
             var sut = new FilesystemFile( new FileInfo( $"{ResourceHelpers.GetTempFilePath()}/{Guid.NewGuid()}.txt" ) );
-            File.Exists( sut.RealPath ).Should().BeFalse();
+            File.Exists( sut.RealPath ).ShouldBeFalse();
         }
 
         [ Fact ]
@@ -25,11 +25,11 @@
             string tempFileInfo = $"{ResourceHelpers.GetTempFilePath()}/{Guid.NewGuid()}.txt";
             var sut = new FilesystemFile( new FileInfo( tempFileInfo ) );
 
-            File.Exists( sut.RealPath ).Should().BeFalse();
+            File.Exists( sut.RealPath ).ShouldBeFalse();
 
             using ( await sut.OpenWriteAsync() ) {}
 
-            File.Exists( sut.RealPath ).Should().BeTrue();
+            File.Exists( sut.RealPath ).ShouldBeTrue();
             File.Delete( sut.RealPath );
         }
 
@@ -46,7 +46,7 @@
             }
 
             string fileContents = File.ReadAllText( sut.RealPath );
-            fileContents.Should().Be( WRITE_CONTENT );
+            fileContents.ShouldBe( WRITE_CONTENT );
 
             File.Delete( sut.RealPath );
         }

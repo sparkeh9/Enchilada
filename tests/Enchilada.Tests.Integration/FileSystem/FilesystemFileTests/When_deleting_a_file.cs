@@ -6,7 +6,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_deleting_a_file
     {
@@ -16,15 +16,15 @@
             string tempFileInfo = $"{ResourceHelpers.GetTempFilePath()}/{Guid.NewGuid()}.txt";
             var sut = new FilesystemFile( new FileInfo( tempFileInfo ) );
 
-            File.Exists( sut.RealPath ).Should().BeFalse();
+            File.Exists( sut.RealPath ).ShouldBeFalse();
 
             using ( await sut.OpenWriteAsync() ) {}
 
-            File.Exists( sut.RealPath ).Should().BeTrue();
+            File.Exists( sut.RealPath ).ShouldBeTrue();
 
             await sut.DeleteAsync();
 
-            File.Exists( sut.RealPath ).Should().BeFalse();
+            File.Exists( sut.RealPath ).ShouldBeFalse();
         }
 
 
@@ -34,7 +34,7 @@
             string tempFileInfo = $"{ResourceHelpers.GetTempFilePath()}/{Guid.NewGuid()}.txt";
             var sut = new FilesystemFile( new FileInfo( tempFileInfo ) );
 
-            File.Exists( sut.RealPath ).Should().BeFalse();
+            File.Exists( sut.RealPath ).ShouldBeFalse();
 
             await sut.DeleteAsync();
         }

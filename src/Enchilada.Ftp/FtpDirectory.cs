@@ -16,7 +16,9 @@
         private readonly string endOfPath;
         private IReadOnlyCollection<INode> allNodes;
 
-        public string Name => directoryPath;
+        public string Name => string.IsNullOrEmpty(directoryPath)
+                                  ? string.Empty
+                                  : (directoryPath.EndsWith("/") ? directoryPath : $"{directoryPath}/");
 
 
         public DateTime? LastModified => allNodes.OrderBy( x => x.LastModified )

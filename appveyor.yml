@@ -24,3 +24,4 @@ artifacts:
 - path: src\Enchilada.AspNetCore\bin\Release\Enchilada.AspNetCore.*.nupkg
 - path: src\Enchilada.Azure\bin\Release\Enchilada.Azure.*.nupkg
 - path: src\Enchilada.Ftp\bin\Release\Enchilada.Ftp.*.nupkg
+- path: src\Enchilada.S3\bin\Release\Enchilada.S3.*.nupkg

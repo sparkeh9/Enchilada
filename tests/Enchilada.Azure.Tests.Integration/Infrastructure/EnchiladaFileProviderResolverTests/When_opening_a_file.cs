@@ -5,9 +5,8 @@
     using Azure.BlobStorage;
     using Configuration;
     using Enchilada.Infrastructure;
-    using Filesystem;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_opening_a_file
     {
@@ -22,7 +21,7 @@
                     {
                         AdapterName = "blob_filesystem",
                         CreateContainer = true,
-                        ConnectionString = "UseDevelopmentStorage=true;",
+                        ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                         ContainerReference = "test",
                         IsPublicAccess = true
                     }
@@ -44,7 +43,7 @@
                     {
                         AdapterName = "blob_filesystem",
                         CreateContainer = true,
-                        ConnectionString = "UseDevelopmentStorage=true;",
+                        ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                         ContainerReference = "test",
                         IsPublicAccess = true
                     }
@@ -52,9 +51,9 @@
             } );
 
             var provider = sut.OpenFileReference( "enchilada://blob_filesystem/ABC123.txt" );
-            provider.Should().BeOfType<BlobStorageFile>();
-            provider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/ABC123.txt" );
-            provider.Name.Should().Be( "ABC123.txt" );
+            provider.ShouldBeOfType<BlobStorageFile>();
+            provider.RealPath.ShouldEndWith( "/devstoreaccount1/test/ABC123.txt" );
+            provider.Name.ShouldBe( "ABC123.txt" );
         }
 
         [ Fact ]
@@ -68,7 +67,7 @@
                     {
                         AdapterName = "blob_filesystem",
                         CreateContainer = true,
-                        ConnectionString = "UseDevelopmentStorage=true;",
+                        ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                         ContainerReference = "test",
                         IsPublicAccess = true
                     },
@@ -76,21 +75,21 @@
                     {
                         AdapterName = "another_filesystem",
                         CreateContainer = true,
-                        ConnectionString = "UseDevelopmentStorage=true;",
+                        ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                         ContainerReference = "enchilada-test"
                     }
                 }
             } );
 
             var firstProvider = sut.OpenFileReference( "enchilada://blob_filesystem/SampleContent.txt" );
-            firstProvider.Should().BeOfType<BlobStorageFile>();
-            firstProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test/SampleContent.txt" );
-            firstProvider.Name.Should().Be( "SampleContent.txt" );
+            firstProvider.ShouldBeOfType<BlobStorageFile>();
+            firstProvider.RealPath.ShouldEndWith( "/devstoreaccount1/test/SampleContent.txt" );
+            firstProvider.Name.ShouldBe( "SampleContent.txt" );
 
             var secondProvider = sut.OpenFileReference( "enchilada://another_filesystem/SampleContent.txt" );
-            secondProvider.Should().BeOfType<BlobStorageFile>();
-            secondProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/enchilada-test/SampleContent.txt" );
-            secondProvider.Name.Should().Be( "SampleContent.txt" );
+            secondProvider.ShouldBeOfType<BlobStorageFile>();
+            secondProvider.RealPath.ShouldEndWith( "/devstoreaccount1/enchilada-test/SampleContent.txt" );
+            secondProvider.Name.ShouldBe( "SampleContent.txt" );
         }
     }
 }

@@ -2,34 +2,33 @@
 {
     using System;
     using System.Threading.Tasks;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
+    using Xunit.Abstractions;
 
     public class When_enumerating_a_directory : FtpTestBase
     {
-//        [ Fact ]
-//        public async Task Should_represent_directory()
-//        {
-//            await ResourceHelpers.CreateFileWithContentAsync( $"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff" );
-//
-//            using ( var ftpClient = ResourceHelpers.GetLocalFtpClient() )
-//            {
-//                var sut = new FtpDirectory( ftpClient, "folder1" );
-//
-//                sut.IsDirectory.Should().BeTrue();
-//                sut.Name.Should().Be( "folder1/" );
-//            }
+        public When_enumerating_a_directory(ITestOutputHelper outputHelper) : base(outputHelper)
+        {
+        }
 
+        [Fact]
+        public async Task Should_represent_directory()
+        {
+            var ftpConfig = FtpConfig;
+            await ResourceHelpers.CreateFileWithContentAsync($"folder1/folder2/folder3/{Guid.NewGuid()}.txt", "stuff", ftpConfig, Logger);
 
-//            var sut = new BlobStorageDirectory( ResourceHelpers.GetLocalDevelopmentContainer(), "folder1" );
-//            sut.IsDirectory.Should().BeTrue();
-//            sut.Name.Should().Be( "folder1/" );
-//
+            using (var ftpClient = ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger))
+            {
+                var sut = new FtpDirectory(ftpClient, "folder1");
 
-//            await sut.DeleteAsync();
+                sut.IsDirectory.ShouldBeTrue();
+                sut.Name.ShouldBe("folder1/");
+            }
+        }
     }
-
+}
 //
 //        [ Fact ]
 //        public async Task Should_be_able_to_search()
@@ -75,4 +74,3 @@
 //
 //            await sut.DeleteAsync();
 //        }
-}

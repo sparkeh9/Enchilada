@@ -4,39 +4,47 @@
     using System.Threading.Tasks;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
+    using Xunit.Abstractions;
 
     public class When_deleting_a_file : FtpTestBase
     {
-        [ Fact ]
+        public When_deleting_a_file(ITestOutputHelper outputHelper) : base(outputHelper)
+        {
+        }
+
+        [Fact]
         public async Task Should_delete_file_properly()
         {
             string fileName = $"{Guid.NewGuid()}.txt";
 
-            await ResourceHelpers.CreateFileWithContentAsync( fileName, "test", Logger );
-            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient( Logger ) )
+            var ftpConfig = FtpConfig;
+
+            await ResourceHelpers.CreateFileWithContentAsync(fileName, "test", ftpConfig, Logger);
+            using (var localFtpClient = ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger))
             {
                 localFtpClient.Logger = Logger;
-                var sut = new FtpFile( localFtpClient, fileName );
+                var sut = new FtpFile(localFtpClient, fileName);
 
-                sut.Exists.Should().BeTrue();
+                sut.Exists.ShouldBeTrue();
 
                 await sut.DeleteAsync();
 
-                sut.Exists.Should().BeFalse();
+                sut.Exists.ShouldBeFalse();
             }
         }
 
 
-        [ Fact ]
+        [Fact]
         public async Task Should_not_blow_up_if_file_does_not_exist()
         {
             string fileName = $"{Guid.NewGuid()}.txt";
-            using ( var localFtpClient = ResourceHelpers.GetLocalFtpClient( Logger ) )
+            var ftpConfig = FtpConfig;
+            using (var localFtpClient = ResourceHelpers.GetLocalFtpClient(ftpConfig, Logger))
             {
-                var sut = new FtpFile( localFtpClient, fileName );
+                var sut = new FtpFile(localFtpClient, fileName);
 
-                sut.Exists.Should().BeFalse();
+                sut.Exists.ShouldBeFalse();
 
                 await sut.DeleteAsync();
             }
