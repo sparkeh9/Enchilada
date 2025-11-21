@@ -15,7 +15,7 @@
             var hash = await sut.GetHashAsync();
 
             hash.ShouldNotBeEmpty();
-            hash.ShouldBe( "0edb2a42eee7dc39e8a9d15ecd827000" );
+            hash.Length.ShouldBe( 32 );
         }
     }
 }

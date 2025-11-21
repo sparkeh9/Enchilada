@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Configuration;
     using Enchilada.Infrastructure;
     using Enchilada.Infrastructure.Exceptions;
@@ -61,11 +62,11 @@
 
             var firstProvider = sut.OpenFileReference( "enchilada://test_filesystem/abc.txt" );
             firstProvider.ShouldBeOfType<FilesystemFile>();
-            firstProvider.RealPath.ShouldBe( $"{firstProviderPath}\\abc.txt" );
+            firstProvider.RealPath.ShouldBe( Path.Combine( firstProviderPath, "abc.txt" ) );
 
             var secondProvider = sut.OpenFileReference( "enchilada://another_filesystem/123.txt" );
             secondProvider.ShouldBeOfType<FilesystemFile>();
-            secondProvider.RealPath.ShouldBe( $"{secondProviderPath}\\123.txt" );
+            secondProvider.RealPath.ShouldBe( Path.Combine( secondProviderPath, "123.txt" ) );
         }
     }
 }
