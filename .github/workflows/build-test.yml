@@ -34,4 +34,4 @@ jobs:
       timeout-minutes: 10
       env:
         TESTCONTAINERS_RYUK_DISABLED: "true"
-      run: dotnet test Enchilada.sln --configuration Debug --no-build --verbosity normal
+      run: dotnet test Enchilada.sln -m:1 --configuration Debug --no-build --verbosity normal
