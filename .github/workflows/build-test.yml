@@ -31,4 +31,8 @@ jobs:
       run: dotnet build Enchilada.sln --configuration Release --no-restore
 
     - name: Run tests
-      run: dotnet test Enchilada.sln --configuration Release --no-build --verbosity normal
+      timeout-minutes: 20
+      run: |
+        set -e
+        dotnet test Enchilada.sln --configuration Release --no-build --verbosity normal
+        echo "dotnet test completed at $(date)"
