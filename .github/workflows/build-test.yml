@@ -48,7 +48,7 @@ jobs:
         for proj in $test_projects; do
           echo ""
           echo "=== Running tests for $proj at $(date) ==="
-          dotnet test "$proj" -m:1 --configuration Release --no-build --verbosity normal
+          dotnet test "$proj" -m:1 --configuration Debug --verbosity normal
           echo "=== Completed tests for $proj at $(date) ==="
         done
 
