@@ -21,7 +21,7 @@ namespace Enchilada.S3.Tests.Integration
             {
                 var container = new MinioBuilder()
                                .WithImage( "minio/minio:latest" )
-                               // .WithCommand( "/data" )
+                                // .WithCommand( "/data" )
                                .WithEnvironment( "MINIO_ROOT_USER", MinioAccessKey )
                                .WithEnvironment( "MINIO_ROOT_PASSWORD", MinioSecretKey )
                                .WithWaitStrategy( Wait.ForUnixContainer().UntilPortIsAvailable( 9000 ) )
@@ -29,7 +29,6 @@ namespace Enchilada.S3.Tests.Integration
 
                 await container.StartAsync();
 
-                AppDomain.CurrentDomain.ProcessExit += async ( _, _ ) => await container.DisposeAsync();
 
                 return container;
             }

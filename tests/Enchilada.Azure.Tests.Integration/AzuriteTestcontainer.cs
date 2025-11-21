@@ -21,8 +21,6 @@ namespace Enchilada.Azure.Tests.Integration
 
             await container.StartAsync();
 
-            AppDomain.CurrentDomain.ProcessExit += async ( _, _ ) => await container.DisposeAsync();
-
             return container;
         }
 
