@@ -47,9 +47,6 @@ namespace Enchilada.Ftp.Tests.Integration
             var container = builder.Build();
             await container.StartAsync();
 
-            // Ensure the container is disposed at process exit to avoid orphaned containers.
-            AppDomain.CurrentDomain.ProcessExit += async (_, _) => await container.DisposeAsync();
-
             return container;
         }
 
