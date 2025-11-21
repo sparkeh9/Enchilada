@@ -3,13 +3,10 @@ name: Build and Test
 on:
   push:
     branches:
-      - master
+      - '**'        # Temporarily run on all branches while debugging Azure hangs
   pull_request:
     branches:
-      - master
-  # Allow manual runs on any branch so we can debug Azure test hangs without
-  # changing triggers again.
-  workflow_dispatch:
+      - '**'
 
 jobs:
   build-and-test:
