@@ -4,7 +4,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_getting_hash_of_a_file
     {
@@ -14,8 +14,8 @@
             var sut = new FilesystemFile( ResourceHelpers.GetResourceFileInfo( "SampleContent.txt" ) );
             var hash = await sut.GetHashAsync();
 
-            hash.Should().NotBeEmpty();
-            hash.Should().Be( "0edb2a42eee7dc39e8a9d15ecd827000" );
+            hash.ShouldNotBeEmpty();
+            hash.ShouldBe( "0edb2a42eee7dc39e8a9d15ecd827000" );
         }
     }
 }

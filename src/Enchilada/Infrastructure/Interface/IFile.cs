@@ -50,5 +50,10 @@
       /// <param name="sourceStream"></param>
       /// <returns></returns>
       Task CopyFromAsync( Stream sourceStream );
+
+      /// <summary>
+      /// Deletes the file
+      /// </summary>
+      Task DeleteAsync();
    }
 }

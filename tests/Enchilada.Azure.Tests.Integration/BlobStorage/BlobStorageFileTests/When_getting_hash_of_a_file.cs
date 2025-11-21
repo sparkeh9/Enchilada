@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -21,8 +21,8 @@
 
             var hash = await sut.GetHashAsync();
 
-            hash.Should().NotBeEmpty();
-            hash.Should().Be( "081cb72eaaacae3df4502708ff956d23" );
+            hash.ShouldNotBeEmpty();
+            hash.ShouldBe( "081cb72eaaacae3df4502708ff956d23" );
 
             await sut.DeleteAsync();
         }

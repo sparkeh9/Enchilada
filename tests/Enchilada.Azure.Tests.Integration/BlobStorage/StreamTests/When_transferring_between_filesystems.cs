@@ -7,7 +7,7 @@
     using Configuration;
     using Enchilada.Infrastructure;
     using Filesystem;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -25,7 +25,7 @@
                                                                           {
                                                                               AdapterName = "blob_filesystem",
                                                                               CreateContainer = true,
-                                                                              ConnectionString = "UseDevelopmentStorage=true;",
+                                                                              ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                                                                               ContainerReference = "test",
                                                                               IsPublicAccess = true
                                                                           },
@@ -46,12 +46,12 @@
 
             await targetFile.CopyFromAsync( sourceFile );
 
-            targetFile.Exists.Should().BeTrue();
+            targetFile.Exists.ShouldBeTrue();
 
             string sourceHash = await sourceFile.GetHashAsync();
             string targetHash = await targetFile.GetHashAsync();
 
-            sourceHash.Should().Be( targetHash );
+            sourceHash.ShouldBe( targetHash );
 
             await targetFile.DeleteAsync();
         }
@@ -64,12 +64,12 @@
 
             await targetFile.CopyFromAsync( sourceFile );
 
-            targetFile.Exists.Should().BeTrue();
+            targetFile.Exists.ShouldBeTrue();
 
             string sourceHash = await sourceFile.GetHashAsync();
             string targetHash = await targetFile.GetHashAsync();
 
-            sourceHash.Should().Be( targetHash );
+            sourceHash.ShouldBe( targetHash );
 
             await targetFile.DeleteAsync();
         }

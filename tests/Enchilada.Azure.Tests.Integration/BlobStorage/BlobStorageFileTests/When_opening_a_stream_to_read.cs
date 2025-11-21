@@ -4,7 +4,7 @@
     using System.IO;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -21,8 +21,8 @@
 
             using ( var stream = await sut.OpenReadAsync() )
             {
-                stream.Should().NotBe( null );
-                stream.Position.Should().Be( 0 );
+                stream.ShouldNotBeNull();
+                stream.Position.ShouldBe( 0 );
             }
 
             await sut.DeleteAsync();
@@ -41,8 +41,8 @@
             {
                 string content = await reader.ReadToEndAsync();
 
-                content.Should().NotBeEmpty();
-                content.Should().StartWith( FileContent );
+                content.ShouldNotBeEmpty();
+                content.ShouldStartWith( FileContent );
             }
 
             await sut.DeleteAsync();

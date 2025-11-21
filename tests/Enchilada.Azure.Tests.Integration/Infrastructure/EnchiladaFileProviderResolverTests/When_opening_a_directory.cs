@@ -7,7 +7,7 @@
     using Enchilada.Infrastructure;
     using Enchilada.Infrastructure.Exceptions;
     using Filesystem;
-    using FluentAssertions;
+    using Shouldly;
     using Xunit;
 
 
@@ -31,7 +31,7 @@
                                                                  {
                                                                      AdapterName = "blob_filesystem",
                                                                      CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
+                                                                     ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                                                                      ContainerReference = "test",
                                                                      IsPublicAccess = true
                                                                  }
@@ -52,15 +52,16 @@
                                                                  {
                                                                      AdapterName = "blob_filesystem",
                                                                      CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
+                                                                     ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                                                                      ContainerReference = "test",
                                                                      IsPublicAccess = true
                                                                  }
                                                              }
                                                          } );
             var directory = sut.OpenDirectoryReference( "enchilada://blob_filesystem/" );
-            directory.Should().BeOfType<BlobStorageDirectory>();
-            directory.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test" );
+            directory.ShouldBeOfType<BlobStorageDirectory>();
+            // directory.RealPath.ShouldBe( $"http://127.0.0.1:10000/devstoreaccount1/test" );
+            directory.RealPath.ShouldMatch( @"^http:\/\/127\.0\.0\.1:\d+\/devstoreaccount1\/test" );
         }
 
         [ Fact ]
@@ -74,7 +75,7 @@
                                                                  {
                                                                      AdapterName = "blob_filesystem",
                                                                      CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
+                                                                     ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                                                                      ContainerReference = "test",
                                                                      IsPublicAccess = true
                                                                  },
@@ -82,7 +83,7 @@
                                                                  {
                                                                      AdapterName = "another_filesystem",
                                                                      CreateContainer = true,
-                                                                     ConnectionString = "UseDevelopmentStorage=true;",
+                                                                     ConnectionString = AzuriteTestcontainer.GetConnectionString(),
                                                                      ContainerReference = "enchilada-test"
                                                                  },
                                                                  new FilesystemAdapterConfiguration
@@ -94,16 +95,16 @@
                                                          } );
 
             var firstProvider = sut.OpenDirectoryReference( "enchilada://blob_filesystem/" );
-            firstProvider.Should().BeOfType<BlobStorageDirectory>();
-            firstProvider.RealPath.Should().Be( "http://127.0.0.1:10000/devstoreaccount1/test" );
+            firstProvider.ShouldBeOfType<BlobStorageDirectory>();
+            firstProvider.RealPath.ShouldEndWith( "/devstoreaccount1/test" );
 
             var secondProvider = sut.OpenDirectoryReference( "enchilada://another_filesystem/abc123/" );
-            secondProvider.Should().BeOfType<BlobStorageDirectory>();
-            secondProvider.RealPath.Should().Be("http://127.0.0.1:10000/devstoreaccount1/enchilada-test/abc123/");
+            secondProvider.ShouldBeOfType<BlobStorageDirectory>();
+            secondProvider.RealPath.ShouldEndWith("/devstoreaccount1/enchilada-test/abc123/");
 
             var thirdProvider = sut.OpenDirectoryReference( "enchilada://local_filesystem/abc123/" );
-            thirdProvider.Should().BeOfType<FilesystemDirectory>();
-            thirdProvider.RealPath.Should().Be( "c:\\abc123" );
+            thirdProvider.ShouldBeOfType<FilesystemDirectory>();
+            thirdProvider.RealPath.ShouldBe( "c:\\abc123" );
         }
     }
 }

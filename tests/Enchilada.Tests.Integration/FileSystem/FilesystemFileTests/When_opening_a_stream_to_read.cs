@@ -5,7 +5,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_opening_a_stream_to_read
     {
@@ -15,8 +15,8 @@
             var sut = new FilesystemFile( ResourceHelpers.GetResourceFileInfo( "SampleContent.txt" ) );
             using ( var stream = await sut.OpenReadAsync() )
             {
-                stream.Should().NotBe( null );
-                stream.Position.Should().Be( 0 );
+                stream.ShouldNotBeNull();
+                stream.Position.ShouldBe( 0 );
             }
         }
 
@@ -29,8 +29,8 @@
             {
                 var content = reader.ReadToEnd();
 
-                content.Should().NotBeEmpty();
-                content.Should().StartWith( "Lorem ipsum" );
+                content.ShouldNotBeEmpty();
+                content.ShouldStartWith( "Lorem ipsum" );
             }
         }
     }

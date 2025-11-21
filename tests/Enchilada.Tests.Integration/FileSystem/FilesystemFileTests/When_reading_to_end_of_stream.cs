@@ -5,7 +5,7 @@
     using Filesystem;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
 
     public class When_reading_to_end_of_stream
     {
@@ -17,7 +17,7 @@
             var bytes = await sut.ReadToEndAsync();
             string contents = Encoding.UTF8.GetString( bytes );
 
-            contents.Should().StartWith( "Lorem ipsum" );
+            contents.ShouldStartWith( "Lorem ipsum" );
         }
     }
 }

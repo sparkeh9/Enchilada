@@ -4,34 +4,39 @@
     using System.Threading.Tasks;
     using Helpers;
     using Xunit;
-    using FluentAssertions;
+    using Shouldly;
+    using Xunit.Abstractions;
 
     public class When_opening_a_file : FtpTestBase
     {
-        [ Fact ]
+        public When_opening_a_file(ITestOutputHelper outputHelper) : base(outputHelper)
+        {
+        }
+
+        [Fact]
         public async Task Should_present_file()
         {
-            Program.Initialise();
+            var ftpConfig = FtpConfig;
 
-            await ResourceHelpers.CreateFileWithContentAsync( "level1/level2/level2content.txt", "Lorem ipsum dolor sit amet", Logger );
+            await ResourceHelpers.CreateFileWithContentAsync("level1/level2/level2content.txt", "Lorem ipsum dolor sit amet", ftpConfig, Logger);
 
-            var filesystemProvider = new FtpFileProvider( new FtpAdapterConfiguration
+            var filesystemProvider = new FtpFileProvider(new FtpAdapterConfiguration
             {
                 AdapterName = "ftp_filesystem",
-                Host = Program.FtpConfiguration.Host,
-                Username = Program.FtpConfiguration.Username,
-                Password = Program.FtpConfiguration.Password,
-                Port = Program.FtpConfiguration.Port,
+                Host = ftpConfig.Host,
+                Username = ftpConfig.Username,
+                Password = ftpConfig.Password,
+                Port = ftpConfig.Port,
                 Directory = "/"
-            }, "level1/level2/level2content.txt" );
+            }, "level1/level2/level2content.txt");
 
-            filesystemProvider.IsFile.Should().BeTrue();
-            filesystemProvider.File.Should().NotBeNull();
+            filesystemProvider.IsFile.ShouldBeTrue();
+            filesystemProvider.File.ShouldNotBeNull();
 
             var bytes = await filesystemProvider.File.ReadToEndAsync();
-            string contents = Encoding.UTF8.GetString( bytes );
+            string contents = Encoding.UTF8.GetString(bytes);
 
-            contents.Should().StartWith( "Lorem ipsum" );
+            contents.ShouldStartWith("Lorem ipsum");
         }
     }
 }

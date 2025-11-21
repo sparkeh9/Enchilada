@@ -11,5 +11,6 @@ namespace Enchilada.Infrastructure.Interface
         Task CreateDirectoryAsync();
         IFile GetFile( string fileName );
         Task<IReadOnlyCollection<INode>> GetAllNodesAsync();
+        Task DeleteAsync();
     }
 }

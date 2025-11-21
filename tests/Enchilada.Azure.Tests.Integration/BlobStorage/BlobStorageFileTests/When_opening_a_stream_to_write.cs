@@ -4,7 +4,7 @@
     using System.IO;
     using System.Threading.Tasks;
     using Azure.BlobStorage;
-    using FluentAssertions;
+    using Shouldly;
     using Helpers;
     using Xunit;
 
@@ -16,18 +16,18 @@
         public void Should_not_have_file_in_place_before_creation()
         {
             var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), $"{Guid.NewGuid()}.txt" );
-            sut.Exists.Should().BeFalse();
+            sut.Exists.ShouldBeFalse();
         }
 
         [ Fact ]
         public async Task Should_create_file_when_stream_opened()
         {
             var sut = new BlobStorageFile( ResourceHelpers.GetLocalDevelopmentContainer(), $"{Guid.NewGuid()}.txt" );
-            sut.Exists.Should().BeFalse();
+            sut.Exists.ShouldBeFalse();
 
             using ( await sut.OpenWriteAsync() ) {}
 
-            sut.Exists.Should().BeTrue();
+            sut.Exists.ShouldBeTrue();
             await sut.DeleteAsync();
         }
 
@@ -44,7 +44,7 @@
 
             string fileContents = await sut.RealPath.MakeHttpRequestAsync();
 
-            fileContents.Should().Be( WRITE_CONTENT );
+            fileContents.ShouldBe( WRITE_CONTENT );
 
             await sut.DeleteAsync();
         }
@@ -62,7 +62,7 @@
 
             string fileContents = await sut.RealPath.MakeHttpRequestAsync();
 
-            fileContents.Should().Be( WRITE_CONTENT );
+            fileContents.ShouldBe( WRITE_CONTENT );
 
             await sut.DeleteAsync();
         }
