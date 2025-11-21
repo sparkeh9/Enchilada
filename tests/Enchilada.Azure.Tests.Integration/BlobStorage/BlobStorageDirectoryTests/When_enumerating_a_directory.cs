@@ -73,8 +73,9 @@
       [Fact]
       public async Task Should_list_all_nodes_at_root_2()
       {
-         var container = ResourceHelpers.GetContainer(AzuriteTestcontainer.GetConnectionString(), "test");
-         await ResourceHelpers.CreateFileWithContentAsync(container, $"{Guid.NewGuid()}.txt", "stuff");
+         var container = ResourceHelpers.GetContainer( AzuriteTestcontainer.GetConnectionString(), "test" );
+         container.CreateIfNotExists();
+         await ResourceHelpers.CreateFileWithContentAsync( container, $"{Guid.NewGuid()}.txt", "stuff" );
 
          var sut = new EnchiladaFileProviderResolver(new EnchiladaConfiguration
          {
