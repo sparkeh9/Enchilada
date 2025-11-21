@@ -18,5 +18,6 @@ using Xunit;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid( "ae7a1fcc-5590-4c9e-af41-698965c6938a" )]
 
-// Match the FTP integration tests and run Azure tests sequentially within this assembly.
+// Run tests sequentially within this assembly to avoid thread pool starvation
+// and container start-up deadlocks under heavy parallel load.
 [assembly: CollectionBehavior( DisableTestParallelization = true )]
