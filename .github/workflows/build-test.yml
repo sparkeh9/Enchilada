@@ -31,7 +31,10 @@ jobs:
       run: dotnet build Enchilada.sln --configuration Release --no-restore
 
     - name: Run tests
-      timeout-minutes: 20
+      timeout-minutes: 5
+      env:
+        TESTCONTAINERS_HOST_OVERRIDE: "host.docker.internal"
+        TESTCONTAINERS_RYUK_DISABLED: "true"
       run: |
         set -e
         dotnet test Enchilada.sln --configuration Release --no-build --verbosity normal
