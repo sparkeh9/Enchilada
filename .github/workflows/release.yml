@@ -22,6 +22,11 @@ jobs:
       run: |
         # Extract version from tag (e.g., release/v1.1.4 -> 1.1.4)
         VERSION=${GITHUB_REF#refs/tags/release/v}
+        # Validate that VERSION matches semantic versioning (e.g., 1.2.3 or 1.2.3-beta)
+        if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$ ]]; then
+          echo "Error: Extracted version '$VERSION' is not a valid semantic version (e.g., 1.2.3 or 1.2.3-beta)."
+          exit 1
+        fi
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         echo "Extracted version: $VERSION"
 
