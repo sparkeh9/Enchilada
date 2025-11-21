@@ -36,6 +36,21 @@ jobs:
         TESTCONTAINERS_RYUK_DISABLED: "true"
       run: |
         set -e
-        # Run tests for all projects, but force MSBuild to use a single test host (no cross-project parallelism).
-        dotnet test Enchilada.sln -m:1 --configuration Release --no-build --verbosity normal
-        echo "dotnet test completed at $(date)"
+
+        echo "Discovering test projects under ./tests at $(date)"
+        test_projects=$(find tests -type f -name '*Tests*.csproj' | sort)
+
+        if [ -z "$test_projects" ]; then
+          echo "No test projects matching '*Tests*.csproj' were found under ./tests"
+          exit 1
+        fi
+
+        for proj in $test_projects; do
+          echo ""
+          echo "=== Running tests for $proj at $(date) ==="
+          dotnet test "$proj" -m:1 --configuration Release --no-build --verbosity normal
+          echo "=== Completed tests for $proj at $(date) ==="
+        done
+
+        echo ""
+        echo "dotnet test completed for all discovered projects at $(date)"
