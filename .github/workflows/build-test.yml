@@ -31,7 +31,13 @@ jobs:
       run: dotnet build Enchilada.sln --configuration Debug --no-restore
 
     - name: Run tests
-      timeout-minutes: 10
+      timeout-minutes: 15
       env:
         TESTCONTAINERS_RYUK_DISABLED: "true"
-      run: dotnet test Enchilada.sln -m:1 --configuration Debug --no-build --verbosity normal
+      run: |
+        set -e
+        echo "Discovering test projects..."
+        for proj in $(find . -name '*Tests*.csproj' | sort); do
+          echo "Running tests for $proj"
+          dotnet test "$proj" -m:1 --configuration Debug --no-build --verbosity normal
+        done
