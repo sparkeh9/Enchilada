@@ -36,5 +36,6 @@ jobs:
         TESTCONTAINERS_RYUK_DISABLED: "true"
       run: |
         set -e
-        dotnet test Enchilada.sln --configuration Release --no-build --verbosity normal
+        # Run tests for all projects, but force MSBuild to use a single test host (no cross-project parallelism).
+        dotnet test Enchilada.sln -m:1 --configuration Release --no-build --verbosity normal
         echo "dotnet test completed at $(date)"
