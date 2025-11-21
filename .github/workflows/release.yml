@@ -1,0 +1,70 @@
+name: Release NuGet Packages
+
+on:
+  push:
+    tags:
+      - 'release/v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Needed for creating releases
+      packages: write  # Needed for publishing packages
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Extract version from tag
+      id: version
+      run: |
+        # Extract version from tag (e.g., release/v1.1.4 -> 1.1.4)
+        VERSION=${GITHUB_REF#refs/tags/release/v}
+        # Validate that VERSION matches semantic versioning (e.g., 1.2.3 or 1.2.3-beta)
+        if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$ ]]; then
+          echo "Error: Extracted version '$VERSION' is not a valid semantic version (e.g., 1.2.3 or 1.2.3-beta)."
+          exit 1
+        fi
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        echo "Extracted version: $VERSION"
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore Enchilada.sln
+
+    - name: Build
+      run: dotnet build Enchilada.sln --configuration Release --no-restore /p:Version=${{ steps.version.outputs.VERSION }}
+
+    - name: Pack NuGet packages
+      run: dotnet pack Enchilada.sln --configuration Release --no-build /p:Version=${{ steps.version.outputs.VERSION }} --output ./nupkgs
+
+    - name: List generated packages
+      run: ls -la ./nupkgs
+
+    - name: Publish to NuGet
+      run: |
+        for package in ./nupkgs/*.nupkg; do
+          echo "Publishing $package"
+          dotnet nuget push "$package" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        done
+      
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./nupkgs/*.nupkg
+        body: |
+          Release version ${{ steps.version.outputs.VERSION }}
+          
+          NuGet packages published:
+          - Enchilada.${{ steps.version.outputs.VERSION }}.nupkg
+          - Enchilada.AspNetCore.${{ steps.version.outputs.VERSION }}.nupkg
+          - Enchilada.Azure.${{ steps.version.outputs.VERSION }}.nupkg
+          - Enchilada.Ftp.${{ steps.version.outputs.VERSION }}.nupkg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

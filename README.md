@@ -1,5 +1,5 @@
 # Enchilada
-[![Build Status: Windows](https://ci.appveyor.com/api/projects/status/github/sparkeh9/enchilada?branch=master&svg=true)](https://ci.appveyor.com/api/projects/status/github/sparkeh9/enchilada?branch=master&svg=true)
+[![Build Status](https://github.com/sparkeh9/Enchilada/actions/workflows/build-test.yml/badge.svg)](https://github.com/sparkeh9/Enchilada/actions/workflows/build-test.yml)
 
 ## What is it?
 Enchilada is a filesystem abstraction layer written in C#, the aim is to enable the seamless use of file operations over and between different providers.
@@ -160,3 +160,28 @@ And provide configuration in the appsettings file, e.g.
   }
 }
 ```
+
+## Development and Releases
+
+### Building and Testing
+The project uses GitHub Actions for continuous integration. Every push to the `master` branch triggers a build and test workflow that includes:
+- Building all projects
+- Running integration tests with Docker containers for FTP and Azure Blob Storage
+
+### Creating a Release
+To create a new release and publish NuGet packages:
+
+1. Create and push a tag with the format `release/v{version}`:
+   ```bash
+   git tag release/v1.1.4
+   git push origin release/v1.1.4
+   ```
+
+2. The release workflow will automatically:
+   - Extract the version from the tag name
+   - Build all projects with the extracted version
+   - Create NuGet packages
+   - Publish packages to NuGet.org
+   - Create a GitHub release with the packages attached
+
+The version number from the tag is embedded into the assembly and NuGet packages.

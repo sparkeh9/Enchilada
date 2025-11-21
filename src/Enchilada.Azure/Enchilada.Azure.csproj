@@ -10,6 +10,8 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Version Condition="'$(Version)' == ''">1.1.0</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
