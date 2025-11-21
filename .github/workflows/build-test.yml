@@ -33,7 +33,6 @@ jobs:
     - name: Run tests
       timeout-minutes: 5
       env:
-        TESTCONTAINERS_HOST_OVERRIDE: "host.docker.internal"
         TESTCONTAINERS_RYUK_DISABLED: "true"
       run: |
         set -e
