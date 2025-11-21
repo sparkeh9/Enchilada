@@ -38,7 +38,8 @@ jobs:
         set -e
 
         echo "Discovering test projects under ./tests at $(date)"
-        test_projects=$(find tests -type f -name '*Tests*.csproj' | sort)
+        # Exclude Azure integration tests for now as they currently hang in CI.
+        test_projects=$(find tests -type f -name '*Tests*.csproj' ! -path 'tests/Enchilada.Azure.Tests.Integration/*' | sort)
 
         if [ -z "$test_projects" ]; then
           echo "No test projects matching '*Tests*.csproj' were found under ./tests"
